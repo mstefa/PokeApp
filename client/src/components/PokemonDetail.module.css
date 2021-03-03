@@ -1,0 +1,73 @@
+.container{
+  /* background-image: url(../resurces/ash.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover; */
+  background-color: rgba(255, 226, 226, 0.432);
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  color: var(--thirdcolor);
+}
+
+.img{
+  border-radius: 0.5rem;
+  width: 14rem;
+  padding: 0.5rem;
+  
+}
+
+.name{
+  font-size: larger;
+  font-weight: 800;
+  /* color: var(--thirdcolor); */
+}
+
+.number{
+  font-weight:lighter;
+  height: 1rem;
+  /* color: var(--thirdcolor); */
+}
+.type{
+  margin: 1rem;
+  font-size: large;
+  height: 1rem;
+  font-weight: 500;
+  /* color: var(--thirdcolor); */
+}
+.stat{
+  display: flex;
+}
+.title{
+  width: auto;
+  font-size: larger;
+  font-weight: 700;
+  /* color: var(--thirdcolor); */
+}
+.dataPresentation{
+  width: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.text{
+  margin: 1rem;
+  font-size: large;
+  height: 0.5rem;
+  font-weight: 500;
+  /* color: var(--thirdcolor); */
+}
+
+.loadingImg{
+  margin: auto;
+  max-width: 15rem;
+  display: flex; 
+  flex-direction: column;
+  text-align: center;
+}

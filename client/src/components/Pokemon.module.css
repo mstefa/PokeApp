@@ -1,0 +1,39 @@
+.container{
+  margin: 1rem;
+  border: var(--bdrcolor) solid 0.08rem;
+  /* background-color: var(--shadingcolor); */
+  border-radius: 0.5rem;
+  width: 15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+}
+.container:hover{
+  border: var(--thirdcolor) solid 0.08rem;
+}
+
+.img{
+  border-radius: 0.5rem;
+  width: 14rem;
+  padding: 0.5rem;
+  
+}
+
+.name{
+  font-size: larger;
+  font-weight: bold;
+  color: var(--thirdcolor);
+}
+
+.number{
+  font-weight:lighter;
+  color: var(--thirdcolor);
+}
+.type{
+  margin: 1rem;
+  font-size: large;
+  font-weight: 500;
+  color: var(--thirdcolor);
+}

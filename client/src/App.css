@@ -1,0 +1,47 @@
+:root {
+  /* --maincolor: #FC6E51; */
+  
+  /* --seccolor : #FFCE54; */
+  /* --bdrhover : #E06248; */
+  /* --maincolor: #FC6E51; */
+  /* pokemon colors */
+  --backgroudcolor : #fdc100;  
+  --maincolor: #2e489b;
+  --seccolor : #ffc702;
+  --thirdcolor : #ee6520;
+  --shadingcolor: #0000001a;
+  --bdrcolor : #4F5A69;
+  --bdrhover : #E06248;
+
+  --backgroudcolor2 : #4F5A69;
+  --seccolor : #FFCE54;
+  /* --thirdcolor : #E06248; */
+
+}
+
+body{
+  background: var(--backgroudcolor);
+  min-height: 50rem;
+  color: var(--maincolor);
+
+}
+a{
+  text-decoration: none;
+}
+
+
+
+button{
+  background-color: var(--seccolor);
+  border: var(--bdrcolor) solid 0.08rem;
+  border-radius: 0.3rem;
+  height: 2rem;
+  font-size: large;
+}
+
+button:hover{
+  border: var(--bdrhover) solid 0.08rem;
+}
+
+
+h1 { font-family: Verdana, Geneva, sans-serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } 

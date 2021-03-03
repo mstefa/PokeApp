@@ -1,0 +1,18 @@
+.container{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+
+.pagination{
+  width: 0 auto;
+}
+
+.loadingImg{
+  margin: auto;
+  max-width: 15rem;
+  display: flex; 
+  flex-direction: column;
+  text-align: center;
+}
