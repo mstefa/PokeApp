@@ -28,12 +28,12 @@ async function populateTypes() {
         where: {id: id, // force id to be equal as in the API
         name: e.name} 
       });
+      console.log('Types Loaded!')
     }
     catch(error){
-    console.log(error)
+    console.error(error)
     }
-    });
-    console.log('Types Loaded!') 
+    }); 
     return types;
 }
 

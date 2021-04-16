@@ -5,7 +5,7 @@ async function getTypes() {
     {attributes: ['id', 'name']},
   );
   
-  console.log((data))
+  // console.log((data))
   return data;
 }
 

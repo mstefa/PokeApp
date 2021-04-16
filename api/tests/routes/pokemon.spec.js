@@ -39,7 +39,7 @@ describe('Types routes', () => {
       agent.get('/types')
       .expect(200)
       .expect(function(res) {
-        console.log(res.body)
+        // console.log(res.body)
         expect(res.body[0].name).to.eql(type.name);
       })
     );

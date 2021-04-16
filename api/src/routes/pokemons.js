@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// const { populatePokemons } = require('../services/populateDB')
 const { Pokemon} = require('../db.js');
 const {getPokemonDetailAPI, getPokemonsALL, getPokemonByName, getPokemonById, savePokemon} = require('../services/pokemonsIdRequest')
 let countAPIPokemons = 1118;
@@ -9,15 +8,19 @@ let countTotalPokemons = countAPIPokemons;
 let lastId = 10220;
 
 
-Pokemon.count({})
-.then(size => {
-  countDBPokemons = size;
-  countTotalPokemons = countAPIPokemons + size;
-  lastId = lastId + size;
-})
+
 
 router.get('/', async function (req, res) {
   let {offset, limit} = req.query;
+
+  if(countDBPokemons === 0){
+    Pokemon.count({})
+    .then(size => {
+      countDBPokemons = size;
+      countTotalPokemons = countAPIPokemons + size;
+      lastId = lastId + size;
+    })
+  }
 
   try{
     let info = await getPokemonsALL(offset, limit, false);
@@ -48,7 +51,7 @@ router.get('/search/', async function (req, res) {
       }
       catch(error){
         console.log(error)
-        res.status(404).json({error: 'Pokemon no encontrado'})
+        res.status(404).json({error: 'Pokemon not found'})
       }  
     }else{
       console.log(error)
@@ -75,7 +78,7 @@ router.get('/:id', async function (req, res) {
       }
       catch(error){
         console.log(error)
-        res.status(404).json({error: 'Pokemon no encontrado'})
+        res.status(404).json({error: 'Pokemon not found'})
       }  
     }else{
       console.log(error)
@@ -102,7 +105,7 @@ router.post('/', async function (req, res) {
 
   }
   catch(error){
-    console.log('Se produjo un error')
+    console.log('An error occurred')
     // console.log(error)
     res.status(500).json(error)
   }
