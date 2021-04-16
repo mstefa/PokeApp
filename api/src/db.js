@@ -63,18 +63,18 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Pokemon, Type } = sequelize.models;
 
 
-// Pokemon.beforeValidate((Pokemon, options) =>{
-//   if (!Pokemon.name && typeof(Pokemon.name) === "string"){
-//     throw new Error('It requires a valid name')
-//   };
-// });
+Pokemon.beforeValidate((Pokemon, options) =>{
+  if (!Pokemon.name && typeof(Pokemon.name) === "string"){
+    throw new Error('It requires a valid name')
+  };
+});
 
 
-// Type.beforeValidate((Types, options) =>{
-//   if (!Type.name && typeof(Type.name) === "string"){
-//     throw new Error('It requires a valid name')
-//   };
-// });
+Type.beforeValidate((Types, options) =>{
+  if (!Type.name && typeof(Type.name) === "string"){
+    throw new Error('It requires a valid name')
+  };
+});
 
 
 // Aca vendrian las relaciones
