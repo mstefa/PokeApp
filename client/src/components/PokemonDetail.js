@@ -1,19 +1,17 @@
 import React from 'react'
-import{ useState, useEffect } from 'react';
+import{ useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { getPokemonsDetail } from '../actions';
 import Styles from './PokemonDetail.module.css';
 import loading from '../resurces/loading.gif'
 
 export default function PokemonDetail(props) {
-  console.log('soy el id del pokemon q me pasaron')
-  console.log(props.match.params.id) 
+
   const pokemon = useSelector(state => state.pokemonDetail)
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getPokemonsDetail(props.match.params.id))
-    console.log('deberia pedir detalles')
   }, [props, dispatch ])
 
   if(!!pokemon.name){

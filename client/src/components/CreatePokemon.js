@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getTypes } from '../actions';
 import Styles from './CreatePokemon.module.css';
 
+let baseURL= process.env.REACT_APP_API;
+baseURL = baseURL || 'http://localhost:3002';
+
 export default function CreatePokemon() {
   const dispatch = useDispatch();
   const [input, setInput] = React.useState({
@@ -38,7 +41,7 @@ export default function CreatePokemon() {
   const handleSubmit = e => {
     e.preventDefault()
     if(input.name && input.name.length>0){
-      fetch(`http://localhost:3002/pokemons`, {
+      fetch(`baseURL/pokemons`, {
         method: 'POST', 
         body: JSON.stringify(input), // data can be `string` or {object}!
         headers:{
@@ -47,7 +50,6 @@ export default function CreatePokemon() {
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         window.alert(data)
       })
       .catch(error => console.error('Error:', error));

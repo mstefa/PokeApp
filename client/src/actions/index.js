@@ -1,35 +1,38 @@
 import { GET_POKEMONS, GET_POKEMONS_TYPES, GET_POKEMON_DETAIL, ORDER_POKEMONS_BY_NAME, FILTER_BY_PERSONALIZATION, FILTER_BY_TYPE} from './types'
 
+let baseURL= process.env.REACT_APP_API;
+baseURL = baseURL || 'http://localhost:3002';
+
 export function getPokemons(offset, limit) {
-  console.log('actions get pokemons')
+ 
   return function(dispatch) {
-    return fetch(`http://localhost:3002/pokemons/?offset=${offset}&limit=${limit}`)  // change fetch to keep pagiantion adding offset and limit
+    return fetch(`${baseURL}/pokemons/?offset=${offset}&limit=${limit}`)  // change fetch to keep pagiantion adding offset and limit
       .then(response => response.json())
       .then(json => {
         dispatch({ type: GET_POKEMONS, payload: json })
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.error(error))
       ;
   };
 }
 
 export function getPokemonsDetail(id) {
-  console.log('acction get detail')
+  
   return function(dispatch) {
-    return fetch(`http://localhost:3002/pokemons/${id}`)
+    return fetch(`${baseURL}/pokemons/${id}`)
       .then(response => response.json())
       .then(json => {
         dispatch({ type: GET_POKEMON_DETAIL, payload: json });
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.error(error))
       ;
   }
 }
 
 export function getTypes() {
-  console.log('acction get Types')
+  
   return function(dispatch) {
-    return fetch(`http://localhost:3002/types/`)
+    return fetch(`${baseURL}/types/`)
       .then(response => response.json())
       .then(json => {
         dispatch({ type: GET_POKEMONS_TYPES, payload: json });
@@ -39,7 +42,7 @@ export function getTypes() {
 }
 
 export function sortPokemons(pokemons, sort) {
-  console.log('estoy ordenando' + sort)
+  
   let sortPokemons = pokemons.slice();
   return function(dispatch){
     if(sort === 'asc'){
@@ -61,14 +64,14 @@ export function sortPokemons(pokemons, sort) {
 } 
 
 export function filterByPersonalization(filter) {
-  console.log('estoy filtrando' + filter)
+  
   return function(dispatch){
     dispatch({type: FILTER_BY_PERSONALIZATION, payload: filter})
   }
 } 
 
 export function filterByType(filter) {
-  console.log('estoy filtrando' + filter)
+  
   return function(dispatch){
     dispatch({type: FILTER_BY_TYPE, payload: filter})
   }

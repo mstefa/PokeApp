@@ -22,18 +22,15 @@ export function Pokemons(props) {
   
   useEffect(() => {
 
-    if( props.pokemons.length < 1){  //!props.pokemons &&
-      console.log('pido los pokemonsss')
+    if( props.pokemons.length < 1){  
       props.getPokemons(0,12)
     }
 
     if(props.types.length < 1){
-      console.log('deberia pedir los tipos')
       props.getTypes()
     }
     },[props])
 
-  console.log(props.pokemons)
   if(props.pokemons.length > 0){
     return (
       <div id="PokemonsComponent" >

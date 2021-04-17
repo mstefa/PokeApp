@@ -6,7 +6,7 @@ import Styles from './Pagination.module.css';
 const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage}) => {
   const pageNumbers = [];
   let numberOfPages= Math.ceil(totalPosts / postsPerPage);
-  currentPage ?  console.log(currentPage) : currentPage =1;
+  currentPage = currentPage || 1;
 
   if(numberOfPages <= 15){
     for (let i = 1; i <= numberOfPages; i++) {

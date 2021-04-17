@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { filterByPersonalization, filterByType, sortPokemons } from '../actions';
 import search from '../resurces/buscar.png'
 
-
+let baseURL= process.env.REACT_APP_API;
+baseURL = baseURL || 'http://localhost:3002';
 
 export default function SearchBar() {
 
@@ -25,11 +26,9 @@ export default function SearchBar() {
   const handleSubmit = e => {
     e.preventDefault()
     
-    fetch(`http://localhost:3002/pokemons/search?name=${input}`)
+    fetch(`baseURL/pokemons/search?name=${input}`)
       .then(response => response.json())
       .then(id => {
-        console.log('soy el id')
-        console.log(id)
         history.push(`/pokemon/${id}`)
       })
   }

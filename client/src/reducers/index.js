@@ -15,7 +15,6 @@ function rootReducer(state = initialState, action) {
   switch (action.type) {
   
   case GET_POKEMONS: 
-    console.log('reducer get pokemons')
     return {
       ...state,
       pokemonsCount: action.payload.count,
@@ -23,14 +22,12 @@ function rootReducer(state = initialState, action) {
     };
 
   case GET_POKEMON_DETAIL:
-    console.log('reducer get Detail')
     return {
       ...state,
       pokemonDetail: action.payload
     }
 
     case GET_POKEMONS_TYPES:
-      console.log('reducer get Types')
     return {
       ...state,
       pokemonsTypes: action.payload
