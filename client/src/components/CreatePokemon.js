@@ -41,7 +41,7 @@ export default function CreatePokemon() {
   const handleSubmit = e => {
     e.preventDefault()
     if(input.name && input.name.length>0){
-      fetch(`baseURL/pokemons`, {
+      fetch(`${baseURL}/pokemons`, {
         method: 'POST', 
         body: JSON.stringify(input), // data can be `string` or {object}!
         headers:{

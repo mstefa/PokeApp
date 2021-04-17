@@ -4,7 +4,7 @@ import Styles from './Pokemon.module.css';
 
 export default function Pokemon({id, name, img, personalized, types }) {
   return (
-    <div className={Styles.container}>
+    <div key={id} className={Styles.container}>
       <Link to={`/pokemon/${id}`}>
         <div>
           <img className={Styles.img} src = {img} alt = 'Pokemon' />

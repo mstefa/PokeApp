@@ -10,7 +10,7 @@ import loading from '../resurces/loading.gif'
 export function Pokemons(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostPerPage] = useState(12);
+  const [postsPerPage] = useState(12);
   let indexOfFirstPost = 0;
 
   // Change page

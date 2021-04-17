@@ -26,7 +26,7 @@ export default function SearchBar() {
   const handleSubmit = e => {
     e.preventDefault()
     
-    fetch(`baseURL/pokemons/search?name=${input}`)
+    fetch(`${baseURL}/pokemons/search?name=${input}`)
       .then(response => response.json())
       .then(id => {
         history.push(`/pokemon/${id}`)
