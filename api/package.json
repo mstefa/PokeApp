@@ -6,8 +6,10 @@
   "scripts": {
     "start": "nodemon -L --exec node index.js",
     "dev": "nodemon -L --exec node index.js",
-    "test": "mocha ./tests/**/*.spec.js --timeout 5000",
-    "test:watch": "mocha ./tests/**/*.spec.js --watch --timeout 5000",
+    "test": "mocha 'tests/**/*.spec.js' --timeout 10000",
+    "test:watch": "mocha 'tests/**/*.spec.js' --watch --timeout 10000",
+    "test:unit": "mocha 'tests/models/**/*.spec.js' --timeout 10000",
+    "test:integration": "mocha 'tests/integration/**/*.spec.js' --timeout 15000",
     "lint": "eslint src/ --fix",
     "format": "prettier --write \"src/**/*.js\" \"tests/**/*.js\""
   },
