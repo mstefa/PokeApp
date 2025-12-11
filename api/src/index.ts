@@ -1,0 +1,25 @@
+import { createApp } from './app';
+import { config } from './config/app.config';
+import { logger } from './shared/utils';
+
+const app = createApp();
+const port = config.port;
+
+const startServer = async (): Promise<void> => {
+  try {
+    // Database connection will be established here
+    // await initializeDatabase(config.database);
+
+    app.listen(port, () => {
+      logger.info(`🚀 Server is running on port ${port}`);
+      logger.info(`📝 Environment: ${config.nodeEnv}`);
+    });
+  } catch (error) {
+    logger.error('Failed to start server', error);
+    process.exit(1);
+  }
+};
+
+startServer();
+
+export default app;
