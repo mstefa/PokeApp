@@ -1,6 +1,9 @@
 import express, { Express } from 'express';
 import morgan from 'morgan';
 
+// @ts-ignore - Routes are still in JS
+const routes = require('./routes/index.js');
+
 export const createApp = (): Express => {
   const app = express();
 
@@ -20,9 +23,8 @@ export const createApp = (): Express => {
     next();
   });
 
-  // Routes will be registered here
-  // app.use('/pokemons', pokemonsRouter);
-  // app.use('/types', typesRouter);
+  // Routes
+  app.use('/', routes);
 
   // Health check
   app.get('/health', (_req, res) => {

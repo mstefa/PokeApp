@@ -1,0 +1,1 @@
+GET http://localhost:3002/pokemons/ HTTP/1.1

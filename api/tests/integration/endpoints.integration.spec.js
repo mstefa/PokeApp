@@ -8,9 +8,10 @@
 
 const { expect } = require('chai');
 const supertest = require('supertest');
-const app = require('../../src/app.js');
+const { createApp } = require('../../src/app.ts');
 const { Pokemon, Type, conn } = require('../../src/db.js');
 
+const app = createApp();
 const request = supertest(app);
 
 // ============================================================================

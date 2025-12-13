@@ -1,6 +1,7 @@
 import { createApp } from './app';
 import { config } from './config/app.config';
 import { logger } from './shared/utils';
+import { conn } from './db.js';
 
 const app = createApp();
 const port = config.port;
@@ -9,6 +10,8 @@ const startServer = async (): Promise<void> => {
   try {
     // Database connection will be established here
     // await initializeDatabase(config.database);
+    await conn.sync({ force: false });
+    logger.info('✅ Database connected and synchronized');
 
     app.listen(port, () => {
       logger.info(`🚀 Server is running on port ${port}`);

@@ -7,6 +7,7 @@
     ],
     "outDir": "./dist",
     "rootDir": "./src",
+    "allowJs": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -51,7 +52,8 @@
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/index.ts"
   ],
   "exclude": [
     "node_modules",
