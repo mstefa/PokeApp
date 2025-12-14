@@ -4,7 +4,7 @@
  */
 import { Pokemon, CreatePokemonRequest, PokemonListResponse } from '../entities/Pokemon';
 
-export interface IPokemonRepository {
+export interface PokemonRepository {
   findAll(offset: number, limit: number): Promise<PokemonListResponse>;
   findById(id: number | string): Promise<Pokemon | null>;
   findByName(name: string): Promise<Pokemon | null>;

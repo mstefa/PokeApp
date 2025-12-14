@@ -1,6 +1,6 @@
 import { createApp } from './app';
 import { config } from './config/app.config';
-import { logger } from './shared/utils';
+import { logger } from './shared/logger';
 import { conn } from './db.js';
 
 const app = createApp();
@@ -18,7 +18,8 @@ const startServer = async (): Promise<void> => {
       logger.info(`📝 Environment: ${config.nodeEnv}`);
     });
   } catch (error) {
-    logger.error('Failed to start server', error);
+    logger.error('Failed to start server');
+    logger.error(error);
     process.exit(1);
   }
 };

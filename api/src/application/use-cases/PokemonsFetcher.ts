@@ -1,10 +1,10 @@
-import { IPokemonRepository } from '../../domain/ports/IPokemonRepository';
+import { PokemonRepository } from '../../domain/ports/PokemonRepository';
 import { PokemonsDto } from '../dto/PokemonsDto';
 
 export class PokemonsFetcher {
-  private repository: IPokemonRepository;
+  private repository: PokemonRepository;
 
-  constructor(repository: IPokemonRepository) {
+  constructor(repository: PokemonRepository) {
     this.repository = repository;
   }
 

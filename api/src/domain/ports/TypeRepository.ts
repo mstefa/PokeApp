@@ -3,7 +3,7 @@
  */
 import { Type } from '../entities/Type';
 
-export interface ITypeRepository {
+export interface TypeRepository {
   findAll(): Promise<Type[]>;
   findById(id: number): Promise<Type | null>;
   create(type: Type): Promise<Type>;
