@@ -1,8 +1,6 @@
-import express, { Express } from 'express';
+import express, { Express, Router } from 'express';
 import morgan from 'morgan';
-
-// @ts-ignore - Routes are still in JS
-const routes = require('./routes/index.js');
+import { registerRoutes } from './routes/index';
 
 export const createApp = (): Express => {
   const app = express();
@@ -23,8 +21,21 @@ export const createApp = (): Express => {
     next();
   });
 
-  // Routes
-  app.use('/', routes);
+  // Register routes (both old JS routes and new TS routes)
+  const mainRouter = Router();
+
+  // Synchronously register JS routes
+  // @ts-ignore
+  // const pokemonsJsRouter = require('./routes/pokemons.js');
+  // // @ts-ignore
+  // const typesJsRouter = require('./routes/types.js');
+
+  // mainRouter.use('/pokemons', pokemonsJsRouter);
+  // mainRouter.use('/pokemons', typesJsRouter);
+  // mainRouter.use('/types', typesJsRouter);
+
+  registerRoutes(mainRouter);
+  app.use('/', mainRouter);
 
   // Health check
   app.get('/health', (_req, res) => {
@@ -51,3 +62,5 @@ export const createApp = (): Express => {
 
   return app;
 };
+
+
