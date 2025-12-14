@@ -1,6 +1,6 @@
-import { Pokemon, PokemonListResponse } from '../../domain/entities/Pokemon';
+import { Pokemon } from '../../domain/Pokemon';
+import { PokemonListResponse, CreatePokemonRequest } from '../../domain/entities/Pokemon';
 import { PokemonRepository } from '../../domain/ports/PokemonRepository';
-import { CreatePokemonRequest } from '../../domain/entities/Pokemon';
 
 // @ts-ignore - db.js is JavaScript
 const { Pokemon: PokemonModel } = require('../../db.js');
@@ -82,21 +82,17 @@ export class SequelizePokemonRepository implements PokemonRepository {
   }
 
   private mapToEntity(model: any): Pokemon {
-    return {
-      id: model.id,
-      name: model.name,
-      life: model.life,
-      strength: model.strength,
-      defense: model.defense,
-      speed: model.speed,
-      height: model.height,
-      weight: model.weight,
-      img: model.img,
-      personalized: model.personalized || false,
-      types: model.Types ? model.Types.map((t: any) => ({
-        id: t.id,
-        name: t.name
-      })) : []
-    };
+    return new Pokemon(
+      model.id,
+      model.name,
+      model.life || 0,
+      model.strength || 0,
+      model.defense || 0,
+      model.speed || 0,
+      model.height || 0,
+      model.weight || 0,
+      true, // personalized = true for DB Pokemon
+      model.img || ''
+    );
   }
 }

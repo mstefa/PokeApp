@@ -3,11 +3,13 @@ export type PokemonsDto = {
   pokemons: Array<{
     id: number;
     name: string;
-    img: string;
+    life?: number;
+    strength?: number;
+    defense?: number;
+    speed?: number;
+    height?: number;
+    weight?: number;
+    img?: string;
     personalized: boolean;
-    types: Array<{
-      id: number;
-      name: string;
-    }>;
   }>;
 };

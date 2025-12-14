@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Pokemon, PokemonType } from '../../domain/entities/Pokemon';
+import { PokemonDto } from '../../domain/Pokemon';
 
 const POKEAPI_BASE_URL = 'https://pokeapi.co/api/v2';
 const POKEAPI_TOTAL_COUNT = 1118; // Official Pokemon count in PokeAPI
@@ -7,7 +7,7 @@ const POKEAPI_TOTAL_COUNT = 1118; // Official Pokemon count in PokeAPI
 /**
  * External PokeAPI Adapter
  * Handles all calls to the official PokeAPI service (read-only)
- * Implements the external data source for official Pokemon data
+ * Returns domain DTOs that can be converted to domain objects
  */
 export class ExternalPokemonAPI {
   /**
@@ -18,13 +18,13 @@ export class ExternalPokemonAPI {
     offset: number,
     limit: number,
     includeStats: boolean = false
-  ): Promise<Pokemon[]> {
+  ): Promise<PokemonDto[]> {
     try {
       const url = `${POKEAPI_BASE_URL}/pokemon?offset=${offset}&limit=${limit}`;
       const response = await axios.get(url);
 
       const pokemonsData = response.data.results;
-      const pokemons: Promise<Pokemon>[] = [];
+      const pokemons: Promise<PokemonDto>[] = [];
 
       // Fetch detailed information for each pokemon
       for (const pokemonData of pokemonsData) {
@@ -41,7 +41,7 @@ export class ExternalPokemonAPI {
   /**
    * Fetch a single pokemon from PokeAPI by ID or name
    */
-  async getPokemonFromAPI(idOrName: number | string): Promise<Pokemon | null> {
+  async getPokemonFromAPI(idOrName: number | string): Promise<PokemonDto | null> {
     try {
       const url = `${POKEAPI_BASE_URL}/pokemon/${idOrName}`;
       const response = await axios.get(url);
@@ -86,7 +86,7 @@ export class ExternalPokemonAPI {
   private async getPokemonDetail(
     url: string,
     includeStats: boolean = false
-  ): Promise<Pokemon> {
+  ): Promise<PokemonDto> {
     try {
       const response = await axios.get(url);
       return this.mapPokemonDetail(response.data, includeStats);
@@ -97,23 +97,10 @@ export class ExternalPokemonAPI {
   }
 
   /**
-   * Map raw PokeAPI response to Pokemon entity
+   * Map raw PokeAPI response to Pokemon DTO
+   * Returns a plain object that matches PokemonDto interface
    */
-  private mapPokemonDetail(data: any, includeStats: boolean): Pokemon {
-    // Extract types
-    const types: PokemonType[] = [];
-    if (data.types && Array.isArray(data.types)) {
-      data.types.forEach((typeData: any) => {
-        const typeId = parseInt(
-          typeData.type.url.match(/\/(\d+)\/?$/)?.[1] || '0'
-        );
-        types.push({
-          id: typeId,
-          name: typeData.type.name
-        });
-      });
-    }
-
+  private mapPokemonDetail(data: any, includeStats: boolean): PokemonDto {
     // Get the best available image
     const img =
       data.sprites?.other?.dream_world?.front_default ||
@@ -121,31 +108,35 @@ export class ExternalPokemonAPI {
       data.sprites?.front_default ||
       '';
 
-    const pokemon: Pokemon = {
-      id: data.id,
-      name: data.name,
-      img,
-      personalized: false,
-      types,
-      // Default stats if not available
-      life: 0,
-      strength: 0,
-      defense: 0,
-      speed: 0,
-      height: 0,
-      weight: 0
-    };
+    // Default stats if not available
+    let life = 0;
+    let strength = 0;
+    let defense = 0;
+    let speed = 0;
+    let height = 0;
+    let weight = 0;
 
     // Add detailed stats if requested
     if (includeStats && data.stats && Array.isArray(data.stats)) {
-      pokemon.life = data.stats[0]?.base_stat || 0; // HP
-      pokemon.strength = data.stats[1]?.base_stat || 0; // Attack
-      pokemon.defense = data.stats[2]?.base_stat || 0; // Defense
-      pokemon.speed = data.stats[5]?.base_stat || 0; // Speed
-      pokemon.height = data.height || 0;
-      pokemon.weight = data.weight || 0;
+      life = data.stats[0]?.base_stat || 0; // HP
+      strength = data.stats[1]?.base_stat || 0; // Attack
+      defense = data.stats[2]?.base_stat || 0; // Defense
+      speed = data.stats[5]?.base_stat || 0; // Speed
+      height = data.height || 0;
+      weight = data.weight || 0;
     }
 
-    return pokemon;
+    return {
+      id: data.id,
+      name: data.name,
+      img,
+      life,
+      strength,
+      defense,
+      speed,
+      height,
+      weight,
+      personalized: false
+    };
   }
 }

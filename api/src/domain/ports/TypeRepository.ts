@@ -1,11 +1,13 @@
 /**
  * Port (Interface) for Type Repository
+ * Defines how the domain interacts with persistence for Types
  */
-import { Type } from '../entities/Type';
+import { Type } from '../Type';
 
 export interface TypeRepository {
   findAll(): Promise<Type[]>;
   findById(id: number): Promise<Type | null>;
-  create(type: Type): Promise<Type>;
-  findOrCreate(type: Type): Promise<Type>;
+  findByName(name: string): Promise<Type | null>;
+  create(name: string): Promise<Type>;
+  findOrCreate(name: string, id?: number): Promise<Type>;
 }

@@ -1,63 +1,40 @@
 /**
  * Domain Entity: Pokemon
- * Pure business object without any persistence concerns
+ * Re-exports the Pokemon domain class from domain/Pokemon.ts
+ * Uses class-based implementation with built-in validation
  */
+export type { Pokemon as PokemonDomainClass } from '../Pokemon';
+export type { PokemonDto as PokemonEntity } from '../Pokemon';
+
 export interface PokemonType {
   id: number;
   name: string;
 }
 
-export interface PokemonStats {
-  life: number;
-  strength: number;
-  defense: number;
-  speed: number;
-  height: number;
-  weight: number;
-}
-
-export interface Pokemon extends PokemonStats {
-  id: number;
-  name: string;
-  img: string;
-  personalized: boolean;
-  types: PokemonType[];
-}
-
 export interface CreatePokemonRequest {
   name: string;
-  life: number;
-  strength: number;
-  defense: number;
-  speed: number;
-  height: number;
-  weight: number;
-  img: string;
-  types: PokemonType[];
+  life?: number;
+  strength?: number;
+  defense?: number;
+  speed?: number;
+  height?: number;
+  weight?: number;
+  img?: string;
+  types?: PokemonType[];
 }
 
 export interface PokemonListResponse {
   count: number;
-  pokemons: Pokemon[];
+  pokemons: Array<{
+    id: number;
+    name: string;
+    life?: number;
+    strength?: number;
+    defense?: number;
+    speed?: number;
+    height?: number;
+    weight?: number;
+    img?: string;
+    personalized: boolean;
+  }>;
 }
-
-// Factory for creating Pokemon entities
-export const createPokemon = (data: CreatePokemonRequest, id: number): Pokemon => {
-  if (!data.name || data.name.trim().length === 0) {
-    throw new Error('Pokemon name is required');
-  }
-
-  return {
-    id,
-    name: data.name,
-    life: data.life,
-    strength: data.strength,
-    defense: data.defense,
-    speed: data.speed,
-    height: data.height,
-    weight: data.weight,
-    img: data.img,
-    personalized: true,
-    types: data.types || [],
-  };
-};

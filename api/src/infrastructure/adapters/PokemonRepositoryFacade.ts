@@ -1,4 +1,5 @@
-import { Pokemon, PokemonListResponse, CreatePokemonRequest } from '../../domain/entities/Pokemon';
+import type { Pokemon } from '../../domain/Pokemon';
+import { PokemonListResponse, CreatePokemonRequest } from '../../domain/entities/Pokemon';
 import { PokemonRepository } from '../../domain/ports/PokemonRepository';
 import { ExternalPokemonAPI } from '../external/ExternalPokemonAPI';
 import { LocalDatabasePokemonRepository } from '../persistence/LocalDatabasePokemonRepository';
@@ -42,29 +43,29 @@ export class PokemonRepositoryFacade implements PokemonRepository {
    */
   async findAll(offset: number, limit: number): Promise<PokemonListResponse> {
     try {
-      // Try to get official Pokemon from API starting at the offset
-      const apiPokemons = await this.externalAPI.getPokemonsFromAPI(offset, limit);
+      // Try to get official Pokemon from API starting at the offset (returns DTOs)
+      const apiPokemonDtos = await this.externalAPI.getPokemonsFromAPI(offset, limit);
 
       // Get total counts from both sources
       const apiTotalCount = this.externalAPI.getTotalCount();
       const dbTotalCount = await this.localRepository.count();
       const totalCount = apiTotalCount + dbTotalCount;
 
-      // If we got enough results from the API, return them
-      if (apiPokemons.length === limit) {
+      // If we got enough results from the API, return them as primitives
+      if (apiPokemonDtos.length === limit) {
         return {
           count: totalCount,
-          pokemons: apiPokemons
+          pokemons: apiPokemonDtos
         };
       }
 
       // Otherwise, we need to supplement with custom Pokemon from the database
-      const remainingNeeded = limit - apiPokemons.length;
+      const remainingNeeded = limit - apiPokemonDtos.length;
       const dbPokemons = await this.localRepository.findAll(0, remainingNeeded);
 
       return {
         count: totalCount,
-        pokemons: [...apiPokemons, ...dbPokemons.pokemons]
+        pokemons: [...apiPokemonDtos, ...dbPokemons.pokemons]
       };
     } catch (error) {
       console.error('Error in PokemonRepositoryFacade.findAll:', error);
@@ -87,10 +88,23 @@ export class PokemonRepositoryFacade implements PokemonRepository {
 
       // Check if this is an official Pokemon (by ID range)
       if (numId >= 1 && numId <= this.OFFICIAL_POKEMON_THRESHOLD) {
-        // Try to fetch from the official API first
-        const officialPokemon = await this.externalAPI.getPokemonFromAPI(numId);
-        if (officialPokemon) {
-          return officialPokemon;
+        // Try to fetch from the official API first (returns DTO)
+        const officialPokemonDto = await this.externalAPI.getPokemonFromAPI(numId);
+        if (officialPokemonDto) {
+          // Convert DTO to domain object
+          const { Pokemon } = require('../../domain/Pokemon');
+          return new Pokemon(
+            officialPokemonDto.id,
+            officialPokemonDto.name,
+            officialPokemonDto.life,
+            officialPokemonDto.strength,
+            officialPokemonDto.defense,
+            officialPokemonDto.speed,
+            officialPokemonDto.height,
+            officialPokemonDto.weight,
+            officialPokemonDto.personalized ?? false,
+            officialPokemonDto.img
+          );
         }
       }
 
@@ -119,8 +133,26 @@ export class PokemonRepositoryFacade implements PokemonRepository {
         return customPokemon;
       }
 
-      // If not found locally, check the official API
-      return await this.externalAPI.getPokemonFromAPI(name);
+      // If not found locally, check the official API (returns DTO)
+      const officialPokemonDto = await this.externalAPI.getPokemonFromAPI(name);
+      if (officialPokemonDto) {
+        // Convert DTO to domain object
+        const { Pokemon } = require('../../domain/Pokemon');
+        return new Pokemon(
+          officialPokemonDto.id,
+          officialPokemonDto.name,
+          officialPokemonDto.life,
+          officialPokemonDto.strength,
+          officialPokemonDto.defense,
+          officialPokemonDto.speed,
+          officialPokemonDto.height,
+          officialPokemonDto.weight,
+          officialPokemonDto.personalized ?? false,
+          officialPokemonDto.img
+        );
+      }
+
+      return null;
     } catch (error) {
       console.error(`Error finding pokemon with name ${name}:`, error);
       throw error;

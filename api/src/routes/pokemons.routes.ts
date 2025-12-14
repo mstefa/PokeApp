@@ -12,8 +12,14 @@ export const register = (router: Router) => {
   //   query('offset').optional().isNumeric()
   // ];
 
+  // GET /pokemons - Fetch all pokemons
   router.get('/', (req: Request, res: Response) =>
     DIContainer.getPokemonsController.run(req, res)
+  );
+
+  // POST /pokemons - Create a new pokemon with validation
+  router.post('/', (req: Request, res: Response) =>
+    DIContainer.createPokemonController.run(req, res)
   );
 };
 

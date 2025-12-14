@@ -2,7 +2,8 @@
  * Port (Interface) for Pokemon Repository
  * Defines how the domain interacts with persistence
  */
-import { Pokemon, CreatePokemonRequest, PokemonListResponse } from '../entities/Pokemon';
+import type { Pokemon } from '../Pokemon';
+import { CreatePokemonRequest, PokemonListResponse } from '../entities/Pokemon';
 
 export interface PokemonRepository {
   findAll(offset: number, limit: number): Promise<PokemonListResponse>;

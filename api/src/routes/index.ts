@@ -12,14 +12,19 @@ export async function registerRoutes(router: Router) {
 
   // Import and register new TypeScript routes
   const { register: registerPokemonsTs } = await import('./pokemons.routes');
+  const { register: registerTypesTs } = await import('./types.routes');
 
-  // Create a sub-router for TypeScript pokemons routes
+  // Create sub-routers for TypeScript routes
   const pokemonsTsRouter = Router();
-  registerPokemonsTs(pokemonsTsRouter);
+  const typesTsRouter = Router();
 
-  // Mount TypeScript pokemons routes alongside JS routes
-  // Both versions coexist - TS routes will override JS routes for matching paths
+  registerPokemonsTs(pokemonsTsRouter);
+  registerTypesTs(typesTsRouter);
+
+  // Mount TypeScript routes alongside JS routes
+  // TS routes will override JS routes for matching paths
   router.use('/pokemons', pokemonsTsRouter);
+  router.use('/types', typesTsRouter);
 }
 
 

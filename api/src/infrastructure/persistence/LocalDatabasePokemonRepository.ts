@@ -1,4 +1,5 @@
-import { Pokemon, PokemonListResponse, CreatePokemonRequest } from '../../domain/entities/Pokemon';
+import { Pokemon as PokemonDomain } from '../../domain/Pokemon';
+import { PokemonListResponse, CreatePokemonRequest } from '../../domain/entities/Pokemon';
 import { PokemonRepository } from '../../domain/ports/PokemonRepository';
 
 // @ts-ignore - db.js is JavaScript
@@ -8,6 +9,7 @@ const { Pokemon: PokemonModel } = require('../../db.js');
  * Local Database Pokemon Repository
  * Handles all operations for user-created Pokemon data stored in the local database
  * This repository supports both read and write operations
+ * Uses the new domain class with built-in validation
  */
 export class LocalDatabasePokemonRepository implements PokemonRepository {
   /**
@@ -27,7 +29,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
 
       return {
         count: totalCount,
-        pokemons: customPokemons.map((p: any) => this.mapToEntity(p))
+        pokemons: customPokemons.map((p: any) => this.mapToEntity(p).toPrimitives())
       };
     } catch (error) {
       console.error('Error finding all custom pokemons:', error);
@@ -38,7 +40,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   /**
    * Find a custom pokemon by ID in the local database
    */
-  async findById(id: number | string): Promise<Pokemon | null> {
+  async findById(id: number | string): Promise<PokemonDomain | null> {
     try {
       const pokemon = await PokemonModel.findByPk(id, { include: 'Types' });
       return pokemon ? this.mapToEntity(pokemon) : null;
@@ -51,7 +53,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   /**
    * Find a custom pokemon by name in the local database
    */
-  async findByName(name: string): Promise<Pokemon | null> {
+  async findByName(name: string): Promise<PokemonDomain | null> {
     try {
       const pokemon = await PokemonModel.findOne({
         where: { name },
@@ -65,20 +67,34 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   }
 
   /**
-   * Create a new custom pokemon in the local database
+   * Create a new custom pokemon in the local database with validation
    */
-  async create(data: CreatePokemonRequest, id: number): Promise<Pokemon> {
+  async create(data: CreatePokemonRequest, id: number): Promise<PokemonDomain> {
     try {
-      const pokemon = await PokemonModel.create({
+      // Use domain class for validation before persistence
+      const pokemonDomain = new PokemonDomain(
         id,
-        name: data.name,
-        life: data.life,
-        strength: data.strength,
-        defense: data.defense,
-        speed: data.speed,
-        height: data.height,
-        weight: data.weight,
-        img: data.img,
+        data.name,
+        data.life,
+        data.strength,
+        data.defense,
+        data.speed,
+        data.height,
+        data.weight,
+        true,
+        data.img
+      );
+
+      const pokemon = await PokemonModel.create({
+        id: pokemonDomain.getId(),
+        name: pokemonDomain.getName(),
+        life: pokemonDomain.getLife(),
+        strength: pokemonDomain.getStrength(),
+        defense: pokemonDomain.getDefense(),
+        speed: pokemonDomain.getSpeed(),
+        height: pokemonDomain.getHeight(),
+        weight: pokemonDomain.getWeight(),
+        img: pokemonDomain.getImage(),
         personalized: true
       });
 
@@ -108,26 +124,21 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   }
 
   /**
-   * Map Sequelize model instance to Pokemon entity
+   * Map Sequelize model instance to Pokemon domain class
+   * Validates all data during construction
    */
-  private mapToEntity(model: any): Pokemon {
-    return {
-      id: model.id,
-      name: model.name,
-      life: model.life || 0,
-      strength: model.strength || 0,
-      defense: model.defense || 0,
-      speed: model.speed || 0,
-      height: model.height || 0,
-      weight: model.weight || 0,
-      img: model.img || '',
-      personalized: model.personalized || true,
-      types: model.Types
-        ? model.Types.map((t: any) => ({
-          id: t.id,
-          name: t.name
-        }))
-        : []
-    };
+  private mapToEntity(model: any): PokemonDomain {
+    return new PokemonDomain(
+      model.id,
+      model.name,
+      model.life,
+      model.strength,
+      model.defense,
+      model.speed,
+      model.height,
+      model.weight,
+      model.personalized || false,
+      model.img
+    );
   }
 }

@@ -1,19 +1,10 @@
 /**
  * Domain Entity: Type
- * Pokemon type/element
+ * Re-exports the Type domain class from domain/Type.ts
+ * Uses class-based implementation with built-in validation
  */
-export interface Type {
-  id: number;
-  name: string;
-}
+export { Type, TypeDto as TypeEntity } from '../Type';
 
-export const createType = (id: number, name: string): Type => {
-  if (!name || name.trim().length === 0) {
-    throw new Error('Type name is required');
-  }
-
-  return {
-    id,
-    name,
-  };
+export const createType = (id: number, name: string) => {
+  return new (require('../Type').Type)(name, id);
 };
