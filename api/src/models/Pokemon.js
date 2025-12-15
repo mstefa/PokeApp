@@ -1,40 +1,55 @@
-const { DataTypes } = require('sequelize');
-// Exportamos una funcion que define el modelo
-// Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
-  // defino el modelo
-  sequelize.define('pokemon', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+  const { DataTypes } = require('sequelize');
+
+  return sequelize.define(
+    'Pokemon',
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      life: {
+        type: DataTypes.STRING,
+      },
+      strength: {
+        type: DataTypes.STRING,
+      },
+      defense: {
+        type: DataTypes.STRING,
+      },
+      speed: {
+        type: DataTypes.STRING,
+      },
+      height: {
+        type: DataTypes.STRING,
+      },
+      weight: {
+        type: DataTypes.STRING,
+      },
+      img: {
+        type: DataTypes.TEXT,
+      },
+      personalized: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      // Nueva columna para almacenar tipos como JSON
+      types: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: [],
+        comment: 'Array of type objects: [{ id, name }, ...]'
+      }
     },
-    life: {
-      type: DataTypes.INTEGER,
-    },
-    strength: {
-      // type: DataTypes.REAL,
-      type: DataTypes.INTEGER
-    },
-    defense: {
-      type: DataTypes.INTEGER,
-    },
-    speed: {
-      type: DataTypes.INTEGER,
-    },
-    height: {
-      type: DataTypes.INTEGER,
-    },
-    weight: {
-      type: DataTypes.INTEGER,
-    },
-    personalized: {
-      type: DataTypes.BOOLEAN,
-      }, 
-    img: {
-      type: DataTypes.STRING,
-      validate: {
-        isUrl: true,
-      }  
-    },
-  });
+    {
+      timestamps: true,
+      underscored: true,
+    }
+  );
 };

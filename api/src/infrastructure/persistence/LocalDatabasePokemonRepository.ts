@@ -1,3 +1,4 @@
+import { logger } from '@/shared/logger';
 import { Pokemon as PokemonDomain } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
 
@@ -18,7 +19,6 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   async findAll(offset: number, limit: number): Promise<{ pokemons: PokemonDomain[]; count: number; }> {
     try {
       const customPokemons = await PokemonModel.findAll({
-        include: 'Types',
         offset,
         limit,
         order: [['id', 'DESC']]
@@ -41,7 +41,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
    */
   async findById(id: number | string): Promise<PokemonDomain | null> {
     try {
-      const pokemon = await PokemonModel.findByPk(id, { include: 'Types' });
+      const pokemon = await PokemonModel.findByPk(id);
       return pokemon ? this.mapToEntity(pokemon) : null;
     } catch (error) {
       console.error(`Error finding custom pokemon with ID ${id}:`, error);
@@ -56,7 +56,6 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
     try {
       const pokemon = await PokemonModel.findOne({
         where: { name },
-        include: 'Types'
       });
       return pokemon ? this.mapToEntity(pokemon) : null;
     } catch (error) {
@@ -71,24 +70,37 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   async create(pokemonDomain: PokemonDomain, id: number): Promise<PokemonDomain> {
     try {
 
-      const pokemon = await PokemonModel.create({
-        id: id,
-        name: pokemonDomain.name,
-        life: pokemonDomain.life,
-        strength: pokemonDomain.strength,
-        defense: pokemonDomain.defense,
-        speed: pokemonDomain.speed,
-        height: pokemonDomain.height,
-        weight: pokemonDomain.weight,
-        img: pokemonDomain.img,
-        personalized: true
-      });
+      logger.info('LocalDB: Creating new pokemon', { id, name: pokemonDomain.name.toString() });
 
-      // Add types if provided
-      if (pokemonDomain.types && pokemonDomain.types.length > 0) {
-        // @ts-ignore - Sequelize method
-        await pokemon.addTypes(pokemonDomain.types.map(t => t.id));
+      // Convert types array to JSON format for storage
+      const typesJson = pokemonDomain.types && pokemonDomain.types.length > 0
+        ? pokemonDomain.types.map(t => ({
+          id: t.id,
+          name: t.name.toString()
+        }))
+        : [];
+
+      const model = {
+        id,
+        name: pokemonDomain.name.toString(),
+        life: pokemonDomain.life.toString(),
+        strength: pokemonDomain.strength.toString(),
+        defense: pokemonDomain.defense.toString(),
+        speed: pokemonDomain.speed.toString(),
+        height: pokemonDomain.height.toString(),
+        weight: pokemonDomain.weight.toString(),
+        img: pokemonDomain.img.toString() || "https://http2.mlstatic.com/D_NQ_NP_2X_872556-MLA99519668399_112025-F.webp",
+        types: [{ id: 1, name: "normal" }],
+        personalized: true
       }
+
+      const pokemon = await PokemonModel.create(model);
+
+      logger.info('LocalDB: Pokemon created successfully', {
+        pokemonId: pokemon.id,
+        pokemonName: pokemon.name,
+        typesCount: typesJson.length
+      });
 
       return this.mapToEntity(pokemon);
     } catch (error) {
@@ -114,18 +126,23 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
    * Validates all data during construction
    */
   private mapToEntity(model: any): PokemonDomain {
-    return new PokemonDomain(
-      model.id,
-      model.name,
-      model.life,
-      model.strength,
-      model.defense,
-      model.speed,
-      model.height,
-      model.weight,
-      model.personalized || false,
-      model.img,
-      model.Types
+    return PokemonDomain.fromPrimitives(
+      {
+        id: model.id,
+        name: model.name,
+        life: parseInt(model.life),
+        strength: parseInt(model.strength),
+        defense: parseInt(model.defense),
+        speed: parseInt(model.speed),
+        height: parseInt(model.height),
+        weight: parseInt(model.weight),
+        personalized: model.personalized || false,
+        img: model.img,
+        types: model.types ? model.types.map((t: any) => ({
+          id: t.id,
+          name: t.name
+        })) : []
+      }
     );
   }
 }

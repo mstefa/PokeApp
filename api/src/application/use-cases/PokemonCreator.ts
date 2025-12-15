@@ -1,3 +1,4 @@
+import { logger } from '@/shared/logger';
 import { Pokemon, PokemonDto } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
 import InvalidArgumentError from '../../domain/errors/InvalidArgumentError';
@@ -17,10 +18,14 @@ export class PokemonCreator {
   async run(data: PokemonDto, id: number): Promise<Pokemon> {
     try {
 
+      logger.info(`PokemonCreator: Creating pokemon with ID ${id}`, { data });
+
       const pokemon = Pokemon.fromPrimitives({
         ...data,
         id
       });
+
+      logger.info("PokemonCreator: Validated pokemon", { pokemon });
 
       const savedPokemon = await this.repository.create(pokemon, id);
 

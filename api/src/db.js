@@ -36,16 +36,11 @@ let sequelize =
       { logging: false, native: false }
     );
 
-// Sequelize for local develompent      
-// const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`, {
-//   logging: false, // set to console.log to see the raw SQL queries
-//   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-// });
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
 
-// Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
+// Leemos todos los archivos de la carpeta Models
 fs.readdirSync(path.join(__dirname, '/models'))
   .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
   .forEach((file) => {
@@ -54,36 +49,25 @@ fs.readdirSync(path.join(__dirname, '/models'))
 
 // Injectamos la conexion (sequelize) a todos los modelos
 modelDefiners.forEach(model => model(sequelize));
-// Capitalizamos los nombres de los modelos ie: product => Product
+
+// Capitalizamos los nombres de los modelos
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-// En sequelize.models están todos los modelos importados como propiedades
-// Para relacionarlos hacemos un destructuring
-const { Pokemon, Type } = sequelize.models;
+const { Pokemon } = sequelize.models;
 
-
-Pokemon.beforeValidate((Pokemon, options) => {
-  if (!Pokemon.name && typeof (Pokemon.name) === "string") {
-    throw new Error('It requires a valid name')
-  };
+Pokemon.beforeValidate((pokemon, options) => {
+  if (!pokemon.name || typeof pokemon.name !== "string") {
+    throw new Error('It requires a valid name');
+  }
 });
 
-
-Type.beforeValidate((Types, options) => {
-  if (!Type.name && typeof (Type.name) === "string") {
-    throw new Error('It requires a valid name')
-  };
-});
-
-
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
-Pokemon.belongsToMany(Type, { through: 'TypePokemon' });
-Type.belongsToMany(Pokemon, { through: 'TypePokemon' });
+// NOTE: Las relaciones muchos-a-muchos con Type han sido eliminadas
+// Los tipos ahora se almacenan como JSON directamente en la tabla Pokemon
+// No se necesita tabla intermedia (pokemon_types)
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
+  ...sequelize.models,
+  conn: sequelize,
 };

@@ -18,8 +18,10 @@ const startServer = async (): Promise<void> => {
       logger.info(`📝 Environment: ${config.nodeEnv}`);
     });
   } catch (error) {
-    logger.error('Failed to start server');
-    logger.error(error);
+    logger.error('Failed to start server', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
     process.exit(1);
   }
 };

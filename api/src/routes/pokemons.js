@@ -84,29 +84,29 @@ router.get('/:id', async function (req, res) {
   };
 });
 
-router.post('/', async function (req, res) {
-  let data = req.body;
-  // console.log(data)
-  try {
-    let info = await savePokemon(data, lastId)
-    if (info.id !== 'Error') {
-      console.log(info.id)
-      lastId = info.id;
-      countDBPokemons++
-      console.log(lastId)
-      countTotalPokemons = countAPIPokemons + countDBPokemons;
-      res.json('Your pokemon was correctly added. His Id is #' + info.id)
-    } else {
-      res.json('An error occurred. Please check if the data is correct')
-    }
+// router.post('/', async function (req, res) {
+//   let data = req.body;
+//   // console.log(data)
+//   try {
+//     let info = await savePokemon(data, lastId)
+//     if (info.id !== 'Error') {
+//       console.log(info.id)
+//       lastId = info.id;
+//       countDBPokemons++
+//       console.log(lastId)
+//       countTotalPokemons = countAPIPokemons + countDBPokemons;
+//       res.json('Your pokemon was correctly added. His Id is #' + info.id)
+//     } else {
+//       res.json('An error occurred. Please check if the data is correct')
+//     }
 
-  }
-  catch (error) {
-    console.log('An error occurred')
-    // console.log(error)
-    res.status(500).json(error)
-  }
+//   }
+//   catch (error) {
+//     console.log('An error occurred')
+//     // console.log(error)
+//     res.status(500).json(error)
+//   }
 
-});
+// });
 
 module.exports = router;

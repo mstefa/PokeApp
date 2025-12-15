@@ -1,0 +1,22 @@
+POST http://localhost:3002/pokemons
+Content-Type: application/json
+
+{
+  "name": "P4",
+  "type": "Electric",
+  "level": 25,
+  "hp": 35,
+  "life": 35,
+  "attack": 55,
+  "defense": 40,
+  "height": 50,
+  "defense": 50,
+  "speed": 90,
+  "weight": 60,
+  "url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+  "types" : [{
+    "id": 13,
+    "name": "Electric"
+  }]
+
+}
