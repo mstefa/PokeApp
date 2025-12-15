@@ -170,7 +170,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
    * - External PokeAPI is read-only and cannot be modified
    * - User-created Pokemon are always stored locally
    */
-  async create(pokemon: Pokemon, id: number): Promise<Pokemon> {
+  async create(pokemon: Pokemon, id: number): Promise<void> {
     try {
       // All write operations go to the local database
       return await this.localRepository.create(pokemon, id);

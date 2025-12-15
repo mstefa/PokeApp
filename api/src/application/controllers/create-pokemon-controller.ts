@@ -7,7 +7,6 @@ import { PokemonCreator } from '../use-cases/PokemonCreator';
 import { logger } from '../../shared/logger';
 import InvalidArgumentError from '../../domain/errors/InvalidArgumentError';
 import { CreatePokemonSchema, CreatePokemonRequest as ValidatedCreatePokemonRequest } from '../../shared/validation/pokemon-schemas';
-import { is } from 'zod/v4/locales';
 
 type CreatePokemonRequest = Request & {
   body: ValidatedCreatePokemonRequest;

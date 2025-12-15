@@ -67,7 +67,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   /**
    * Create a new custom pokemon in the local database with validation
    */
-  async create(pokemonDomain: PokemonDomain, id: number): Promise<PokemonDomain> {
+  async create(pokemonDomain: PokemonDomain, id: number): Promise<void> {
     try {
 
       logger.info('LocalDB: Creating new pokemon', { id, name: pokemonDomain.name.toString() });
@@ -102,7 +102,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
         typesCount: typesJson.length
       });
 
-      return this.mapToEntity(pokemon);
+      return;
     } catch (error) {
       console.error('Error creating custom pokemon:', error);
       throw error;
