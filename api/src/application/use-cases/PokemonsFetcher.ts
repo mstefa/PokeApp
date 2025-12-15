@@ -9,6 +9,7 @@ export class PokemonsFetcher {
   }
 
   async run(limit: number, offset: number): Promise<PokemonsDto> {
+
     const result = await this.repository.findAll(offset, limit);
 
     return {
