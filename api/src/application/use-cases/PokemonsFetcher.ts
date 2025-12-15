@@ -1,4 +1,4 @@
-import { PokemonRepository } from '../../domain/ports/PokemonRepository';
+import { PokemonRepository } from '../../domain/PokemonRepository';
 import { PokemonsDto } from '../dto/PokemonsDto';
 
 export class PokemonsFetcher {
@@ -13,7 +13,7 @@ export class PokemonsFetcher {
 
     return {
       count: result.count,
-      pokemons: result.pokemons
+      pokemons: result.pokemons.map((p) => p.toPrimitives())
     };
   }
 }

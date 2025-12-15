@@ -38,7 +38,7 @@ export class CreatePokemonController extends Controller {
       const pokemon = await this.pokemonCreator.run(req.body, nextId);
 
       res.status(httpStatus.CREATED).json({
-        message: `Your pokemon was correctly added. Its ID is #${pokemon.getId()}`,
+        message: `Your pokemon was correctly added. Its ID is #${pokemon.id}`,
         pokemon: pokemon.toPrimitives()
       });
     } catch (error) {

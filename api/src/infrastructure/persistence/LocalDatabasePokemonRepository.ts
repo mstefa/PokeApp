@@ -1,6 +1,5 @@
 import { Pokemon as PokemonDomain } from '../../domain/Pokemon';
-import { PokemonListResponse, CreatePokemonRequest } from '../../domain/entities/Pokemon';
-import { PokemonRepository } from '../../domain/ports/PokemonRepository';
+import { PokemonRepository } from '../../domain/PokemonRepository';
 
 // @ts-ignore - db.js is JavaScript
 const { Pokemon: PokemonModel } = require('../../db.js');
@@ -16,7 +15,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
    * Find all custom Pokemon in the local database
    * Does NOT include official Pokemon from PokeAPI
    */
-  async findAll(offset: number, limit: number): Promise<PokemonListResponse> {
+  async findAll(offset: number, limit: number): Promise<{ pokemons: PokemonDomain[]; count: number; }> {
     try {
       const customPokemons = await PokemonModel.findAll({
         include: 'Types',
@@ -69,39 +68,26 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   /**
    * Create a new custom pokemon in the local database with validation
    */
-  async create(data: CreatePokemonRequest, id: number): Promise<PokemonDomain> {
+  async create(pokemonDomain: PokemonDomain, id: number): Promise<PokemonDomain> {
     try {
-      // Use domain class for validation before persistence
-      const pokemonDomain = new PokemonDomain(
-        id,
-        data.name,
-        data.life,
-        data.strength,
-        data.defense,
-        data.speed,
-        data.height,
-        data.weight,
-        true,
-        data.img
-      );
 
       const pokemon = await PokemonModel.create({
-        id: pokemonDomain.getId(),
-        name: pokemonDomain.getName(),
-        life: pokemonDomain.getLife(),
-        strength: pokemonDomain.getStrength(),
-        defense: pokemonDomain.getDefense(),
-        speed: pokemonDomain.getSpeed(),
-        height: pokemonDomain.getHeight(),
-        weight: pokemonDomain.getWeight(),
-        img: pokemonDomain.getImage(),
+        id: id,
+        name: pokemonDomain.name,
+        life: pokemonDomain.life,
+        strength: pokemonDomain.strength,
+        defense: pokemonDomain.defense,
+        speed: pokemonDomain.speed,
+        height: pokemonDomain.height,
+        weight: pokemonDomain.weight,
+        img: pokemonDomain.img,
         personalized: true
       });
 
       // Add types if provided
-      if (data.types && data.types.length > 0) {
+      if (pokemonDomain.types && pokemonDomain.types.length > 0) {
         // @ts-ignore - Sequelize method
-        await pokemon.addTypes(data.types.map(t => t.id));
+        await pokemon.addTypes(pokemonDomain.types.map(t => t.id));
       }
 
       return this.mapToEntity(pokemon);
@@ -138,7 +124,8 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
       model.height,
       model.weight,
       model.personalized || false,
-      model.img
+      model.img,
+      model.Types
     );
   }
 }

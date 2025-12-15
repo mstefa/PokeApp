@@ -1,6 +1,5 @@
-import type { Pokemon } from '../../domain/Pokemon';
-import { PokemonListResponse, CreatePokemonRequest } from '../../domain/entities/Pokemon';
-import { PokemonRepository } from '../../domain/ports/PokemonRepository';
+import { Pokemon } from '../../domain/Pokemon';
+import { PokemonRepository } from '../../domain/PokemonRepository';
 import { ExternalPokemonAPI } from '../external/ExternalPokemonAPI';
 import { LocalDatabasePokemonRepository } from '../persistence/LocalDatabasePokemonRepository';
 
@@ -41,10 +40,10 @@ export class PokemonRepositoryFacade implements PokemonRepository {
    * 2. If more results are needed, fetch custom Pokemon from the local database
    * 3. Concatenate results to provide a seamless unified list
    */
-  async findAll(offset: number, limit: number): Promise<PokemonListResponse> {
+  async findAll(offset: number, limit: number): Promise<{ pokemons: Pokemon[]; count: number }> {
     try {
       // Try to get official Pokemon from API starting at the offset (returns DTOs)
-      const apiPokemonDtos = await this.externalAPI.getPokemonsFromAPI(offset, limit);
+      const apiPokemonDto = await this.externalAPI.getPokemonsFromAPI(offset, limit);
 
       // Get total counts from both sources
       const apiTotalCount = this.externalAPI.getTotalCount();
@@ -52,20 +51,24 @@ export class PokemonRepositoryFacade implements PokemonRepository {
       const totalCount = apiTotalCount + dbTotalCount;
 
       // If we got enough results from the API, return them as primitives
-      if (apiPokemonDtos.length === limit) {
+      if (apiPokemonDto.length === limit) {
         return {
           count: totalCount,
-          pokemons: apiPokemonDtos
+          pokemons: apiPokemonDto.map(dto => {
+            return Pokemon.fromPrimitives(dto);
+          })
         };
       }
 
       // Otherwise, we need to supplement with custom Pokemon from the database
-      const remainingNeeded = limit - apiPokemonDtos.length;
+      const remainingNeeded = limit - apiPokemonDto.length;
       const dbPokemons = await this.localRepository.findAll(0, remainingNeeded);
 
       return {
         count: totalCount,
-        pokemons: [...apiPokemonDtos, ...dbPokemons.pokemons]
+        pokemons: [...apiPokemonDto.map(dto => {
+          return Pokemon.fromPrimitives(dto);
+        }), ...dbPokemons.pokemons]
       };
     } catch (error) {
       console.error('Error in PokemonRepositoryFacade.findAll:', error);
@@ -167,7 +170,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
    * - External PokeAPI is read-only and cannot be modified
    * - User-created Pokemon are always stored locally
    */
-  async create(pokemon: CreatePokemonRequest, id: number): Promise<Pokemon> {
+  async create(pokemon: Pokemon, id: number): Promise<Pokemon> {
     try {
       // All write operations go to the local database
       return await this.localRepository.create(pokemon, id);

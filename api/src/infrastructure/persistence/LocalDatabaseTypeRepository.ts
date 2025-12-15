@@ -1,5 +1,5 @@
 import { Type } from '../../domain/Type';
-import { TypeRepository } from '../../domain/ports/TypeRepository';
+import { TypeRepository } from '../../domain/TypeRepository';
 
 // @ts-ignore - db.js is JavaScript
 const { Type: TypeModel } = require('../../db.js');
@@ -51,16 +51,16 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
   /**
    * Create a new type with validation
    */
-  async create(name: string): Promise<Type> {
+  async create(name: string, id: number): Promise<Type> {
     try {
       // Domain class validates name during construction
-      const typeDomain = new Type(name);
+      const typeDomain = new Type(id, name);
 
       const type = await TypeModel.create({
-        name: typeDomain.getName()
+        name: typeDomain.name
       });
 
-      return new Type(type.name, type.id);
+      return new Type(type.id, type.name);
     } catch (error) {
       console.error('Error creating type:', error);
       throw error;
@@ -70,17 +70,17 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
   /**
    * Find or create a type
    */
-  async findOrCreate(name: string, id?: number): Promise<Type> {
+  async findOrCreate(name: string, id: number): Promise<Type> {
     try {
       // Domain class validates name during construction
-      const typeDomain = new Type(name, id);
+      const typeDomain = new Type(id, name);
 
       const [type] = await TypeModel.findOrCreate({
-        where: { name: typeDomain.getName() },
-        defaults: id ? { id, name: typeDomain.getName() } : { name: typeDomain.getName() }
+        where: { name: typeDomain.name },
+        defaults: id ? { id, name: typeDomain.name } : { name: typeDomain.name }
       });
 
-      return new Type(type.name, type.id);
+      return new Type(type.id, type.name);
     } catch (error) {
       console.error(`Error finding or creating type "${name}":`, error);
       throw error;

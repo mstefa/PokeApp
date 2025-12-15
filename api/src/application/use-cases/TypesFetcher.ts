@@ -1,4 +1,4 @@
-import { TypeRepository } from '../../domain/ports/TypeRepository';
+import { TypeRepository } from '../../domain/TypeRepository';
 
 /**
  * Use Case: Get Types

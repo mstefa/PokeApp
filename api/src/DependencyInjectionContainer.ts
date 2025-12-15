@@ -8,8 +8,8 @@ import { PokemonRepositoryFacade } from './infrastructure/adapters/PokemonReposi
 import { ExternalPokemonAPI } from './infrastructure/external/ExternalPokemonAPI';
 import { LocalDatabasePokemonRepository } from './infrastructure/persistence/LocalDatabasePokemonRepository';
 import { LocalDatabaseTypeRepository } from './infrastructure/persistence/LocalDatabaseTypeRepository';
-import { PokemonRepository } from './domain/ports/PokemonRepository';
-import { TypeRepository } from './domain/ports/TypeRepository';
+import { PokemonRepository } from './domain/PokemonRepository';
+import { TypeRepository } from './domain/TypeRepository';
 
 export class DependencyContainer {
   private static instance: DependencyContainer;

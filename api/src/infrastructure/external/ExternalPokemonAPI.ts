@@ -136,7 +136,8 @@ export class ExternalPokemonAPI {
       speed,
       height,
       weight,
-      personalized: false
+      personalized: false,
+      types: data.types.map((t: any) => ({ id: t.type.url.split('/').slice(-2, -1)[0], name: t.type.name }))
     };
   }
 }

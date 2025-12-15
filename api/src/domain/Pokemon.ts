@@ -1,95 +1,23 @@
 import { PokemonName } from './value-objects/PokemonName';
 import { PokemonStat } from './value-objects/PokemonStat';
 import { PokemonImage } from './value-objects/PokemonImage';
-
-export interface PokemonDto {
-  id: number;
-  name: string;
-  life?: number;
-  strength?: number;
-  defense?: number;
-  speed?: number;
-  height?: number;
-  weight?: number;
-  personalized: boolean;
-  img?: string;
-}
+import { Type, TypeDto } from './Type';
 
 export class Pokemon {
-  private readonly id: number;
-  private readonly name: PokemonName;
-  private readonly life: PokemonStat;
-  private readonly strength: PokemonStat;
-  private readonly defense: PokemonStat;
-  private readonly speed: PokemonStat;
-  private readonly height: PokemonStat;
-  private readonly weight: PokemonStat;
-  private readonly personalized: boolean;
-  private readonly img: PokemonImage;
 
   constructor(
-    id: number,
-    name: string,
-    life?: number,
-    strength?: number,
-    defense?: number,
-    speed?: number,
-    height?: number,
-    weight?: number,
-    personalized: boolean = false,
-    img?: string
-  ) {
-    this.id = id;
-    this.name = new PokemonName(name);
-    this.life = new PokemonStat(life, 'Life');
-    this.strength = new PokemonStat(strength, 'Strength');
-    this.defense = new PokemonStat(defense, 'Defense');
-    this.speed = new PokemonStat(speed, 'Speed');
-    this.height = new PokemonStat(height, 'Height');
-    this.weight = new PokemonStat(weight, 'Weight');
-    this.personalized = personalized;
-    this.img = new PokemonImage(img);
-  }
-
-  getId(): number {
-    return this.id;
-  }
-
-  getName(): string {
-    return this.name.value;
-  }
-
-  getLife(): number {
-    return this.life.value;
-  }
-
-  getStrength(): number {
-    return this.strength.value;
-  }
-
-  getDefense(): number {
-    return this.defense.value;
-  }
-
-  getSpeed(): number {
-    return this.speed.value;
-  }
-
-  getHeight(): number {
-    return this.height.value;
-  }
-
-  getWeight(): number {
-    return this.weight.value;
-  }
-
-  isPersonalized(): boolean {
-    return this.personalized;
-  }
-
-  getImage(): string {
-    return this.img.value;
-  }
+    readonly id: number,
+    readonly name: PokemonName,
+    readonly life: PokemonStat,
+    readonly strength: PokemonStat,
+    readonly defense: PokemonStat,
+    readonly speed: PokemonStat,
+    readonly height: PokemonStat,
+    readonly weight: PokemonStat,
+    readonly personalized: boolean = false,
+    readonly img: PokemonImage,
+    readonly types: Type[]
+  ) { }
 
   toPrimitives(): PokemonDto {
     return {
@@ -103,21 +31,37 @@ export class Pokemon {
       weight: this.weight.value,
       personalized: this.personalized,
       img: this.img.value,
+      types: this.types.map(t => t.toPrimitives())
     };
   }
 
   static fromPrimitives(data: PokemonDto): Pokemon {
     return new Pokemon(
       data.id,
-      data.name,
-      data.life,
-      data.strength,
-      data.defense,
-      data.speed,
-      data.height,
-      data.weight,
+      new PokemonName(data.name),
+      new PokemonStat(data.life, 'Life'),
+      new PokemonStat(data.strength, 'Strength'),
+      new PokemonStat(data.defense, 'Defense'),
+      new PokemonStat(data.speed, 'Speed'),
+      new PokemonStat(data.height, 'Height'),
+      new PokemonStat(data.weight, 'Weight'),
       data.personalized ?? false,
-      data.img
+      new PokemonImage(data.img),
+      data.types.map(t => new Type(t.id, t.name)),
     );
   }
+}
+
+export interface PokemonDto {
+  id: number;
+  name: string;
+  life: number;
+  strength: number;
+  defense: number;
+  speed: number;
+  height: number;
+  weight: number;
+  personalized: boolean;
+  img: string;
+  types: TypeDto[];
 }

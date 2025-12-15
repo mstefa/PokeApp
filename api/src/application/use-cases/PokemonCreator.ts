@@ -1,6 +1,5 @@
-import { Pokemon } from '../../domain/Pokemon';
-import { PokemonRepository } from '../../domain/ports/PokemonRepository';
-import { CreatePokemonRequest } from '../../domain/entities/Pokemon';
+import { Pokemon, PokemonDto } from '../../domain/Pokemon';
+import { PokemonRepository } from '../../domain/PokemonRepository';
 import InvalidArgumentError from '../../domain/errors/InvalidArgumentError';
 
 /**
@@ -15,12 +14,15 @@ export class PokemonCreator {
     this.repository = repository;
   }
 
-  async run(data: CreatePokemonRequest, id: number): Promise<Pokemon> {
+  async run(data: PokemonDto, id: number): Promise<Pokemon> {
     try {
-      // Domain class validates all inputs during construction
-      // If validation fails, InvalidArgumentError is thrown
-      // Persist to repository
-      const savedPokemon = await this.repository.create(data, id);
+
+      const pokemon = Pokemon.fromPrimitives({
+        ...data,
+        id
+      });
+
+      const savedPokemon = await this.repository.create(pokemon, id);
 
       return savedPokemon;
     } catch (error) {
