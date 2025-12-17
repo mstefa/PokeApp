@@ -1,6 +1,7 @@
 import { logger } from '@/shared/logger';
 import { Pokemon as PokemonDomain } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
+import { NotFoundError } from '@/shared/errors';
 
 // @ts-ignore - db.js is JavaScript
 const { Pokemon: PokemonModel } = require('../../db.js');
@@ -42,9 +43,16 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
   async findById(id: number | string): Promise<PokemonDomain | null> {
     try {
       const pokemon = await PokemonModel.findByPk(id);
-      return pokemon ? this.mapToEntity(pokemon) : null;
+
+      if (!pokemon) {
+        logger.debug('LocalDB: Pokemon not found', { id });
+
+        throw new NotFoundError(`Custom Pokemon with ID "${id}" not found`);
+      }
+
+      return this.mapToEntity(pokemon)
     } catch (error) {
-      console.error(`Error finding custom pokemon with ID ${id}:`, error);
+      logger.error(`Error finding custom pokemon with ID ${id}:`, error as Error);
       throw error;
     }
   }

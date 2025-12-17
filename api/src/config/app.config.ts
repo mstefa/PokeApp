@@ -24,6 +24,7 @@ export interface AppConfig {
   port: number;
   nodeEnv: 'development' | 'production' | 'test';
   database: DatabaseConfig;
+  officialPokemonThreshold: number;
 }
 
 const getAppConfig = (): AppConfig => {
@@ -60,6 +61,7 @@ const getAppConfig = (): AppConfig => {
   return {
     port,
     nodeEnv,
+    officialPokemonThreshold: 1118,
     database: dbConfig,
   };
 };

@@ -46,7 +46,9 @@ export class ExternalPokemonAPI {
       const url = `${POKEAPI_BASE_URL}/pokemon/${idOrName}`;
       const response = await axios.get(url);
 
-      return this.mapPokemonDetail(response.data, true);
+      const pokemon = this.mapPokemonDetail(response.data, true);
+      return pokemon;
+
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         return null;
@@ -126,6 +128,11 @@ export class ExternalPokemonAPI {
       weight = data.weight || 0;
     }
 
+    const types = data.types.map((t: any) => (
+      { id: t.type.url.split('/').slice(-2, -1)[0], name: t.type.name }
+    )
+    );
+
     return {
       id: data.id,
       name: data.name,
@@ -137,7 +144,7 @@ export class ExternalPokemonAPI {
       height,
       weight,
       personalized: false,
-      types: data.types.map((t: any) => ({ id: t.type.url.split('/').slice(-2, -1)[0], name: t.type.name }))
+      types
     };
   }
 }

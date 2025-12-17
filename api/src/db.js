@@ -70,4 +70,5 @@ Pokemon.beforeValidate((pokemon, options) => {
 module.exports = {
   ...sequelize.models,
   conn: sequelize,
+  Pokemon
 };

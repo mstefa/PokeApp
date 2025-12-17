@@ -27,17 +27,13 @@ export class CreatePokemonController extends Controller {
 
       logger.info(`Creating pokemon "${validatedBody.name}"`);
 
-      // Get next ID from repository (this will be passed from the route)
-      const nextId = (req as any).nextId || 10220 + Math.floor(Math.random() * 1000);
-
       // Cast the validated body to PokemonDto (id will be set by PokemonCreator)
       const pokemonData = {
         ...validatedBody,
         personalized: true,
-        id: nextId
       };
 
-      const pokemon = await this.pokemonCreator.run(pokemonData, nextId);
+      const pokemon = await this.pokemonCreator.run(pokemonData);
 
       logger.info(`Pokemon created successfully`, {
         pokemonId: pokemon.id,

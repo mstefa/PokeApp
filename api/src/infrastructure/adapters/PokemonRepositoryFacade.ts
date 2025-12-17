@@ -1,7 +1,9 @@
+
 import { Pokemon } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
 import { ExternalPokemonAPI } from '../external/ExternalPokemonAPI';
 import { LocalDatabasePokemonRepository } from '../persistence/LocalDatabasePokemonRepository';
+import { config } from '@/config/app.config';
 
 /**
  * Pokemon Repository Facade (Aggregation Pattern)
@@ -22,7 +24,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
   private localRepository: LocalDatabasePokemonRepository;
 
   // Constant representing the total count of official Pokemon in PokeAPI
-  private readonly OFFICIAL_POKEMON_THRESHOLD = 1118;
+  private readonly OFFICIAL_POKEMON_THRESHOLD = config.officialPokemonThreshold;
 
   constructor(
     externalAPI?: ExternalPokemonAPI,
@@ -87,7 +89,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
    */
   async findById(id: number | string): Promise<Pokemon | null> {
     try {
-      const numId = typeof id === 'string' ? parseInt(id) : id;
+      const numId = typeof id === 'string' ? parseInt(id) : id; //TODO: use only number
 
       // Check if this is an official Pokemon (by ID range)
       if (numId >= 1 && numId <= this.OFFICIAL_POKEMON_THRESHOLD) {
@@ -95,19 +97,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
         const officialPokemonDto = await this.externalAPI.getPokemonFromAPI(numId);
         if (officialPokemonDto) {
           // Convert DTO to domain object
-          const { Pokemon } = require('../../domain/Pokemon');
-          return new Pokemon(
-            officialPokemonDto.id,
-            officialPokemonDto.name,
-            officialPokemonDto.life,
-            officialPokemonDto.strength,
-            officialPokemonDto.defense,
-            officialPokemonDto.speed,
-            officialPokemonDto.height,
-            officialPokemonDto.weight,
-            officialPokemonDto.personalized ?? false,
-            officialPokemonDto.img
-          );
+          return Pokemon.fromPrimitives(officialPokemonDto);
         }
       }
 

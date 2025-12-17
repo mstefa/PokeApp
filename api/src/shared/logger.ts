@@ -7,7 +7,7 @@ import type { LoggerOptions } from 'pino';
  */
 interface CustomLogger {
   info(message: string, data?: Record<string, any>): void;
-  error(message: string, data?: Record<string, any>): void;
+  error(message: string, error?: Error | unknown): void;
   warn(message: string, data?: Record<string, any>): void;
   debug(message: string, data?: Record<string, any>): void;
   trace(message: string, data?: Record<string, any>): void;
@@ -92,9 +92,9 @@ const logger: CustomLogger = {
     }
   },
 
-  error: (message: string, data?: Record<string, any>) => {
-    if (data) {
-      baseLogger.error({ msg: message, data });
+  error: (message: string, error?: Error) => {
+    if (error) {
+      baseLogger.error({ msg: message, error });
     } else {
       baseLogger.error(message);
     }

@@ -31,58 +31,58 @@ let lastId = 10220;
 // });
 
 // query by name---------------------------------
-router.get('/search/', async function (req, res) {
-  let name = req.query.name;
-  try {
-    let url = `https://pokeapi.co/api/v2/pokemon/${name}`
-    let info = await getPokemonDetailAPI(url, true);
-    res.json(info.id)
-  }
-  catch (error) {
-    if (error.message == '404:PokemonNotFound') {
+// router.get('/search/', async function (req, res) {
+//   let name = req.query.name;
+//   try {
+//     let url = `https://pokeapi.co/api/v2/pokemon/${name}`
+//     let info = await getPokemonDetailAPI(url, true);
+//     res.json(info.id)
+//   }
+//   catch (error) {
+//     if (error.message == '404:PokemonNotFound') {
 
-      try {
-        let info = await getPokemonByName(name);
-        // console.log(info[0].id)
-        res.json(info[0].id)
-      }
-      catch (error) {
-        console.log(error)
-        res.status(404).json({ error: 'Pokemon not found' })
-      }
-    } else {
-      console.log(error)
-      res.status(404).json(error)
-    }
+//       try {
+//         let info = await getPokemonByName(name);
+//         // console.log(info[0].id)
+//         res.json(info[0].id)
+//       }
+//       catch (error) {
+//         console.log(error)
+//         res.status(404).json({ error: 'Pokemon not found' })
+//       }
+//     } else {
+//       console.log(error)
+//       res.status(404).json(error)
+//     }
 
-  }
-});
+//   }
+// });
 
-router.get('/:id', async function (req, res) {
-  let id = req.params.id;
-  try {
-    let url = `https://pokeapi.co/api/v2/pokemon/${id}`
-    let info = await getPokemonDetailAPI(url, true);
-    res.json(info)
-  }
-  catch (error) {
-    if (error.message == '404:PokemonNotFound') {
+// router.get('/:id', async function (req, res) {
+//   let id = req.params.id;
+//   try {
+//     let url = `https://pokeapi.co/api/v2/pokemon/${id}`
+//     let info = await getPokemonDetailAPI(url, true);
+//     res.json(info)
+//   }
+//   catch (error) {
+//     if (error.message == '404:PokemonNotFound') {
 
-      try {
-        let info = await getPokemonById(id);
-        // console.log(info[0].id)
-        res.json(info[0])
-      }
-      catch (error) {
-        console.log(error)
-        res.status(404).json({ error: 'Pokemon not found' })
-      }
-    } else {
-      console.log(error)
-      res.status(404).json(error)
-    }
-  };
-});
+//       try {
+//         let info = await getPokemonById(id);
+//         // console.log(info[0].id)
+//         res.json(info[0])
+//       }
+//       catch (error) {
+//         console.log(error)
+//         res.status(404).json({ error: 'Pokemon not found' })
+//       }
+//     } else {
+//       console.log(error)
+//       res.status(404).json(error)
+//     }
+//   };
+// });
 
 // router.post('/', async function (req, res) {
 //   let data = req.body;

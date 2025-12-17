@@ -1,6 +1,8 @@
 import { logger } from '@/shared/logger';
-import { Pokemon, PokemonDto } from '../../domain/Pokemon';
+import { Pokemon } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
+import { TypeDto } from '@/domain/Type';
+import { config } from '@/config/app.config';
 
 /**
  * Use Case: Create Pokemon
@@ -14,9 +16,11 @@ export class PokemonCreator {
     this.repository = repository;
   }
 
-  async run(data: PokemonDto, id: number): Promise<Pokemon> {
+  async run(data: CreatePokemonDto): Promise<Pokemon> {
 
-    logger.info(`PokemonCreator: Creating pokemon with ID ${id}`, { data });
+    logger.info(`PokemonCreator: Creating pokemon with name ${data.name}`, { data });
+
+    const id = await this.repository.count() + 1 + config.officialPokemonThreshold; // Simple ID generation strategy
 
     const pokemon = Pokemon.fromPrimitives({
       ...data,
@@ -30,4 +34,18 @@ export class PokemonCreator {
     return pokemon;
 
   }
+}
+
+
+export interface CreatePokemonDto {
+  name: string;
+  life: number;
+  strength: number;
+  defense: number;
+  speed: number;
+  height: number;
+  weight: number;
+  personalized: boolean;
+  img: string;
+  types: TypeDto[];
 }
