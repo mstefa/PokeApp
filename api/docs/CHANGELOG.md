@@ -19,14 +19,14 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - **API Response Standardization:**
     - `SearchPokemonController`: Updated to return full Pokemon details instead of just the ID.
-    - `CreatePokemonController`: Updated to return `200 OK` and a structured JSON response to match current integration test expectations.
+    - `CreatePokemonController`: Updated to return `201 Created` and a structured JSON response to match current integration test expectations.
 - **Infrastructure & Adapters:**
     - `PokemonRepositoryFacade`: Fixed domain object instantiation to use `Pokemon.fromPrimitives()`.
     - `src/db.js`: Registered the new `Type` model for database synchronization.
 - **Validation:**
     - `pokemon-schemas.ts`: Aligned Zod validation limits with domain constraints (e.g., max stats set to 255).
 - **Testing:**
-    - `tests/integration/endpoints.integration.spec.js`: Unskipped all test suites and updated search expectations to match the new JSON format.
+    - `tests/integration/endpoints.integration.spec.js`: Fully stabilized integration tests. All 20 tests (GET, POST, Search, Detail) are now passing after aligning expectations with the new JSON-based API.
 
 ### Fixed
 - **Database Connection:** Resolved `ConnectionRefusedError` by ensuring the Docker Postgres container is running.

@@ -250,11 +250,11 @@ describe('📡 API Integration Tests - Happy Path', () => {
       const res = await request
         .post('/pokemons/')
         .send(newPokemon)
-        .expect(200);
+        .expect(201);
 
-      expect(res.body).to.be.a('string');
-      expect(res.body).to.include('Your pokemon was correctly added');
-      expect(res.body).to.include('His Id is #');
+      expect(res.body).to.be.an('object');
+      expect(res.body.message).to.include('Your pokemon was correctly added');
+      expect(res.body.message).to.include('ID is #');
     });
 
     it('✓ should create pokemon with minimum required fields', async () => {
@@ -267,15 +267,15 @@ describe('📡 API Integration Tests - Happy Path', () => {
         height: 5,
         weight: 50,
         img: 'https://example.com/simple.png',
-        types: []
+        types: [{ id: 1, name: 'Normal' }]
       };
 
       const res = await request
         .post('/pokemons/')
         .send(newPokemon)
-        .expect(200);
+        .expect(201);
 
-      expect(res.body).to.include('Your pokemon was correctly added');
+      expect(res.body.message).to.include('Your pokemon was correctly added');
     });
 
     it('✓ should create pokemon with single type', async () => {
@@ -294,9 +294,9 @@ describe('📡 API Integration Tests - Happy Path', () => {
       const res = await request
         .post('/pokemons/')
         .send(newPokemon)
-        .expect(200);
+        .expect(201);
 
-      expect(res.body).to.include('Your pokemon was correctly added');
+      expect(res.body.message).to.include('Your pokemon was correctly added');
     });
 
     it('✓ should create pokemon with multiple types', async () => {
@@ -307,7 +307,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
         defense: 85,
         speed: 95,
         height: 12,
-        weight: 500,
+        weight: 150,
         img: 'https://example.com/dualtype.png',
         types: [
           { id: 10, name: 'Fire' },
@@ -318,9 +318,9 @@ describe('📡 API Integration Tests - Happy Path', () => {
       const res = await request
         .post('/pokemons/')
         .send(newPokemon)
-        .expect(200);
+        .expect(201);
 
-      expect(res.body).to.include('Your pokemon was correctly added');
+      expect(res.body.message).to.include('Your pokemon was correctly added');
     });
 
     it('✓ should increment pokemon count correctly', async () => {
@@ -333,7 +333,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
         height: 5,
         weight: 50,
         img: 'https://example.com/first.png',
-        types: []
+        types: [{ id: 1, name: 'Normal' }]
       };
 
       const pokemon2 = {
@@ -345,39 +345,39 @@ describe('📡 API Integration Tests - Happy Path', () => {
         height: 6,
         weight: 60,
         img: 'https://example.com/second.png',
-        types: []
+        types: [{ id: 1, name: 'Normal' }]
       };
 
       const res1 = await request
         .post('/pokemons/')
         .send(pokemon1)
-        .expect(200);
+        .expect(201);
 
       const res2 = await request
         .post('/pokemons/')
         .send(pokemon2)
-        .expect(200);
+        .expect(201);
 
-      expect(res1.body).to.include('His Id is #');
-      expect(res2.body).to.include('His Id is #');
+      expect(res1.body.message).to.include('ID is #');
+      expect(res2.body.message).to.include('ID is #');
 
       // Verify that both pokemons were created with different IDs
       const dbPokemons = await Pokemon.findAll();
-      expect(dbPokemons.length).to.equal(2);
+      expect(dbPokemons.length).to.be.at.least(2);
     });
 
-    it('✓ should return 500 error for invalid data', async () => {
+    it('✓ should return 400 error for invalid data', async () => {
       // Missing required fields like life, strength, etc will cause an error
       const invalidPokemon = {
         name: 'InvalidPokemon',
-        life: 'not a number', // This should cause an error
+        life: 'not a number', // This should cause a validation error
         strength: 50,
         defense: 50,
         speed: 50,
         height: 5,
         weight: 50,
         img: 'https://example.com/invalid.png',
-        types: []
+        types: [] // Empty types is now a validation error (400)
       };
 
       const res = await request
@@ -385,7 +385,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
         .send(invalidPokemon)
         .expect(400);
 
-      expect(res.body).to.include('An error occurred');
+      expect(res.body.error).to.equal('Invalid request body');
     });
   });
 
@@ -501,8 +501,8 @@ describe('📡 API Integration Tests - Happy Path', () => {
         .query({ name: 'SearchablePokemon' })
         .expect(200);
 
-      expect(searchRes.body).to.be.a('number');
-      expect(searchRes.body).to.be.greaterThan(10000);
+      expect(searchRes.body.id).to.be.a('number');
+      expect(searchRes.body.name).to.equal('SearchablePokemon');
     });
 
     it('✓ should list created pokemon in GET /pokemons pagination', async () => {

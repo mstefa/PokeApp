@@ -14,7 +14,7 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 ### Phase 1: Test Stabilization & Coverage (TDD)
 - [x] **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.
 - [x] **Fix Search Response:** Adjust `SearchPokemonController` to return full JSON object.
-- [ ] **Stabilize Integration Tests:** Update remaining 7 failing assertions in `POST /pokemons` to match new JSON structure.
+- [x] **Stabilize Integration Tests:** Update remaining 7 failing assertions in `POST /pokemons` to match new JSON structure.
 - [ ] **Add Missing Integration Tests:**
     - [ ] Validation errors (e.g., creating a pokemon with missing fields).
     - [ ] Edge cases for pagination (offset/limit).
