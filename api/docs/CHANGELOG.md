@@ -12,8 +12,9 @@ All notable changes to this project will be documented in this file.
 - **Persistence:**
     - `src/models/Type.js`: Legacy Sequelize model for Pokemon types to enable database synchronization.
 - **Project Configuration:**
-    - `AGENTS.MD`: Core mandates and instructions for AI agents.
+    - `AGENTS.MD`: Core mandates and instructions for AI agents, including progress tracking and commit protocols.
     - `GEMINI.md`: Symbolic link to `AGENTS.MD` for system-level integration.
+    - Global `~/.gemini/GEMINI.md`: Updated with the "Double-Check Protocol" for commits.
 
 ### Changed
 - **API Response Standardization:**
