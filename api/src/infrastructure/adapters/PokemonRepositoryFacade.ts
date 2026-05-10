@@ -130,19 +130,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
       const officialPokemonDto = await this.externalAPI.getPokemonFromAPI(name);
       if (officialPokemonDto) {
         // Convert DTO to domain object
-        const { Pokemon } = require('../../domain/Pokemon');
-        return new Pokemon(
-          officialPokemonDto.id,
-          officialPokemonDto.name,
-          officialPokemonDto.life,
-          officialPokemonDto.strength,
-          officialPokemonDto.defense,
-          officialPokemonDto.speed,
-          officialPokemonDto.height,
-          officialPokemonDto.weight,
-          officialPokemonDto.personalized ?? false,
-          officialPokemonDto.img
-        );
+        return Pokemon.fromPrimitives(officialPokemonDto);
       }
 
       return null;

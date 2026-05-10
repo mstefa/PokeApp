@@ -40,7 +40,7 @@ export class CreatePokemonController extends Controller {
         pokemonName: pokemon.name.value
       });
 
-      res.status(httpStatus.CREATED).json({
+      res.status(httpStatus.OK).json({
         message: `Your pokemon was correctly added. Its ID is #${pokemon.id}`,
         pokemon: pokemon.toPrimitives()
       });

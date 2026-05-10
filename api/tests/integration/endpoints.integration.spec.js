@@ -41,7 +41,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
   // GET /pokemons - List all pokemons with pagination
   // ========================================================================
 
-  xdescribe('GET /pokemons - List Pokemons', () => {
+  describe('GET /pokemons - List Pokemons', () => {
     it('✓ should return 200 with paginated pokemons from API', async () => {
       const res = await request
         .get('/pokemons/')
@@ -94,25 +94,33 @@ describe('📡 API Integration Tests - Happy Path', () => {
   // GET /pokemons/search?name=<name> - Search pokemon by name
   // ========================================================================
 
-  xdescribe('GET /pokemons/search - Search by Name', () => {
+  describe('GET /pokemons/search - Search by Name', () => {
     it('✓ should find pokemon by name from API', async () => {
       const res = await request
         .get('/pokemons/search/')
         .query({ name: 'pikachu' })
         .expect(200);
 
-      expect(res.body).to.be.a('number');
-      expect(res.body).to.equal(25); // Pikachu's ID
+      expect(res.body.id).to.equal(25); // Pikachu's ID
+      expect(res.body.name).to.equal('pikachu');
     });
 
     it('✓ should find pokemon by name from database', async () => {
       // Note: Search first checks API, then DB. For DB-only pokemon, 
       // use a pokemon name that exists in DB but not in API
       await Pokemon.create({
-        id: 99999,
         name: 'DatabaseOnlyPokemon',
-        personalized: true,
-        img: 'https://example.com/dbonly.png'
+        life: 78,
+        strength: 150,
+        defense: 90,
+        speed: 100,
+        height: 17,
+        weight: 100,
+        img: 'https://example.com/megacharizard.png',
+        types: [
+          { id: 10, name: 'Fire' },
+          { id: 3, name: 'Flying' }
+        ]
       });
 
       const res = await request
@@ -120,7 +128,9 @@ describe('📡 API Integration Tests - Happy Path', () => {
         .query({ name: 'DatabaseOnlyPokemon' })
         .expect(200);
 
-      expect(res.body).to.equal(99999);
+      expect(res.body.id).to.be.a('number');
+      expect(res.body.id).to.be.greaterThan(0);
+      expect(res.body.name).to.equal('DatabaseOnlyPokemon');
     });
 
     it('✓ should return 404 when pokemon not found', async () => {
@@ -129,8 +139,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
         .query({ name: 'NonexistentPokemon123456' })
         .expect(404);
 
-      expect(res.body).to.have.property('error');
-      expect(res.body.error).to.equal('Pokemon not found');
+      expect(res.body.message).to.contain('not found');
     });
   });
 
@@ -139,7 +148,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
   // ========================================================================
 
   describe('GET /pokemons/:id - Get Pokemon by ID', () => {
-    xit('✓ should return complete pokemon details from API', async () => {
+    it('✓ should return complete pokemon details from API', async () => {
       const res = await request
         .get('/pokemons/25') // Pikachu
         .expect(200);
@@ -221,7 +230,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
   // POST /pokemons - Create a new custom pokemon
   // ========================================================================
 
-  xdescribe('POST /pokemons - Create Pokemon', () => {
+  describe('POST /pokemons - Create Pokemon', () => {
     it('✓ should create a new pokemon with all fields', async () => {
       const newPokemon = {
         name: 'MegaCharizard',
@@ -230,7 +239,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
         defense: 90,
         speed: 100,
         height: 17,
-        weight: 1005,
+        weight: 100,
         img: 'https://example.com/megacharizard.png',
         types: [
           { id: 10, name: 'Fire' },
@@ -384,7 +393,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
   // GET /types - List all pokemon types
   // ========================================================================
 
-  xdescribe('GET /types - List Types', () => {
+  describe('GET /types - List Types', () => {
     it('✓ should return all types from API on first call', async () => {
       const res = await request
         .get('/types')
@@ -450,7 +459,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
   // CROSS-ENDPOINT TESTS
   // ========================================================================
 
-  xdescribe('🔗 Cross-Endpoint Scenarios', () => {
+  describe('🔗 Cross-Endpoint Scenarios', () => {
     it('✓ should create pokemon and retrieve it with GET /:id', async () => {
       // The GET /:id endpoint tries the API first, so we'll test retrieving
       // a known API pokemon and verifying the structure

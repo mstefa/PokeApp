@@ -28,8 +28,7 @@ export class SearchPokemonController extends Controller {
 
     try {
       const pokemon = await this.pokemonSearcher.run(name as string);
-      // Return only the ID as per the original implementation
-      res.status(httpStatus.OK).send({ id: pokemon.id });
+      res.status(httpStatus.OK).send(pokemon.toPrimitives());
     } catch (error) {
       this.errorHandling(error, res);
     }
