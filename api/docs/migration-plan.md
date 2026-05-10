@@ -9,7 +9,31 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - **Application:** Use cases for `PokemonCreator`, `PokemonsFetcher`, `PokemonDetailFetcher`, `PokemonDetailSearcher`, and `TypesFetcher` are implemented in TS.
 - **Persistence:** Currently uses legacy `src/db.js` (Sequelize) and `src/models/Pokemon.js`. `LocalDatabasePokemonRepository` acts as an adapter.
 
-## Step-by-Step Migration Strategy
+## Migration TODO List
+
+### Phase 1: Test Stabilization & Coverage (TDD)
+- [x] **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.
+- [x] **Fix Search Response:** Adjust `SearchPokemonController` to return full JSON object.
+- [ ] **Stabilize Integration Tests:** Update remaining 7 failing assertions in `POST /pokemons` to match new JSON structure.
+- [ ] **Add Missing Integration Tests:**
+    - [ ] Validation errors (e.g., creating a pokemon with missing fields).
+    - [ ] Edge cases for pagination (offset/limit).
+    - [ ] Error handling for external API failures.
+
+### Phase 2: Domain & Persistence Migration
+- [ ] **Migrate Models to TS:**
+    - [ ] Convert `src/models/Pokemon.js` to a TypeScript Sequelize model.
+    - [ ] Update `src/db.js` to a TypeScript configuration file (`src/infrastructure/persistence/sequelize.ts`).
+- [ ] **Refine Repositories:**
+    - [ ] Update `LocalDatabasePokemonRepository` and `LocalDatabaseTypeRepository` to use the new TS models.
+    - [ ] Ensure strict typing for all database operations.
+
+### Phase 3: Final Infrastructure & Cleanup
+- [ ] **Complete Route Migration:** Ensure all logic is removed from `src/routes/pokemons.js` and `src/routes/types.js` before deleting them.
+- [ ] **Standardize Error Handling:** Implement a global Error Middleware in TS.
+- [ ] **Convert Tests to TS:** Migrate `.spec.js` files to `.spec.ts`.
+
+## Step-by-Step Migration Strategy (Detailed)
 
 ### Phase 1: Test Stabilization & Coverage (TDD)
 1.  **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.

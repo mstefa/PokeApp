@@ -11,3 +11,4 @@ This project follows a strict Hexagonal Architecture and TDD approach for its Ty
 - Prioritize a TDD approach: update or add tests first, ensure they fail, then implement the fix.
 - Keep the application in a "green" state (passing tests) as much as possible.
 - Adhere to the domain-driven patterns defined in `src/domain`.
+- **Progress Tracking:** Always update the "Migration TODO List" in `docs/migration-plan.md` after completing a task or phase. Mark completed items with `[x]`.
