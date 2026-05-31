@@ -15,6 +15,8 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - [x] **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.
 - [x] **Fix Search Response:** Adjust `SearchPokemonController` to return full JSON object.
 - [x] **Stabilize Integration Tests:** Update remaining 7 failing assertions in `POST /pokemons` to match new JSON structure.
+- [ ] **Fix Deprecated Mocha Flags:** Migrate `--loader=tsx` to `--import=tsx` in `package.json` test scripts to support Node v18.19+/v20.6+/v22+.
+- [ ] **Create Dev Infrastructure:** Add a `docker-compose.yml` for a local PostgreSQL setup to run integration tests locally.
 - [ ] **Add Missing Integration Tests:**
     - [ ] Validation errors (e.g., creating a pokemon with missing fields).
     - [ ] Edge cases for pagination (offset/limit).
@@ -32,13 +34,17 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - [ ] **Complete Route Migration:** Ensure all logic is removed from `src/routes/pokemons.js` and `src/routes/types.js` before deleting them.
 - [ ] **Standardize Error Handling:** Implement a global Error Middleware in TS.
 - [ ] **Convert Tests to TS:** Migrate `.spec.js` files to `.spec.ts`.
+- [ ] **Update Docker Setup:** Modernize `Dockerfile` to compile TS using `tsc` and run in a modern Node.js environment.
+- [ ] **Add Environment Configuration Safety:** Introduce a Zod-validated configuration loader class for type-safe environment variables.
 
 ## Step-by-Step Migration Strategy (Detailed)
 
 ### Phase 1: Test Stabilization & Coverage (TDD)
 1.  **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.
 2.  **Fix Search Response:** Adjust `SearchPokemonController` or `PokemonSearcher` to return the expected structured object (ID + details) instead of just the ID.
-3.  **Add Missing Integration Tests:**
+3.  **Fix Deprecated Mocha Flags:** Update `package.json` test scripts to use `--import=tsx` instead of `--loader=tsx` so tests run successfully on modern Node versions.
+4.  **Create Dev Infrastructure:** Create a `docker-compose.yml` defining the local PostgreSQL service and document environment setup in `.env`.
+5.  **Add Missing Integration Tests:**
     *   Validation errors (e.g., creating a pokemon with missing fields).
     *   Edge cases for pagination (offset/limit).
     *   Error handling for external API failures.
@@ -55,6 +61,8 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 1.  **Complete Route Migration:** Ensure all logic is removed from `src/routes/pokemons.js` and `src/routes/types.js` before deleting them.
 2.  **Standardize Error Handling:** Implement a global Error Middleware in TS that handles `NotFoundError`, `InvalidArgumentError`, etc., consistently.
 3.  **Convert Tests to TS:** Migrate `.spec.js` files to `.spec.ts` for full type safety in the test suite.
+4.  **Update Docker Setup:** Update the `Dockerfile` to build the app with `tsc` and run the output `dist/index.js` under a modern alpine node image.
+5.  **Add Environment Configuration Safety:** Build a schema-based environment validator using Zod in `src/config/index.ts` to ensure required variables are present and correct.
 
 ---
 
