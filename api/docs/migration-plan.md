@@ -37,6 +37,13 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - [ ] **Update Docker Setup:** Modernize `Dockerfile` to compile TS using `tsc` and run in a modern Node.js environment.
 - [ ] **Add Environment Configuration Safety:** Introduce a Zod-validated configuration loader class for type-safe environment variables.
 
+### Phase 4: Cucumber BDD Integration Tests
+- [ ] **Configure Cucumber Framework:** Add `@cucumber/cucumber` devDependency and create root `cucumber.js` configuration.
+- [ ] **Write Gherkin Features:** Define `tests/features/pokemons.feature` covering health, pagination, search, and validation error paths.
+- [ ] **Implement Cucumber Step Definitions:**
+    - [ ] Create `tests/step_definitions/preparation.steps.ts` managing the server launch and database cleaning hooks.
+    - [ ] Create `tests/step_definitions/controller.steps.ts` mapping step patterns with Supertest assertions.
+
 ## Step-by-Step Migration Strategy (Detailed)
 
 ### Phase 1: Test Stabilization & Coverage (TDD)
@@ -63,6 +70,11 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 3.  **Convert Tests to TS:** Migrate `.spec.js` files to `.spec.ts` for full type safety in the test suite.
 4.  **Update Docker Setup:** Update the `Dockerfile` to build the app with `tsc` and run the output `dist/index.js` under a modern alpine node image.
 5.  **Add Environment Configuration Safety:** Build a schema-based environment validator using Zod in `src/config/index.ts` to ensure required variables are present and correct.
+
+### Phase 4: Cucumber BDD Integration Tests
+1.  **Configure Cucumber Framework:** Add the necessary BDD dependencies and set up the `cucumber.js` runner config in the root.
+2.  **Write Gherkin Features:** Add Gherkin specification feature files under `tests/features/`.
+3.  **Implement Cucumber Step Definitions:** Code the steps definitions and preparation hook classes under `tests/step_definitions/` mapping scenarios to Express controllers.
 
 ---
 
