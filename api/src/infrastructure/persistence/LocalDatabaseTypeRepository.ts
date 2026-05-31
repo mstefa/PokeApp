@@ -1,8 +1,7 @@
 import { Type } from '../../domain/Type';
 import { TypeRepository } from '../../domain/TypeRepository';
 
-// @ts-ignore - db.js is JavaScript
-const { Type: TypeModel } = require('../../db.js');
+import { Type as TypeModel } from './sequelize';
 
 /**
  * Local Database Type Repository

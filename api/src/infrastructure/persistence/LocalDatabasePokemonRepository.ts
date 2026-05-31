@@ -3,8 +3,7 @@ import { Pokemon as PokemonDomain } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
 import { NotFoundError } from '@/shared/errors';
 
-// @ts-ignore - db.js is JavaScript
-const { Pokemon: PokemonModel } = require('../../db.js');
+import { Pokemon as PokemonModel } from './sequelize';
 
 /**
  * Local Database Pokemon Repository
@@ -29,7 +28,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
 
       return {
         count: totalCount,
-        pokemons: customPokemons.map((p: any) => this.mapToEntity(p).toPrimitives())
+        pokemons: customPokemons.map((p) => this.mapToEntity(p).toPrimitives())
       };
     } catch (error) {
       console.error('Error finding all custom pokemons:', error);
@@ -133,17 +132,17 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
    * Map Sequelize model instance to Pokemon domain class
    * Validates all data during construction
    */
-  private mapToEntity(model: any): PokemonDomain {
+  private mapToEntity(model: PokemonModel): PokemonDomain {
     return PokemonDomain.fromPrimitives(
       {
         id: model.id,
         name: model.name,
-        life: parseInt(model.life),
-        strength: parseInt(model.strength),
-        defense: parseInt(model.defense),
-        speed: parseInt(model.speed),
-        height: parseInt(model.height),
-        weight: parseInt(model.weight),
+        life: model.life,
+        strength: model.strength,
+        defense: model.defense,
+        speed: model.speed,
+        height: model.height,
+        weight: model.weight,
         personalized: model.personalized || false,
         img: model.img,
         types: model.types ? model.types.map((t: any) => ({

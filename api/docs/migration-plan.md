@@ -23,12 +23,12 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
     - [x] Error handling for external API failures.
 
 ### Phase 2: Domain & Persistence Migration
-- [ ] **Migrate Models to TS:**
-    - [ ] Convert `src/models/Pokemon.js` to a TypeScript Sequelize model.
-    - [ ] Update `src/db.js` to a TypeScript configuration file (`src/infrastructure/persistence/sequelize.ts`).
-- [ ] **Refine Repositories:**
-    - [ ] Update `LocalDatabasePokemonRepository` and `LocalDatabaseTypeRepository` to use the new TS models.
-    - [ ] Ensure strict typing for all database operations.
+- [x] **Migrate Models to TS:**
+    - [x] Convert `src/models/Pokemon.js` to a TypeScript Sequelize model.
+    - [x] Update `src/db.js` to a TypeScript configuration file (`src/infrastructure/persistence/sequelize.ts`).
+- [x] **Refine Repositories:**
+    - [x] Update `LocalDatabasePokemonRepository` and `LocalDatabaseTypeRepository` to use the new TS models.
+    - [x] Ensure strict typing for all database operations.
 
 ### Phase 3: Final Infrastructure & Cleanup
 - [ ] **Complete Route Migration:** Ensure all logic is removed from `src/routes/pokemons.js` and `src/routes/types.js` before deleting them.

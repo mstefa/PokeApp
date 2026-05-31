@@ -1,7 +1,7 @@
 import { createApp } from './app';
 import { config } from './config/app.config';
 import { logger } from './shared/logger';
-import { conn } from './db.js';
+import { conn } from './infrastructure/persistence/sequelize';
 
 const app = createApp();
 const port = config.port;

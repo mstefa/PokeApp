@@ -1,8 +1,25 @@
-module.exports = (sequelize) => {
-  const { DataTypes } = require('sequelize');
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
-  return sequelize.define(
-    'Pokemon',
+export class PokemonModel extends Model {
+  public id!: number;
+  public name!: string;
+  public life!: number;
+  public strength!: number;
+  public defense!: number;
+  public speed!: number;
+  public height!: number;
+  public weight!: number;
+  public img!: string;
+  public personalized!: boolean;
+  public types!: Array<{ id: number; name: string }>;
+
+  // Timestamps
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+export function initPokemonModel(sequelize: Sequelize): typeof PokemonModel {
+  PokemonModel.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -46,17 +63,26 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      // Nueva columna para almacenar tipos como JSON
       types: {
         type: DataTypes.JSON,
         allowNull: true,
         defaultValue: [],
-        comment: 'Array of type objects: [{ id, name }, ...]'
       }
     },
     {
+      sequelize,
+      tableName: 'pokemons',
       timestamps: true,
       underscored: true,
+      hooks: {
+        beforeValidate: (pokemon: PokemonModel) => {
+          if (!pokemon.name || typeof pokemon.name !== 'string') {
+            throw new Error('It requires a valid name');
+          }
+        }
+      }
     }
   );
-};
+
+  return PokemonModel;
+}
