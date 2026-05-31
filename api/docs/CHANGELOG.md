@@ -26,7 +26,7 @@ All notable changes to this project will be documented in this file.
     - `package.json`: Updated test scripts to use `--import=tsx` (fixing crashes on Node 22+).
     - `AGENTS.MD`: Added instructions requiring AI agents to always update `docs/CHANGELOG.md` upon committing.
 - **Migration Plan:**
-    - `docs/migration-plan.md`: Checked off all Phase 1 and Phase 2 checklist tasks as completed, and added Cucumber BDD integration tests as **Phase 4**.
+    - `docs/migration-plan.md`: Checked off all Phase 1 and Phase 2 checklist tasks as completed, added Cucumber BDD integration tests as **Phase 4**, and added the npm to pnpm package manager migration as **Phase 5**.
 
 ### Removed
 - **Legacy JS Models:**

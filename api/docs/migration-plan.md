@@ -44,6 +44,11 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
     - [ ] Create `tests/step_definitions/preparation.steps.ts` managing the server launch and database cleaning hooks.
     - [ ] Create `tests/step_definitions/controller.steps.ts` mapping step patterns with Supertest assertions.
 
+### Phase 5: Package Manager Migration (npm to pnpm)
+- [ ] **Setup pnpm Environment:** Install `pnpm` globally/locally and configure package engine requirement in `package.json`.
+- [ ] **Generate Lockfile:** Remove legacy `package-lock.json` and generate `pnpm-lock.yaml` using `pnpm install` or `pnpm import`.
+- [ ] **Update Documentation & Tooling:** Update local script references, Dockerfile configurations, and verification documentation to utilize `pnpm` instead of `npm`.
+
 ## Step-by-Step Migration Strategy (Detailed)
 
 ### Phase 1: Test Stabilization & Coverage (TDD)
@@ -75,6 +80,11 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 1.  **Configure Cucumber Framework:** Add the necessary BDD dependencies and set up the `cucumber.js` runner config in the root.
 2.  **Write Gherkin Features:** Add Gherkin specification feature files under `tests/features/`.
 3.  **Implement Cucumber Step Definitions:** Code the steps definitions and preparation hook classes under `tests/step_definitions/` mapping scenarios to Express controllers.
+
+### Phase 5: Package Manager Migration (npm to pnpm)
+1.  **Setup pnpm Environment:** Ensure `pnpm` is installed and configure it under engine requirements.
+2.  **Generate Lockfile:** Run `pnpm import` or `pnpm install` after deleting `package-lock.json` to generate the correct `pnpm-lock.yaml`.
+3.  **Update Documentation & Tooling:** Replace references of `npm run` with `pnpm` across `package.json` scripts, `Dockerfile` run commands, and testing docs.
 
 ---
 
