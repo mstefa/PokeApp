@@ -21,8 +21,15 @@ export class GetPokemonsController extends Controller {
   }
 
   async run(req: GetPokemonsRequest, res: Response) {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 12;
-    const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 12;
+    let offset = req.query.offset ? parseInt(req.query.offset) : 0;
+
+    if (isNaN(limit) || limit < 0) {
+      limit = 12;
+    }
+    if (isNaN(offset) || offset < 0) {
+      offset = 0;
+    }
 
     logger.info(`GetPokemonsController: limit=${limit}, offset=${offset}`);
 

@@ -15,12 +15,12 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - [x] **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.
 - [x] **Fix Search Response:** Adjust `SearchPokemonController` to return full JSON object.
 - [x] **Stabilize Integration Tests:** Update remaining 7 failing assertions in `POST /pokemons` to match new JSON structure.
-- [ ] **Fix Deprecated Mocha Flags:** Migrate `--loader=tsx` to `--import=tsx` in `package.json` test scripts to support Node v18.19+/v20.6+/v22+.
-- [ ] **Create Dev Infrastructure:** Add a `docker-compose.yml` for a local PostgreSQL setup to run integration tests locally.
-- [ ] **Add Missing Integration Tests:**
-    - [ ] Validation errors (e.g., creating a pokemon with missing fields).
-    - [ ] Edge cases for pagination (offset/limit).
-    - [ ] Error handling for external API failures.
+- [x] **Fix Deprecated Mocha Flags:** Migrate `--loader=tsx` to `--import=tsx` in `package.json` test scripts to support Node v18.19+/v20.6+/v22+.
+- [x] **Create Dev Infrastructure:** Add a `docker-compose.yml` for a local PostgreSQL setup to run integration tests locally.
+- [x] **Add Missing Integration Tests:**
+    - [x] Validation errors (e.g., creating a pokemon with missing fields).
+    - [x] Edge cases for pagination (offset/limit).
+    - [x] Error handling for external API failures.
 
 ### Phase 2: Domain & Persistence Migration
 - [ ] **Migrate Models to TS:**

@@ -15,25 +15,32 @@ module.exports = (sequelize) => {
         unique: true,
       },
       life: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
+        validate: { isInt: true }
       },
       strength: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
+        validate: { isInt: true }
       },
       defense: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
+        validate: { isInt: true }
       },
       speed: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
+        validate: { isInt: true }
       },
       height: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
+        validate: { isInt: true }
       },
       weight: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
+        validate: { isInt: true }
       },
       img: {
         type: DataTypes.TEXT,
+        validate: { isUrl: true }
       },
       personalized: {
         type: DataTypes.BOOLEAN,
