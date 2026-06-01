@@ -12,15 +12,17 @@
     "test:watch": "mocha --import=tsx 'tests/**/*.spec.js' --watch --timeout 10000",
     "test:unit": "mocha --import=tsx 'tests/models/**/*.spec.js' --timeout 10000",
     "test:integration": "mocha --import=tsx 'tests/integration/**/*.spec.js' --timeout 15000",
+    "test:cucumber": "cucumber-js -p backend",
     "lint": "eslint src/ --ext .ts,.js --fix",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\""
   },
   "author": "Henry",
   "license": "ISC",
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=22.20.0",
+    "pnpm": ">=11.5.0"
   },
+  "packageManager": "pnpm@11.5.0",
   "dependencies": {
     "axios": "^1.6.2",
     "cors": "^2.8.5",
@@ -35,11 +37,14 @@
     "zod": "^4.2.0"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^12.9.0",
+    "@types/chai": "^5.2.3",
     "@types/express": "^5.0.6",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.0.0",
     "@types/pino": "^7.0.4",
     "@types/sequelize": "^4.28.20",
+    "@types/supertest": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",
     "chai": "^4.3.10",
@@ -49,6 +54,7 @@
     "prettier": "^3.1.0",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

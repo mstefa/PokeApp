@@ -28,7 +28,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
 
       return {
         count: totalCount,
-        pokemons: customPokemons.map((p) => this.mapToEntity(p).toPrimitives())
+        pokemons: customPokemons.map((p) => this.mapToEntity(p))
       };
     } catch (error) {
       console.error('Error finding all custom pokemons:', error);

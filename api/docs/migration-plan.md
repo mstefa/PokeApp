@@ -38,16 +38,16 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - [ ] **Add Environment Configuration Safety:** Introduce a Zod-validated configuration loader class for type-safe environment variables.
 
 ### Phase 4: Cucumber BDD Integration Tests
-- [ ] **Configure Cucumber Framework:** Add `@cucumber/cucumber` devDependency and create root `cucumber.js` configuration.
-- [ ] **Write Gherkin Features:** Define `tests/features/pokemons.feature` covering health, pagination, search, and validation error paths.
-- [ ] **Implement Cucumber Step Definitions:**
-    - [ ] Create `tests/step_definitions/preparation.steps.ts` managing the server launch and database cleaning hooks.
-    - [ ] Create `tests/step_definitions/controller.steps.ts` mapping step patterns with Supertest assertions.
+- [x] **Configure Cucumber Framework:** Add `@cucumber/cucumber` devDependency and create root `cucumber.js` configuration.
+- [x] **Write Gherkin Features:** Define `tests/features/pokemons.feature` covering health, pagination, search, and validation error paths.
+- [x] **Implement Cucumber Step Definitions:**
+    - [x] Create `tests/step_definitions/preparation.steps.ts` managing the server launch and database cleaning hooks.
+    - [x] Create `tests/step_definitions/controller.steps.ts` mapping step patterns with Supertest assertions.
 
 ### Phase 5: Package Manager Migration (npm to pnpm)
-- [ ] **Setup pnpm Environment:** Install `pnpm` globally/locally and configure package engine requirement in `package.json`.
-- [ ] **Generate Lockfile:** Remove legacy `package-lock.json` and generate `pnpm-lock.yaml` using `pnpm install` or `pnpm import`.
-- [ ] **Update Documentation & Tooling:** Update local script references, Dockerfile configurations, and verification documentation to utilize `pnpm` instead of `npm`.
+- [x] **Setup pnpm Environment:** Install `pnpm` globally/locally and configure package engine requirement in `package.json`.
+- [x] **Generate Lockfile:** Remove legacy `package-lock.json` and generate `pnpm-lock.yaml` using `pnpm install` or `pnpm import`.
+- [x] **Update Documentation & Tooling:** Update local script references, Dockerfile configurations, and verification documentation to utilize `pnpm` instead of `npm`.
 
 ## Step-by-Step Migration Strategy (Detailed)
 

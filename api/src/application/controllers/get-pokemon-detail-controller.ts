@@ -19,7 +19,7 @@ export class GetPokemonDetailController extends Controller {
     logger.info(`GetPokemonDetailController: Fetching pokemon with ID: ${id}`);
 
     try {
-      const pokemon = await this.pokemonFetcher.run(parseInt(id));
+      const pokemon = await this.pokemonFetcher.run(parseInt(id as string));
       res.status(httpStatus.OK).send(pokemon);
     } catch (error) {
       this.errorHandling(error, res);

@@ -2,9 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2026-05-31
+## [Unreleased] - 2026-06-01
 
 ### Added
+- **Cucumber BDD Integration Tests (Phase 4):**
+    - `@cucumber/cucumber`: Added BDD testing devDependency.
+    - `cucumber.js`: Added Cucumber execution configuration supporting ts-node and path mapping resolution.
+    - `tests/features/pokemons.feature`: Defined BDD scenarios in Gherkin syntax covering health, paginated listing, details search, and creation validations.
+    - `tests/step_definitions/preparation.steps.ts`: Implemented database connectivity and cleanup hooks (`BeforeAll`, `After`, `AfterAll`) for test isolation.
+    - `tests/step_definitions/controller.steps.ts`: Created reusable step bindings using Supertest assertions for testing HTTP endpoints.
+
+### Changed
+- **Package Manager Migration (Phase 5):**
+    - Transitioned project package manager from `npm` to `pnpm` by deleting the legacy `package-lock.json` and creating `pnpm-lock.yaml` using highly optimized `pnpm install`.
+    - `package.json`: Updated `engines` requirement and `packageManager` properties. Added `test:cucumber` execution script.
+
+### Fixed
+- **TypeScript Compilation & Bug Fixes:**
+    - `LocalDatabasePokemonRepository.ts`: Fixed return type mismatch in `findAll` by returning domain entity instances instead of calling `toPrimitives()`.
+    - `LocalDatabaseTypeRepository.ts`: Corrected the constructor arguments order when instantiating the `Type` domain class (now correctly passing `id` first and `name` second).
+    - `get-pokemon-detail-controller.ts`: Explicitly cast path parameter `id` as `string` to resolve Express request typing compatibility.
+
+## [Unreleased] - 2026-05-31
 - **TypeScript Model Migration:**
     - `src/infrastructure/persistence/models/Pokemon.ts`: Created strongly-typed TypeScript Sequelize model with integer statistical validations and hooks.
     - `src/infrastructure/persistence/models/Type.ts`: Created strongly-typed TypeScript Sequelize model for Pokemon types.

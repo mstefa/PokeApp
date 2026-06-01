@@ -14,7 +14,7 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
   async findAll(): Promise<Type[]> {
     try {
       const types = await TypeModel.findAll();
-      return types.map((t: any) => new Type(t.name, t.id));
+      return types.map((t: any) => new Type(t.id, t.name));
     } catch (error) {
       console.error('Error finding all types:', error);
       throw error;
@@ -27,7 +27,7 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
   async findById(id: number): Promise<Type | null> {
     try {
       const type = await TypeModel.findByPk(id);
-      return type ? new Type(type.name, type.id) : null;
+      return type ? new Type(type.id, type.name) : null;
     } catch (error) {
       console.error(`Error finding type with ID ${id}:`, error);
       throw error;
@@ -40,7 +40,7 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
   async findByName(name: string): Promise<Type | null> {
     try {
       const type = await TypeModel.findOne({ where: { name } });
-      return type ? new Type(type.name, type.id) : null;
+      return type ? new Type(type.id, type.name) : null;
     } catch (error) {
       console.error(`Error finding type with name ${name}:`, error);
       throw error;
