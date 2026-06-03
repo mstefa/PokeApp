@@ -1,25 +1,13 @@
-/**
- * Integration Tests - Outside-In Approach
- * Testing all happy path scenarios for API endpoints
- * 
- * These tests validate the complete flow from HTTP request to response,
- * testing real interactions with the database and external APIs.
- */
-
-const { expect } = require('chai');
-const supertest = require('supertest');
-const { createApp } = require('../../src/app.ts');
-const { Pokemon, conn } = require('../../src/db.js');
+import { expect, describe, beforeAll, afterEach, it } from 'vitest';
+import supertest from 'supertest';
+import { createApp } from '../../src/app';
+import { Pokemon, conn } from '../../src/infrastructure/persistence/sequelize';
 
 const app = createApp();
 const request = supertest(app);
 
-// ============================================================================
-// SETUP & TEARDOWN
-// ============================================================================
-
 describe('📡 API Integration Tests - Happy Path', () => {
-  before(async () => {
+  beforeAll(async () => {
     // Authenticate with database
     await conn.authenticate()
       .catch((err) => {
@@ -185,8 +173,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
     it('✓ should return custom pokemon details from database', async () => {
       // Note: GET /:id tries API first. Custom DB pokemon IDs > 1118 
       // won't be found in API, so we can use those for testing
-      // const type = await Type.create({ id: 100, name: 'Electric' }); TODO: Delete
-      const pokemon = await Pokemon.create({
+      await Pokemon.create({
         id: 88888,
         name: 'MyCustomPokemon',
         life: 50,
@@ -406,53 +393,6 @@ describe('📡 API Integration Tests - Happy Path', () => {
       expect(type).to.have.property('id');
       expect(type).to.have.property('name');
     });
-
-    // it('✓ should return types from database on subsequent calls', async () => {
-    //   // First call populates database
-    //   await request.get('/types').expect(200);
-
-    //   // Second call should return from database
-    //   const res = await request
-    //     .get('/types')
-    //     .expect(200);
-
-    //   expect(res.body).to.be.an('array');
-    //   expect(res.body.length).to.be.greaterThan(0);
-    //   expect(res.body[0]).to.have.property('id');
-    //   expect(res.body[0]).to.have.property('name');
-    // });
-
-    // it('✓ should return pre-created types from database', async () => {
-    //   // const type1 = await Type.create({ id: 1, name: 'Normal' });
-    //   // const type2 = await Type.create({ id: 2, name: 'Fighting' });
-
-    //   const res = await request
-    //     .get('/types')
-    //     .expect(200);
-
-    //   expect(res.body).to.be.an('array');
-    //   expect(res.body.length).to.be.greaterThan(0);
-
-    //   const typeNames = res.body.map(t => t.name);
-    //   expect(typeNames).to.include('Normal');
-    //   expect(typeNames).to.include('Fighting');
-    // });
-
-    //   it('✓ should return types with correct structure', async () => {
-    //     await Type.create({ id: 99, name: 'TestType' });
-
-    //     const res = await request
-    //       .get('/types')
-    //       .expect(200);
-
-    //     expect(res.body).to.be.an('array');
-    //     res.body.forEach(type => {
-    //       expect(type).to.have.property('id');
-    //       expect(type).to.have.property('name');
-    //       expect(type.id).to.be.a('number');
-    //       expect(type.name).to.be.a('string');
-    //     });
-    //   });
   });
 
   // ========================================================================
@@ -490,7 +430,7 @@ describe('📡 API Integration Tests - Happy Path', () => {
       };
 
       // Create pokemon
-      const createRes = await request
+      await request
         .post('/pokemons/')
         .send(newPokemon)
         .expect(201);
@@ -506,10 +446,6 @@ describe('📡 API Integration Tests - Happy Path', () => {
     });
 
     it('✓ should list created pokemon in GET /pokemons pagination', async () => {
-      // Test that the pagination works and returns results
-      // Note: This test validates the endpoint works, actual DB pokemon
-      // visibility depends on ID ranges due to current API-first logic
-
       const res = await request
         .get('/pokemons/')
         .query({ offset: 0, limit: 5 })

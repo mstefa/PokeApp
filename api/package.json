@@ -8,11 +8,10 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "mocha --import=tsx 'tests/**/*.spec.js' --timeout 10000",
-    "test:watch": "mocha --import=tsx 'tests/**/*.spec.js' --watch --timeout 10000",
-    "test:unit": "mocha --import=tsx 'tests/models/**/*.spec.js' --timeout 10000",
-    "test:integration": "mocha --import=tsx 'tests/integration/**/*.spec.js' --timeout 15000",
-    "test:cucumber": "cucumber-js -p backend",
+    "test": "vitest run && cucumber-js -p backend",
+    "test:watch": "vitest",
+    "test:unit": "vitest run",
+    "test:integration": "cucumber-js -p backend",
     "lint": "eslint src/ --ext .ts,.js --fix",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\""
   },
@@ -38,7 +37,6 @@
   },
   "devDependencies": {
     "@cucumber/cucumber": "^12.9.0",
-    "@types/chai": "^5.2.3",
     "@types/express": "^5.0.6",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.0.0",
@@ -47,15 +45,13 @@
     "@types/supertest": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",
-    "chai": "^4.3.10",
     "eslint": "^8.54.0",
-    "mocha": "^10.2.0",
-    "nodemon": "^3.0.2",
     "prettier": "^3.1.0",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.8"
   }
 }

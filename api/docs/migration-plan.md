@@ -50,9 +50,9 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - [x] **Update Documentation & Tooling:** Update local script references, Dockerfile configurations, and verification documentation to utilize `pnpm` instead of `npm`.
 
 ### Phase 6: Testing & Dependency Rationalization
-- [ ] **Delete Unit Tests:** Delete all unit tests (e.g. `tests/models` and `tests/routes`). Keep only the integration tests (`tests/integration`) and BDD integration tests (Cucumber).
-- [ ] **Migrate and Simplify Test Runner:** Transition the test runner to Vitest (or another modern Vite-based test framework) to simplify test configuration and execution.
-- [ ] **Remove Unused Dependencies:** Audit and remove all unused runtime and development dependencies from `package.json`.
+- [x] **Delete Unit Tests:** Delete all unit tests (e.g. `tests/models` and `tests/routes`). Keep only the integration tests (`tests/integration`) and BDD integration tests (Cucumber).
+- [x] **Migrate and Simplify Test Runner:** Transition the test runner to Vitest (or another modern Vite-based test framework) to simplify test configuration and execution.
+- [x] **Remove Unused Dependencies:** Audit and remove all unused runtime and development dependencies from `package.json`.
 
 ## Step-by-Step Migration Strategy (Detailed)
 
@@ -99,7 +99,9 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 ---
 
 # Verification & Testing
-- **Integration Tests:** Run `pnpm test:integration` after every small change.
+- **Run All Tests:** Run `pnpm test` (executes Vitest followed by Cucumber BDD).
+- **Vitest Suite:** Run `pnpm test:unit` (or `pnpm test:watch` for watch mode).
+- **BDD Integration Tests:** Run `pnpm test:integration` (Cucumber scenarios).
 - **TDD Workflow:** 
   1. Identify a missing or failing test.
   2. Implement/Fix the minimal code to make it green.

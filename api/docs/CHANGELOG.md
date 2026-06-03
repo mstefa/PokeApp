@@ -4,10 +4,29 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased] - 2026-06-03
 
+### Added
+- **Vitest Migration:**
+  - Installed `vitest` as the new test runner for integration tests.
+  - `vitest.config.ts`: Created new Vitest configuration with custom tsconfig path aliases (`@/*`).
+  - `tests/integration/endpoints.integration.spec.ts` & `tests/integration/errors.integration.spec.ts`: Converted and migrated integration tests to TypeScript (`.spec.ts`) utilizing Vitest test hooks and spy utilities.
+
 ### Changed
-- **Migration Plan & Guidelines Update:**
-    - `docs/migration-plan.md`: Added **Phase 6: Testing & Dependency Rationalization** which plans to delete legacy unit tests, migrate the test runner to Vitest, and clean up unused dependencies.
-    - `AGENTS.MD`: Added a mandate instructing agents to use `pnpm` for installing packages and executing commands.
+- **Migration Plan & Guidelines:**
+  - `docs/migration-plan.md`: Added and checked off all tasks under **Phase 6: Testing & Dependency Rationalization**.
+  - `AGENTS.MD`: Added a mandate instructing agents to use `pnpm` for installing packages and executing commands. Added a complete **Testing Infrastructure & Commands** and **Testing Specifications & Guidelines** specification to maintain testing guidance alongside the project.
+- **Route & Database Cleanup:**
+  - `src/routes/index.ts`: Made route registration synchronous to eliminate async race conditions during test startup.
+  - Migrated Cucumber test assertions in `tests/step_definitions/controller.steps.ts` to Node's native `assert` library, allowing tests to run with zero assertion framework dependencies.
+- **Test Commands Simplification:**
+  - `package.json`: Configured `test:unit` to run Vitest integration tests once, `test:integration` to launch Cucumber BDD tests, `test:watch` for Vitest watch mode, and `test` to run both Vitest and Cucumber BDD tests sequentially.
+
+### Removed
+- **Unused Dependencies:**
+  - Uninstalled `mocha`, `chai`, `@types/chai`, and `nodemon` from `package.json`.
+- **Legacy Files:**
+  - Deleted legacy unit tests (`tests/models/` and `tests/routes/`).
+  - Deleted legacy route and bridge files (`src/routes/pokemons.js`, `src/routes/types.js`, `src/db.js`).
+  - Deleted unused services folder (`src/services/`).
 
 ## [Unreleased] - 2026-06-01
 

@@ -1,21 +1,14 @@
-/**
- * Integration Tests - Unhappy Paths, Validations & Error Handling
- * 
- * These tests validate how the application handles errors, bad input data,
- * validation constraints, and external failures.
- */
-
-const { expect } = require('chai');
-const supertest = require('supertest');
-const axios = require('axios');
-const { createApp } = require('../../src/app.ts');
-const { Pokemon, conn } = require('../../src/db.js');
+import { expect, describe, beforeAll, afterEach, it, vi } from 'vitest';
+import supertest from 'supertest';
+import axios from 'axios';
+import { createApp } from '../../src/app';
+import { Pokemon, conn } from '../../src/infrastructure/persistence/sequelize';
 
 const app = createApp();
 const request = supertest(app);
 
 describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
-  before(async () => {
+  beforeAll(async () => {
     // Authenticate with database
     await conn.authenticate()
       .catch((err) => {
@@ -31,6 +24,7 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
     } catch (error) {
       console.error('Error cleaning up Pokemon:', error);
     }
+    vi.restoreAllMocks();
   });
 
   // ========================================================================
@@ -52,9 +46,6 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
     });
 
     it('✗ should fallback to defaults for negative limit or offset', async () => {
-      // In JavaScript, a negative offset/limit passed to external API or Sequelize
-      // is handled gracefully or defaults to 0/12 depending on logic.
-      // Let's verify it responds with 200 rather than crashing
       const res = await request
         .get('/pokemons/')
         .query({ limit: -5, offset: -10 })
@@ -90,7 +81,7 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
       expect(res.body.error).to.equal('Invalid request body');
       expect(res.body.details).to.be.an('array');
       
-      const nameError = res.body.details.find(d => d.field === 'name');
+      const nameError = res.body.details.find((d: any) => d.field === 'name');
       expect(nameError).to.exist;
       expect(nameError.message).to.match(/Required|Invalid input/i);
     });
@@ -114,7 +105,7 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
         .expect(400);
 
       expect(res.body.error).to.equal('Invalid request body');
-      const lifeError = res.body.details.find(d => d.field === 'life');
+      const lifeError = res.body.details.find((d: any) => d.field === 'life');
       expect(lifeError).to.exist;
       expect(lifeError.message).to.contain('at most 255');
     });
@@ -138,7 +129,7 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
         .expect(400);
 
       expect(res.body.error).to.equal('Invalid request body');
-      const imgError = res.body.details.find(d => d.field === 'img');
+      const imgError = res.body.details.find((d: any) => d.field === 'img');
       expect(imgError).to.exist;
       expect(imgError.message).to.contain('Image must be a valid URL');
     });
@@ -162,7 +153,7 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
         .expect(400);
 
       expect(res.body.error).to.equal('Invalid request body');
-      const typesError = res.body.details.find(d => d.field === 'types');
+      const typesError = res.body.details.find((d: any) => d.field === 'types');
       expect(typesError).to.exist;
       expect(typesError.message).to.contain('At least one type is required');
     });
@@ -173,24 +164,14 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
   // ========================================================================
 
   describe('📡 External API Unreachable / Failures', () => {
-    let originalGet;
-
-    beforeEach(() => {
-      originalGet = axios.get;
-    });
-
-    afterEach(() => {
-      axios.get = originalGet;
-    });
-
     it('✗ should gracefully handle external PokeAPI server failures when listing', async () => {
-      // Mock axios.get to reject for API calls to simulate PokeAPI failure
-      axios.get = async (url) => {
-        if (url.includes('pokeapi.co')) {
+      // Mock axios.get to reject PokeAPI calls
+      vi.spyOn(axios, 'get').mockImplementation(async (url: any) => {
+        if (typeof url === 'string' && url.includes('pokeapi.co')) {
           throw new Error('PokeAPI is down (Simulated 500 error)');
         }
-        return originalGet(url);
-      };
+        throw new Error('Unexpected network call in test');
+      });
 
       const res = await request
         .get('/pokemons/')
@@ -214,13 +195,13 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
         types: [{ id: 1, name: 'Normal' }]
       });
 
-      // Mock axios.get to reject for API calls to simulate PokeAPI failure
-      axios.get = async (url) => {
-        if (url.includes('pokeapi.co')) {
+      // Mock axios.get to reject PokeAPI calls
+      vi.spyOn(axios, 'get').mockImplementation(async (url: any) => {
+        if (typeof url === 'string' && url.includes('pokeapi.co')) {
           throw new Error('PokeAPI is unreachable (Simulated Network Error)');
         }
-        return originalGet(url);
-      };
+        throw new Error('Unexpected network call in test');
+      });
 
       // Since search checks local database first for custom pokemon,
       // it should be able to retrieve "LocalSurvivor" even if the API is down!
