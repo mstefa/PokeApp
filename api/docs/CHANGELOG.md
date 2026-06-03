@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-06-03
+
+### Changed
+- **Migration Plan & Guidelines Update:**
+    - `docs/migration-plan.md`: Added **Phase 6: Testing & Dependency Rationalization** which plans to delete legacy unit tests, migrate the test runner to Vitest, and clean up unused dependencies.
+    - `AGENTS.MD`: Added a mandate instructing agents to use `pnpm` for installing packages and executing commands.
+
 ## [Unreleased] - 2026-06-01
 
 ### Added

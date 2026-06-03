@@ -49,6 +49,11 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 - [x] **Generate Lockfile:** Remove legacy `package-lock.json` and generate `pnpm-lock.yaml` using `pnpm install` or `pnpm import`.
 - [x] **Update Documentation & Tooling:** Update local script references, Dockerfile configurations, and verification documentation to utilize `pnpm` instead of `npm`.
 
+### Phase 6: Testing & Dependency Rationalization
+- [ ] **Delete Unit Tests:** Delete all unit tests (e.g. `tests/models` and `tests/routes`). Keep only the integration tests (`tests/integration`) and BDD integration tests (Cucumber).
+- [ ] **Migrate and Simplify Test Runner:** Transition the test runner to Vitest (or another modern Vite-based test framework) to simplify test configuration and execution.
+- [ ] **Remove Unused Dependencies:** Audit and remove all unused runtime and development dependencies from `package.json`.
+
 ## Step-by-Step Migration Strategy (Detailed)
 
 ### Phase 1: Test Stabilization & Coverage (TDD)
@@ -86,12 +91,18 @@ Continue the migration of the PokeApp API to TypeScript and Hexagonal Architectu
 2.  **Generate Lockfile:** Run `pnpm import` or `pnpm install` after deleting `package-lock.json` to generate the correct `pnpm-lock.yaml`.
 3.  **Update Documentation & Tooling:** Replace references of `npm run` with `pnpm` across `package.json` scripts, `Dockerfile` run commands, and testing docs.
 
+### Phase 6: Testing & Dependency Rationalization
+1.  **Delete Unit Tests:** Delete the legacy unit tests directory and files (`tests/models/*` and `tests/routes/*`), keeping only the integration suite (`tests/integration/*`) and Cucumber scenarios (`tests/features/*`).
+2.  **Migrate to Vitest:** Replace Mocha/Chai with Vitest. Simplify `package.json` testing scripts and configure Vitest to run the remaining integration tests.
+3.  **Clean up unused dependencies:** Audit `package.json` for unused packages and run `pnpm remove` to uninstall them.
+
 ---
 
 # Verification & Testing
-- **Integration Tests:** Run `npm run test:integration` after every small change.
+- **Integration Tests:** Run `pnpm test:integration` after every small change.
 - **TDD Workflow:** 
   1. Identify a missing or failing test.
   2. Implement/Fix the minimal code to make it green.
   3. Refactor.
 - **Manual Verification:** Use files in `docs/request/` (e.g., `get-pokemon.http`) to verify behavior.
+
