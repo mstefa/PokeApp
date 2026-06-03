@@ -63,7 +63,7 @@ export const CreatePokemonSchema = z.object({
   weight: z
     .number()
     .min(0, 'Weight must be at least 0')
-    .max(255, 'Weight must be at most 255')
+    .max(10000, 'Weight must be at most 10000')
     .default(0),
 
   types: z

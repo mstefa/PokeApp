@@ -25,9 +25,10 @@ export class PokemonStat {
   }
 
   private ensureIsInRange(value: number, statName: string): void {
-    if (value < MIN_VALUE || value > MAX_VALUE) {
+    const maxValue = statName.toLowerCase() === 'weight' ? 10000 : MAX_VALUE;
+    if (value < MIN_VALUE || value > maxValue) {
       throw new InvalidArgumentError(
-        `${statName} must be between ${MIN_VALUE} and ${MAX_VALUE}`
+        `${statName} must be between ${MIN_VALUE} and ${maxValue}`
       );
     }
   }

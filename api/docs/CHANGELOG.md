@@ -28,6 +28,14 @@ All notable changes to this project will be documented in this file.
   - Deleted legacy route and bridge files (`src/routes/pokemons.js`, `src/routes/types.js`, `src/db.js`).
   - Deleted unused services folder (`src/services/`).
 
+### Fixed
+- **Pokemon Weight Validation Limit:**
+  - `src/shared/validation/pokemon-schemas.ts`: Increased the Zod validation max weight limit from 255 to 10000.
+  - `src/domain/value-objects/PokemonStat.ts`: Extended value object validation checks to support a maximum limit of 10000 specifically for `Weight` statistics.
+  - Added happy and unhappy path integration tests to verify proper handling of heavier Pokemon.
+- **Race Conditions in Tests:**
+  - `vitest.config.ts`: Configured `fileParallelism: false` to ensure test files run sequentially, avoiding concurrent database collisions.
+
 ## [Unreleased] - 2026-06-01
 
 ### Added

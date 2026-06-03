@@ -244,6 +244,27 @@ describe('📡 API Integration Tests - Happy Path', () => {
       expect(res.body.message).to.include('ID is #');
     });
 
+    it('✓ should create pokemon with a heavy weight (up to 10000)', async () => {
+      const heavyPokemon = {
+        name: 'HeavyPokemon',
+        life: 50,
+        strength: 50,
+        defense: 50,
+        speed: 50,
+        height: 15,
+        weight: 9999,
+        img: 'https://example.com/heavy.png',
+        types: [{ id: 1, name: 'Normal' }]
+      };
+
+      const res = await request
+        .post('/pokemons/')
+        .send(heavyPokemon)
+        .expect(201);
+
+      expect(res.body.message).to.include('Your pokemon was correctly added');
+    });
+
     it('✓ should create pokemon with minimum required fields', async () => {
       const newPokemon = {
         name: 'SimplePokemon',

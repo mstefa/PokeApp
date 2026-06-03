@@ -110,6 +110,30 @@ describe('📡 API Integration Tests - Error Handling & Edge Cases', () => {
       expect(lifeError.message).to.contain('at most 255');
     });
 
+    it('✗ should fail with 400 when weight is greater than 10000', async () => {
+      const invalidPokemon = {
+        name: 'TooHeavyPokemon',
+        life: 50,
+        strength: 50,
+        defense: 50,
+        speed: 50,
+        height: 5,
+        weight: 10001,
+        img: 'https://example.com/too-heavy.png',
+        types: [{ id: 1, name: 'Normal' }]
+      };
+
+      const res = await request
+        .post('/pokemons/')
+        .send(invalidPokemon)
+        .expect(400);
+
+      expect(res.body.error).to.equal('Invalid request body');
+      const weightError = res.body.details.find((d: any) => d.field === 'weight');
+      expect(weightError).to.exist;
+      expect(weightError.message).to.contain('at most 10000');
+    });
+
     it('✗ should fail with 400 when img is not a valid URL', async () => {
       const invalidPokemon = {
         name: 'BadImagePokemon',
