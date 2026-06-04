@@ -43,21 +43,16 @@ try {
       );
     }
 
-    // Sort by id if any filter is active, otherwise sort by name
-    const isFilterActive = personalized || type !== 'all';
-
-    if (isFilterActive) {
-      if (sort === 'asc') {
-        allPokemons.sort((a: any, b: any) => Number(a.id) - Number(b.id));
-      } else if (sort === 'desc') {
-        allPokemons.sort((a: any, b: any) => Number(b.id) - Number(a.id));
-      }
+    // Sort logic
+    if (sort === 'name-asc') {
+      allPokemons.sort((a: any, b: any) => a.name.localeCompare(b.name));
+    } else if (sort === 'name-desc') {
+      allPokemons.sort((a: any, b: any) => b.name.localeCompare(a.name));
+    } else if (sort === 'desc') {
+      allPokemons.sort((a: any, b: any) => Number(b.id) - Number(a.id));
     } else {
-      if (sort === 'asc') {
-        allPokemons.sort((a: any, b: any) => a.name.localeCompare(b.name));
-      } else if (sort === 'desc') {
-        allPokemons.sort((a: any, b: any) => b.name.localeCompare(a.name));
-      }
+      // Default: 'asc' / 'id-asc' or any other value sorts by ID ascending
+      allPokemons.sort((a: any, b: any) => Number(a.id) - Number(b.id));
     }
 
     count = allPokemons.length;

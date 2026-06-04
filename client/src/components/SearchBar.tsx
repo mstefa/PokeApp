@@ -25,6 +25,7 @@ export default function SearchBar({
   currentSearch,
 }: SearchBarProps) {
   const [searchInput, setSearchInput] = useState(currentSearch);
+  const isFilterActive = currentType !== 'all' || currentPersonalized;
 
   const updateUrl = (newParams: Record<string, string | boolean | null>) => {
     const params = new URLSearchParams(window.location.search);
@@ -86,16 +87,30 @@ export default function SearchBar({
       </form>
       <div className={Styles.filters}>
         <Button
-          variant={currentSort === 'asc' ? 'primary' : 'secondary'}
+          variant={currentSort === 'asc' || !['desc', 'name-asc', 'name-desc'].includes(currentSort) ? 'primary' : 'secondary'}
           className={Styles.buttonFilter}
           onClick={() => updateUrl({ sort: 'asc' })}
         >
-          a-z
+          # ↑
         </Button>
         <Button
           variant={currentSort === 'desc' ? 'primary' : 'secondary'}
           className={Styles.buttonFilter}
           onClick={() => updateUrl({ sort: 'desc' })}
+        >
+          # ↓
+        </Button>
+        <Button
+          variant={currentSort === 'name-asc' ? 'primary' : 'secondary'}
+          className={Styles.buttonFilter}
+          onClick={() => updateUrl({ sort: 'name-asc' })}
+        >
+          a-z
+        </Button>
+        <Button
+          variant={currentSort === 'name-desc' ? 'primary' : 'secondary'}
+          className={Styles.buttonFilter}
+          onClick={() => updateUrl({ sort: 'name-desc' })}
         >
           z-a
         </Button>
@@ -106,6 +121,15 @@ export default function SearchBar({
         >
           {currentPersonalized ? 'todos' : 'solo creados'}
         </Button>
+        {isFilterActive && (
+          <Button
+            variant="accent"
+            className={Styles.buttonClear}
+            onClick={() => updateUrl({ type: 'all', personalized: false })}
+          >
+            Limpiar Filtros
+          </Button>
+        )}
       </div>
       <div className={Styles.sort}>
         <span className={Styles.sortText}>Tipo:</span>

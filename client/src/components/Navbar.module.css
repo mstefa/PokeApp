@@ -61,8 +61,8 @@
   color: inherit;
 }
 
-.navButton {
-  padding: 0.5rem 1rem !important;
-  font-size: 0.95rem !important;
-  height: auto !important;
+button.navButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  height: auto;
 }

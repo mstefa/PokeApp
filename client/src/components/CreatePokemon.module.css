@@ -98,9 +98,9 @@
   width: 100%;
 }
 
-.buttonSubmit {
+button.buttonSubmit {
   width: 100%;
   max-width: 20rem;
   height: 52px;
-  font-size: 1.1rem !important;
+  font-size: 1.1rem;
 }

@@ -24,13 +24,13 @@
   display: inline-flex;
 }
 
-.pageButton {
+button.pageButton {
   width: 40px;
   height: 40px;
   min-width: 40px;
-  padding: 0 !important;
-  font-size: 1rem !important;
-  border-radius: 0.75rem !important;
+  padding: 0;
+  font-size: 1rem;
+  border-radius: 0.75rem;
 }
 
 .dots {
