@@ -34,6 +34,13 @@
 
 .buttonFilter {
   margin-left:  0.5rem;
+  cursor: pointer;
+}
+
+.buttonFilter.active {
+  background-color: var(--thirdcolor);
+  color: white;
+  border-color: var(--thirdcolor);
 }
 
 .filters{

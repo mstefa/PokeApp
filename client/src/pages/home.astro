@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Pokemon from '../components/Pokemon';
+import SearchBar from '../components/SearchBar';
+import Pagination from '../components/Pagination';
+import Styles from '../components/Pokemons.module.css';
+
+const url = new URL(Astro.request.url);
+const page = parseInt(url.searchParams.get('page') || '1', 10);
+const type = url.searchParams.get('type') || 'all';
+const sort = url.searchParams.get('sort') || 'asc';
+const personalized = url.searchParams.get('personalized') === 'true';
+const search = url.searchParams.get('search') || '';
+
+const limit = 12;
+
+const apiBase = process.env.API_URL || process.env.REACT_APP_API || 'http://localhost:3002';
+let pokemons: any[] = [];
+let count = 0;
+let types: any[] = [];
+let error: string | null = null;
+
+try {
+  const typesRes = await fetch(`${apiBase}/types`);
+  if (typesRes.ok) {
+    types = await typesRes.json();
+  }
+
+  const pokemonRes = await fetch(`${apiBase}/pokemons?limit=1000`);
+  if (pokemonRes.ok) {
+    const data = await pokemonRes.json();
+    let allPokemons = data.pokemons || [];
+
+    // Filter by personalization
+    if (personalized) {
+      allPokemons = allPokemons.filter((p: any) => p.personalized);
+    }
+
+    // Filter by type
+    if (type !== 'all') {
+      allPokemons = allPokemons.filter((p: any) =>
+        p.types && p.types.some((t: any) => t.name === type)
+      );
+    }
+
+    // Sort by name
+    if (sort === 'asc') {
+      allPokemons.sort((a: any, b: any) => a.name.localeCompare(b.name));
+    } else if (sort === 'desc') {
+      allPokemons.sort((a: any, b: any) => b.name.localeCompare(a.name));
+    }
+
+    count = allPokemons.length;
+
+    const offset = (page - 1) * limit;
+    pokemons = allPokemons.slice(offset, offset + limit);
+  } else {
+    error = `Error al obtener los pokémons (status ${pokemonRes.status})`;
+  }
+} catch (err: any) {
+  error = err.message;
+}
+---
+
+<Layout title="Pokemon Home">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    {error && (
+      <div class="error-banner">
+        <span>{error}</span>
+      </div>
+    )}
+
+    <SearchBar
+      client:load
+      types={types}
+      currentType={type}
+      currentSort={sort}
+      currentPersonalized={personalized}
+      currentSearch={search}
+    />
+
+    {pokemons.length > 0 ? (
+      <>
+        <div class={Styles.container}>
+          {pokemons.map((p: any) => (
+            <Pokemon
+              key={p.id}
+              id={p.id}
+              name={p.name}
+              img={p.img}
+              types={p.types}
+              personalized={p.personalized}
+            />
+          ))}
+        </div>
+
+        <div class={Styles.pagination}>
+          <Pagination
+            total={count}
+            currentPage={page}
+            limit={limit}
+            currentSearch={url.search}
+          />
+        </div>
+      </>
+    ) : (
+      <div class="no-results">
+        <p>No se encontraron Pokémon con los filtros seleccionados.</p>
+      </div>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .error-banner {
+    background-color: #ffdddd;
+    color: #ff0000;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  .no-results {
+    text-align: center;
+    font-size: 1.25rem;
+    margin-top: 4rem;
+    font-weight: 500;
+    color: var(--maincolor);
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CreatePokemon from '../components/CreatePokemon';
+
+const apiBase = process.env.API_URL || process.env.REACT_APP_API || 'http://localhost:3002';
+let types = [];
+let error = null;
+
+try {
+  const res = await fetch(`${apiBase}/types`);
+  if (res.ok) {
+    types = await res.json();
+  } else {
+    error = `Error al obtener tipos de Pokémon (status ${res.status})`;
+  }
+} catch (err: any) {
+  error = err.message;
+}
+---
+
+<Layout title="Crear Pokémon">
+  <div style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+    <h1 style="text-align: center; margin-bottom: 2rem; color: var(--maincolor);">Crea tu propio Pokémon</h1>
+
+    {error && (
+      <div class="error-banner">
+        <span>{error}</span>
+      </div>
+    )}
+
+    <CreatePokemon client:load types={types} />
+  </div>
+</Layout>
+
+<style>
+  .error-banner {
+    background-color: #ffdddd;
+    color: #ff0000;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+  }
+</style>

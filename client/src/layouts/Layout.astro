@@ -1,0 +1,81 @@
+---
+import NavBar from '../components/NavBar';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | PokeApp</title>
+    <style is:global>
+      :root {
+        --backgroudcolor: #fdc100;
+        --maincolor: #2e489b;
+        --seccolor: #ffc702;
+        --thirdcolor: #ee6520;
+        --shadingcolor: #0000001a;
+        --bdrcolor: #4F5A69;
+        --bdrhover: #E06248;
+        --backgroudcolor2: #4F5A69;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: var(--backgroudcolor);
+        min-height: 50rem;
+        color: var(--maincolor);
+      }
+
+      code {
+        font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+          monospace;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      button {
+        background-color: var(--seccolor);
+        border: var(--bdrcolor) solid 0.08rem;
+        border-radius: 0.3rem;
+        height: 2rem;
+        font-size: large;
+        cursor: pointer;
+      }
+
+      button:hover {
+        border: var(--bdrhover) solid 0.08rem;
+      }
+
+      h1 {
+        font-family: Verdana, Geneva, sans-serif;
+        font-size: 24px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 700;
+        line-height: 26.4px;
+      }
+    </style>
+  </head>
+  <body>
+    <NavBar />
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

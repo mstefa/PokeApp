@@ -28,7 +28,7 @@ install: check-deps
 	@echo "$(YELLOW)Installing backend dependencies...$(NC)"
 	@cd api && pnpm install
 	@echo "$(YELLOW)Installing frontend dependencies...$(NC)"
-	@cd client && npm install --legacy-peer-deps
+	@cd client && pnpm install
 	@echo "$(GREEN)✓ All dependencies installed successfully!$(NC)"
 
 ## db-up: Start PostgreSQL database container in the background.
@@ -95,8 +95,8 @@ run-api: check-deps check-docker
 ## run-client: Run the frontend client in development mode.
 .PHONY: run-client
 run-client:
-	@echo "$(YELLOW)Starting frontend client (npm)...$(NC)"
-	@cd client && NODE_OPTIONS=--openssl-legacy-provider npm start
+	@echo "$(YELLOW)Starting frontend client (pnpm)...$(NC)"
+	@cd client && pnpm start
 
 ## dev: Start the database and run both API and client in parallel.
 .PHONY: dev
@@ -105,7 +105,7 @@ dev: db-up
 	@echo "$(CYAN)Press Ctrl+C to stop all processes.$(NC)"
 	@trap 'echo "\n$(RED)Stopping all services...$(NC)"; kill 0' INT; \
 	(cd api && pnpm dev) & \
-	(cd client && NODE_OPTIONS=--openssl-legacy-provider npm start) & \
+	(cd client && pnpm start) & \
 	wait
 
 ## build: Build both the API and client for production.
@@ -114,7 +114,7 @@ build: check-deps
 	@echo "$(YELLOW)Building backend API...$(NC)"
 	@cd api && pnpm build
 	@echo "$(YELLOW)Building frontend client...$(NC)"
-	@cd client && NODE_OPTIONS=--openssl-legacy-provider npm run build
+	@cd client && pnpm build
 	@echo "$(GREEN)✓ Both frontend and backend builds completed!$(NC)"
 
 ## clean: Clean build folders and node_modules.
