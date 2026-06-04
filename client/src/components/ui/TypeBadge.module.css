@@ -1,0 +1,20 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.75rem;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}

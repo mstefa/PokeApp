@@ -1,0 +1,307 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Bienvenidos">
+  <div class="landing-container" id="landing-container">
+    <div class="stars-bg">
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+    </div>
+    
+    <div class="landing-card">
+      <h1 id="landing-title" class="title">PokeApp</h1>
+      <p class="subtitle">La enciclopedia Pokémon definitiva</p>
+      
+      <div class="pokeball-wrapper" id="pokeball-wrapper" role="button" aria-label="Ingresar a la PokeApp">
+        <div class="glow-ring"></div>
+        <img id="pokeball" src="/resources/pokeball.png" alt="Pokéball interactiva" class="pokeball-img" />
+      </div>
+
+      <button id="start-btn" class="start-btn" aria-label="Comenzar viaje">
+        PULSAR START
+      </button>
+      
+      <p class="footer-text">Haga clic en la Pokéball o pulse Start para ingresar</p>
+    </div>
+
+    <!-- White-out overlay for transition flash -->
+    <div class="flash-overlay"></div>
+  </div>
+</Layout>
+
+<style>
+  .landing-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle, #1e1b4b 0%, #090d16 100%);
+    overflow: hidden;
+    font-family: 'Fredoka', sans-serif;
+  }
+
+  /* Floating decorative stars */
+  .stars-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--poke-yellow);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: pulse-star 3s infinite ease-in-out;
+  }
+
+  .star:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+  .star:nth-child(2) { top: 25%; left: 80%; animation-delay: 0.5s; }
+  .star:nth-child(3) { top: 70%; left: 15%; animation-delay: 1s; }
+  .star:nth-child(4) { top: 80%; left: 75%; animation-delay: 1.5s; }
+  .star:nth-child(5) { top: 40%; left: 88%; animation-delay: 2s; }
+  .star:nth-child(6) { top: 10%; left: 60%; animation-delay: 0.2s; }
+  .star:nth-child(7) { top: 85%; left: 40%; animation-delay: 0.8s; }
+  .star:nth-child(8) { top: 55%; left: 8%; animation-delay: 1.2s; }
+
+  @keyframes pulse-star {
+    0%, 100% { transform: scale(1); opacity: 0.2; }
+    50% { transform: scale(1.8); opacity: 0.8; }
+  }
+
+  /* Main Interactive Card */
+  .landing-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 4px solid var(--border-heavy);
+    border-radius: 2.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), var(--shadow-box);
+    padding: 3rem 2.5rem;
+    width: 90%;
+    max-width: 28rem;
+    text-align: center;
+    z-index: 10;
+    transition: transform 0.3s ease;
+  }
+
+  .title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0 0 0.5rem 0;
+    color: var(--poke-yellow);
+    letter-spacing: 2px;
+    -webkit-text-stroke: 2px var(--poke-blue);
+    text-shadow: 4px 4px 0 var(--border-heavy);
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    font-weight: 500;
+  }
+
+  /* Interactive Pokéball */
+  .pokeball-wrapper {
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+    margin: 0 auto 2.5rem auto;
+    cursor: pointer;
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite;
+    transition: var(--transition-bouncy);
+    user-select: none;
+  }
+
+  .pokeball-wrapper:hover {
+    transform: scale(1.08);
+  }
+
+  .pokeball-wrapper:active {
+    transform: scale(0.92);
+  }
+
+  .glow-ring {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .pokeball-wrapper:hover .glow-ring {
+    opacity: 1;
+    animation: pulse-glow 2s infinite ease-in-out;
+  }
+
+  .pokeball-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+  }
+
+  /* Start button - Styled according to Design Tokens */
+  .start-btn {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    background-color: var(--poke-red);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: 1.25rem;
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-bouncy);
+    border-bottom: 5px solid #b91c1c;
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.25);
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    outline: none;
+    display: inline-block;
+  }
+
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(239, 68, 68, 0.35);
+  }
+
+  .start-btn:active {
+    transform: translateY(3px) scale(0.96);
+    border-bottom-width: 1px;
+  }
+
+  .footer-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* Animations definitions */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  /* Transitioning State Animations */
+  .transitioning .pokeball-wrapper {
+    animation: spinShake 1.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  .transitioning .landing-card {
+    transform: scale(0.95);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  @keyframes spinShake {
+    0% { transform: rotate(0deg) scale(1.08); }
+    10% { transform: rotate(-15deg) scale(1.05); }
+    20% { transform: rotate(15deg) scale(1.05); }
+    30% { transform: rotate(-25deg) scale(1.03); }
+    40% { transform: rotate(25deg) scale(1.03); }
+    55% { transform: rotate(-540deg) scale(1.1); }
+    75% { transform: rotate(-1080deg) scale(2); }
+    90% { transform: rotate(-1440deg) scale(8); opacity: 0.5; }
+    100% { transform: rotate(-1800deg) scale(35); opacity: 0; }
+  }
+
+  /* Flash overlay */
+  .flash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .transitioning .flash-overlay {
+    opacity: 1;
+    pointer-events: all;
+  }
+</style>
+
+<script>
+  const pokeball = document.getElementById('pokeball');
+  const startBtn = document.getElementById('start-btn');
+  const container = document.getElementById('landing-container');
+
+  function startTransition() {
+    if (!container || container.classList.contains('transitioning')) return;
+    container.classList.add('transitioning');
+    
+    // Custom retro sound using Web Audio API
+    try {
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      const osc1 = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc1.type = 'triangle';
+      osc2.type = 'triangle';
+      
+      // Retro ascending double beep
+      osc1.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+      osc1.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.12); // G5
+      
+      osc2.frequency.setValueAtTime(261.63, audioCtx.currentTime); // C4
+      osc2.frequency.setValueAtTime(392.00, audioCtx.currentTime + 0.12); // G4
+
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+      
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc1.start();
+      osc2.start();
+      osc1.stop(audioCtx.currentTime + 0.45);
+      osc2.stop(audioCtx.currentTime + 0.45);
+    } catch (e) {
+      console.warn('AudioContext failed:', e);
+    }
+
+    setTimeout(() => {
+      window.location.href = '/home';
+    }, 1250);
+  }
+
+  if (pokeball) pokeball.addEventListener('click', startTransition);
+  if (startBtn) startBtn.addEventListener('click', startTransition);
+</script>

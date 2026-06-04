@@ -1,0 +1,110 @@
+# Migration Plan: TypeScript & Hexagonal Architecture
+
+## Objective
+Continue the migration of the PokeApp API to TypeScript and Hexagonal Architecture, ensuring high test coverage and maintaining a functional application at every step.
+
+## Current Status (feat/update-api)
+- **Infrastructure:** `DependencyInjectionContainer` implemented. Hybrid routing (JS/TS) active.
+- **Domain:** `Pokemon` and `Type` entities defined in TS. `PokemonRepository` and `TypeRepository` interfaces defined.
+- **Application:** Use cases for `PokemonCreator`, `PokemonsFetcher`, `PokemonDetailFetcher`, `PokemonDetailSearcher`, and `TypesFetcher` are implemented in TS.
+- **Persistence:** Currently uses legacy `src/db.js` (Sequelize) and `src/models/Pokemon.js`. `LocalDatabasePokemonRepository` acts as an adapter.
+
+## Migration TODO List
+
+### Phase 1: Test Stabilization & Coverage (TDD)
+- [x] **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.
+- [x] **Fix Search Response:** Adjust `SearchPokemonController` to return full JSON object.
+- [x] **Stabilize Integration Tests:** Update remaining 7 failing assertions in `POST /pokemons` to match new JSON structure.
+- [x] **Fix Deprecated Mocha Flags:** Migrate `--loader=tsx` to `--import=tsx` in `package.json` test scripts to support Node v18.19+/v20.6+/v22+.
+- [x] **Create Dev Infrastructure:** Add a `docker-compose.yml` for a local PostgreSQL setup to run integration tests locally.
+- [x] **Add Missing Integration Tests:**
+    - [x] Validation errors (e.g., creating a pokemon with missing fields).
+    - [x] Edge cases for pagination (offset/limit).
+    - [x] Error handling for external API failures.
+
+### Phase 2: Domain & Persistence Migration
+- [x] **Migrate Models to TS:**
+    - [x] Convert `src/models/Pokemon.js` to a TypeScript Sequelize model.
+    - [x] Update `src/db.js` to a TypeScript configuration file (`src/infrastructure/persistence/sequelize.ts`).
+- [x] **Refine Repositories:**
+    - [x] Update `LocalDatabasePokemonRepository` and `LocalDatabaseTypeRepository` to use the new TS models.
+    - [x] Ensure strict typing for all database operations.
+
+### Phase 3: Final Infrastructure & Cleanup
+- [ ] **Complete Route Migration:** Ensure all logic is removed from `src/routes/pokemons.js` and `src/routes/types.js` before deleting them.
+- [ ] **Standardize Error Handling:** Implement a global Error Middleware in TS.
+- [ ] **Convert Tests to TS:** Migrate `.spec.js` files to `.spec.ts`.
+- [ ] **Update Docker Setup:** Modernize `Dockerfile` to compile TS using `tsc` and run in a modern Node.js environment.
+- [ ] **Add Environment Configuration Safety:** Introduce a Zod-validated configuration loader class for type-safe environment variables.
+
+### Phase 4: Cucumber BDD Integration Tests
+- [x] **Configure Cucumber Framework:** Add `@cucumber/cucumber` devDependency and create root `cucumber.js` configuration.
+- [x] **Write Gherkin Features:** Define `tests/features/pokemons.feature` covering health, pagination, search, and validation error paths.
+- [x] **Implement Cucumber Step Definitions:**
+    - [x] Create `tests/step_definitions/preparation.steps.ts` managing the server launch and database cleaning hooks.
+    - [x] Create `tests/step_definitions/controller.steps.ts` mapping step patterns with Supertest assertions.
+
+### Phase 5: Package Manager Migration (npm to pnpm)
+- [x] **Setup pnpm Environment:** Install `pnpm` globally/locally and configure package engine requirement in `package.json`.
+- [x] **Generate Lockfile:** Remove legacy `package-lock.json` and generate `pnpm-lock.yaml` using `pnpm install` or `pnpm import`.
+- [x] **Update Documentation & Tooling:** Update local script references, Dockerfile configurations, and verification documentation to utilize `pnpm` instead of `npm`.
+
+### Phase 6: Testing & Dependency Rationalization
+- [x] **Delete Unit Tests:** Delete all unit tests (e.g. `tests/models` and `tests/routes`). Keep only the integration tests (`tests/integration`) and BDD integration tests (Cucumber).
+- [x] **Migrate and Simplify Test Runner:** Transition the test runner to Vitest (or another modern Vite-based test framework) to simplify test configuration and execution.
+- [x] **Remove Unused Dependencies:** Audit and remove all unused runtime and development dependencies from `package.json`.
+
+## Step-by-Step Migration Strategy (Detailed)
+
+### Phase 1: Test Stabilization & Coverage (TDD)
+1.  **Unskip Search Tests:** Enable all tests in `tests/integration/endpoints.integration.spec.js`.
+2.  **Fix Search Response:** Adjust `SearchPokemonController` or `PokemonSearcher` to return the expected structured object (ID + details) instead of just the ID.
+3.  **Fix Deprecated Mocha Flags:** Update `package.json` test scripts to use `--import=tsx` instead of `--loader=tsx` so tests run successfully on modern Node versions.
+4.  **Create Dev Infrastructure:** Create a `docker-compose.yml` defining the local PostgreSQL service and document environment setup in `.env`.
+5.  **Add Missing Integration Tests:**
+    *   Validation errors (e.g., creating a pokemon with missing fields).
+    *   Edge cases for pagination (offset/limit).
+    *   Error handling for external API failures.
+
+### Phase 2: Domain & Persistence Migration
+1.  **Migrate Models to TS:**
+    *   Convert `src/models/Pokemon.js` to a TypeScript Sequelize model.
+    *   Update `src/db.js` to a TypeScript configuration file (`src/infrastructure/persistence/sequelize.ts`).
+2.  **Refine Repositories:**
+    *   Update `LocalDatabasePokemonRepository` and `LocalDatabaseTypeRepository` to use the new TS models.
+    *   Ensure strict typing for all database operations.
+
+### Phase 3: Final Infrastructure & Cleanup
+1.  **Complete Route Migration:** Ensure all logic is removed from `src/routes/pokemons.js` and `src/routes/types.js` before deleting them.
+2.  **Standardize Error Handling:** Implement a global Error Middleware in TS that handles `NotFoundError`, `InvalidArgumentError`, etc., consistently.
+3.  **Convert Tests to TS:** Migrate `.spec.js` files to `.spec.ts` for full type safety in the test suite.
+4.  **Update Docker Setup:** Update the `Dockerfile` to build the app with `tsc` and run the output `dist/index.js` under a modern alpine node image.
+5.  **Add Environment Configuration Safety:** Build a schema-based environment validator using Zod in `src/config/index.ts` to ensure required variables are present and correct.
+
+### Phase 4: Cucumber BDD Integration Tests
+1.  **Configure Cucumber Framework:** Add the necessary BDD dependencies and set up the `cucumber.js` runner config in the root.
+2.  **Write Gherkin Features:** Add Gherkin specification feature files under `tests/features/`.
+3.  **Implement Cucumber Step Definitions:** Code the steps definitions and preparation hook classes under `tests/step_definitions/` mapping scenarios to Express controllers.
+
+### Phase 5: Package Manager Migration (npm to pnpm)
+1.  **Setup pnpm Environment:** Ensure `pnpm` is installed and configure it under engine requirements.
+2.  **Generate Lockfile:** Run `pnpm import` or `pnpm install` after deleting `package-lock.json` to generate the correct `pnpm-lock.yaml`.
+3.  **Update Documentation & Tooling:** Replace references of `npm run` with `pnpm` across `package.json` scripts, `Dockerfile` run commands, and testing docs.
+
+### Phase 6: Testing & Dependency Rationalization
+1.  **Delete Unit Tests:** Delete the legacy unit tests directory and files (`tests/models/*` and `tests/routes/*`), keeping only the integration suite (`tests/integration/*`) and Cucumber scenarios (`tests/features/*`).
+2.  **Migrate to Vitest:** Replace Mocha/Chai with Vitest. Simplify `package.json` testing scripts and configure Vitest to run the remaining integration tests.
+3.  **Clean up unused dependencies:** Audit `package.json` for unused packages and run `pnpm remove` to uninstall them.
+
+---
+
+# Verification & Testing
+- **Run All Tests:** Run `pnpm test` (executes Vitest followed by Cucumber BDD).
+- **Vitest Suite:** Run `pnpm test:unit` (or `pnpm test:watch` for watch mode).
+- **BDD Integration Tests:** Run `pnpm test:integration` (Cucumber scenarios).
+- **TDD Workflow:** 
+  1. Identify a missing or failing test.
+  2. Implement/Fix the minimal code to make it green.
+  3. Refactor.
+- **Manual Verification:** Use files in `docs/request/` (e.g., `get-pokemon.http`) to verify behavior.
+

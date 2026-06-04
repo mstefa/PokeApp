@@ -1,0 +1,171 @@
+---
+import NavBar from '../components/NavBar';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const showNavBar = Astro.url.pathname !== '/';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <title>{title} | PokeApp</title>
+    <style is:global>
+      :root {
+        /* Legacy custom property fallbacks to maintain system compatibility during refactoring */
+        --backgroudcolor: var(--bg-body);
+        --maincolor: var(--text-main);
+        --seccolor: var(--poke-yellow);
+        --thirdcolor: var(--poke-red);
+        --shadingcolor: rgba(30, 41, 59, 0.08);
+        --bdrcolor: var(--border-color);
+        --bdrhover: var(--poke-blue);
+        --backgroudcolor2: var(--surface-inner);
+
+        /* Layout Backdrops */
+        --bg-body: #f8fafc;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --text-inverse: #ffffff;
+        
+        /* Component Surfaces */
+        --surface-card: #ffffff;
+        --surface-inner: #f1f5f9;
+        --border-color: #cbd5e1;
+        --border-heavy: #1e293b;
+        
+        /* Brand Accents */
+        --poke-red: #ef4444;
+        --poke-red-gradient: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+        --poke-blue: #3b4cca;
+        --poke-yellow: #ffde00;
+        
+        /* Tactile Physics & Drop Shadows */
+        --shadow-box: 6px 6px 0px 0px #1e293b;
+        --shadow-toast: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --shadow-btn: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --transition-bouncy: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        
+        /* Elemental Type Palette (HEX & Background Alpha overlays) */
+        --color-fire: #ef4444;
+        --color-fire-bg: rgba(239, 68, 68, 0.1);
+        --color-water: #3b82f6;
+        --color-water-bg: rgba(59, 130, 246, 0.1);
+        --color-grass: #10b981;
+        --color-grass-bg: rgba(16, 185, 129, 0.1);
+        --color-electric: #f59e0b;
+        --color-electric-bg: rgba(245, 158, 11, 0.1);
+        --color-poison: #a855f7;
+        --color-poison-bg: rgba(168, 85, 247, 0.1);
+        --color-normal: #78716c;
+        --color-normal-bg: rgba(120, 113, 108, 0.1);
+        --color-flying: #818cf8;
+        --color-flying-bg: rgba(129, 140, 248, 0.1);
+        --color-ground: #b45309;
+        --color-ground-bg: rgba(180, 83, 9, 0.1);
+        --color-psychic: #ec4899;
+        --color-psychic-bg: rgba(236, 72, 153, 0.1);
+        --color-ice: #22d3ee;
+        --color-ice-bg: rgba(34, 211, 238, 0.1);
+        --color-fighting: #b91c1c;
+        --color-fighting-bg: rgba(185, 28, 28, 0.1);
+        --color-bug: #84cc16;
+        --color-bug-bg: rgba(132, 204, 22, 0.1);
+        --color-rock: #7c2d12;
+        --color-rock-bg: rgba(124, 45, 18, 0.1);
+        --color-ghost: #6366f1;
+        --color-ghost-bg: rgba(99, 102, 241, 0.1);
+        --color-dragon: #4f46e5;
+        --color-dragon-bg: rgba(79, 70, 229, 0.1);
+        --color-steel: #64748b;
+        --color-steel-bg: rgba(100, 116, 139, 0.1);
+        --color-dark: #1e293b;
+        --color-dark-bg: rgba(30, 41, 59, 0.1);
+        --color-fairy: #f472b6;
+        --color-fairy-bg: rgba(244, 114, 182, 0.1);
+      }
+
+      /* Dark Mode Scheme Activations */
+      html.dark {
+        --bg-body: #090d16;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        
+        --surface-card: #0f172a;
+        --surface-inner: #070a12;
+        --border-color: #1e293b;
+        --border-heavy: #334155;
+        
+        --poke-red-gradient: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+        --shadow-box: 6px 6px 0px 0px rgba(0, 0, 0, 0.5);
+        
+        /* Dynamic contrast boost for elemental opacity overlays on dark canvas */
+        --color-fire-bg: rgba(239, 68, 68, 0.2);
+        --color-water-bg: rgba(59, 130, 246, 0.2);
+        --color-grass-bg: rgba(16, 185, 129, 0.2);
+        --color-electric-bg: rgba(245, 158, 11, 0.2);
+        --color-poison-bg: rgba(168, 85, 247, 0.2);
+        --color-normal-bg: rgba(120, 113, 108, 0.2);
+        --color-flying-bg: rgba(129, 140, 248, 0.2);
+        --color-ground-bg: rgba(180, 83, 9, 0.2);
+        --color-psychic-bg: rgba(236, 72, 153, 0.2);
+        --color-ice-bg: rgba(34, 211, 238, 0.2);
+        --color-fighting-bg: rgba(185, 28, 28, 0.2);
+        --color-bug-bg: rgba(132, 204, 22, 0.2);
+        --color-rock-bg: rgba(124, 45, 18, 0.2);
+        --color-ghost-bg: rgba(99, 102, 241, 0.2);
+        --color-dragon-bg: rgba(79, 70, 229, 0.2);
+        --color-steel-bg: rgba(100, 116, 139, 0.2);
+        --color-dark-bg: rgba(30, 41, 59, 0.2);
+        --color-fairy-bg: rgba(244, 114, 182, 0.2);
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 500;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: var(--bg-body);
+        min-height: 100vh;
+        color: var(--text-main);
+      }
+
+      code {
+        font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+          monospace;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    {showNavBar && <NavBar />}
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

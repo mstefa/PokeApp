@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PokemonDetail from '../../components/PokemonDetail';
+
+const { id } = Astro.params;
+
+const apiBase = process.env.API_URL || process.env.REACT_APP_API || 'http://localhost:3002';
+let pokemon = null;
+let error = null;
+
+try {
+  const res = await fetch(`${apiBase}/pokemons/${id}`);
+  if (res.ok) {
+    pokemon = await res.json();
+  } else {
+    error = `Pokemon no encontrado (status ${res.status})`;
+  }
+} catch (err: any) {
+  error = err.message;
+}
+---
+
+<Layout title={pokemon ? pokemon.name : "Detalles del Pokemon"}>
+  <div class="detail-wrapper">
+    {pokemon ? (
+      <PokemonDetail pokemon={pokemon} />
+    ) : (
+      <div class="error-container">
+        <h2>Error al cargar el Pokémon</h2>
+        <p>{error}</p>
+        <a href="/home" class="back-btn">Volver a Home</a>
+      </div>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .detail-wrapper {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .error-container {
+    text-align: center;
+    background-color: rgba(255, 226, 226, 0.8);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    max-width: 25rem;
+    color: var(--thirdcolor);
+    font-weight: 500;
+  }
+  .back-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: var(--seccolor);
+    border: var(--bdrcolor) solid 0.08rem;
+    border-radius: 0.3rem;
+    padding: 0.5rem 1rem;
+    color: var(--maincolor);
+    font-weight: bold;
+  }
+  .back-btn:hover {
+    border-color: var(--bdrhover);
+  }
+</style>

@@ -1,0 +1,5 @@
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.2s ease, stroke 0.2s ease;
+}
