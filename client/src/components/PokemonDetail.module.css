@@ -1,73 +1,168 @@
-.container{
-  /* background-image: url(../resurces/ash.png);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover; */
-  background-color: rgba(255, 226, 226, 0.432);
-  margin: 0 auto;
+.container {
+  max-width: 40rem;
+  width: 100%;
+  margin: 1.5rem auto;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageWrapper {
+  width: 12rem;
+  height: 12rem;
+  background-color: var(--surface-inner);
+  border-radius: 2rem;
+  border: 3px solid var(--border-heavy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.titleSection {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .titleSection {
+    align-items: center;
+  }
+}
+
+.number {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  margin: 0 0 0.25rem 0;
+}
+
+.name {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-transform: capitalize;
+  margin: 0 0 1rem 0;
+}
+
+.typesContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.divider {
+  height: 3px;
+  background-color: var(--border-heavy);
+  margin: 2rem 0;
+  width: 100%;
+}
+
+.statsSection {
+  width: 100%;
+}
+
+.title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 1.5rem 0;
+  text-align: left;
+}
+
+.statGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.statLabel {
+  width: 6.5rem;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: left;
+}
+
+.statBarContainer {
+  flex-grow: 1;
+  height: 16px;
+  background-color: var(--surface-inner);
+  border: 2px solid var(--border-heavy);
   border-radius: 0.5rem;
-  max-width: 30rem;
+  overflow: hidden;
+}
+
+.statBar {
+  height: 100%;
+  border-radius: 0.25rem;
+  transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.statValue {
+  width: 2.5rem;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: right;
+}
+
+.dimensionsSection {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  gap: 2rem;
+}
+
+.dimensionItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-items: center;
-  text-align: center;
-  color: var(--thirdcolor);
+  background-color: var(--surface-inner);
+  border: 2px solid var(--border-heavy);
+  border-radius: 1.5rem;
+  padding: 1rem 2.5rem;
+  flex-grow: 1;
 }
 
-.img{
-  border-radius: 0.5rem;
-  width: 14rem;
-  padding: 0.5rem;
-  
-}
-
-.name{
-  font-size: larger;
-  font-weight: 800;
-  /* color: var(--thirdcolor); */
-}
-
-.number{
-  font-weight:lighter;
-  height: 1rem;
-  /* color: var(--thirdcolor); */
-}
-.type{
-  margin: 1rem;
-  font-size: large;
-  height: 1rem;
+.dimLabel {
+  font-family: 'Fredoka', sans-serif;
   font-weight: 500;
-  /* color: var(--thirdcolor); */
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
 }
-.stat{
-  display: flex;
-}
-.title{
-  width: auto;
-  font-size: larger;
+
+.dimValue {
+  font-family: 'Fredoka', sans-serif;
   font-weight: 700;
-  /* color: var(--thirdcolor); */
-}
-.dataPresentation{
-  width: 12rem;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-}
-
-.text{
-  margin: 1rem;
-  font-size: large;
-  height: 0.5rem;
-  font-weight: 500;
-  /* color: var(--thirdcolor); */
-}
-
-.loadingImg{
-  margin: auto;
-  max-width: 15rem;
-  display: flex; 
-  flex-direction: column;
-  text-align: center;
+  font-size: 1.25rem;
+  color: var(--text-main);
 }

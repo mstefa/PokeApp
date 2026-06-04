@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Pokemon from '../components/Pokemon';
+import PokemonCard from '../components/PokemonCard';
 import SearchBar from '../components/SearchBar';
 import Pagination from '../components/Pagination';
 import Styles from '../components/Pokemons.module.css';
@@ -83,7 +83,7 @@ try {
       <>
         <div class={Styles.container}>
           {pokemons.map((p: any) => (
-            <Pokemon
+            <PokemonCard
               key={p.id}
               id={p.id}
               name={p.name}

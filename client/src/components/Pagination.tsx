@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './ui/Button';
 import Styles from './Pagination.module.css';
 
 interface PaginationProps {
@@ -50,30 +51,36 @@ export default function Pagination({ total, currentPage, limit, currentSearch }:
           <>
             <li className={Styles.pageItem}>
               <a href={getPageUrl(1)} className={Styles.pageLink}>
-                1
+                <Button variant="secondary" className={Styles.pageButton}>
+                  1
+                </Button>
               </a>
             </li>
-            <span style={{ padding: '0.5rem', display: 'block', color: 'var(--maincolor)' }}>...</span>
+            <span className={Styles.dots}>...</span>
           </>
         )}
 
         {pagesToRender.map((number) => (
-          <li
-            key={number}
-            className={`${Styles.pageItem} ${number === currentPage ? Styles.active : ''}`}
-          >
+          <li key={number} className={Styles.pageItem}>
             <a href={getPageUrl(number)} className={Styles.pageLink}>
-              {number === currentPage ? <strong>{number}</strong> : number}
+              <Button
+                variant={number === currentPage ? 'primary' : 'secondary'}
+                className={Styles.pageButton}
+              >
+                {number}
+              </Button>
             </a>
           </li>
         ))}
 
         {showEndDots && (
           <>
-            <span style={{ padding: '0.5rem', display: 'block', color: 'var(--maincolor)' }}>...</span>
+            <span className={Styles.dots}>...</span>
             <li className={Styles.pageItem}>
               <a href={getPageUrl(numberOfPages)} className={Styles.pageLink}>
-                {numberOfPages}
+                <Button variant="secondary" className={Styles.pageButton}>
+                  {numberOfPages}
+                </Button>
               </a>
             </li>
           </>

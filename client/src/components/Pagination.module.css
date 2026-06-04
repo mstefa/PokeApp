@@ -1,53 +1,43 @@
-.container{
+.container {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  margin: 2rem 0;
 }
 
 .pagination {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  padding-left: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
   list-style: none;
-  border-radius: 0.25rem;
+}
+
+.pageItem {
+  display: inline-flex;
 }
 
 .pageLink {
-  position: relative;
-  display: block;
-  padding: 0.5rem 0.75rem;
-  margin-left: -1px;
-  line-height: 1.25;
-  color: var(--maincolor);
-  background-color: var(--shadingcolor);
-  border: 1px solid var(--maincolor);
-}
-
-.pageLink:hover {
-  color: #0056b3;
   text-decoration: none;
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+  color: inherit;
+  display: inline-flex;
 }
 
-.pageItem{
-  margin-left: 0.1rem;
-  margin-right: 0.1rem;
-}
-.pageItem:first-child .pageLink {
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-}
-
-.pageItem:last-child .pageLink {
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
+.pageButton {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 !important;
+  font-size: 1rem !important;
+  border-radius: 0.75rem !important;
 }
 
-.pageItem.active .pageLink {
-  z-index: 1;
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+.dots {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  padding: 0 0.5rem;
+  user-select: none;
 }

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Input from './ui/Input';
+import Select from './ui/Select';
+import Button from './ui/Button';
 import Styles from './SearchBar.module.css';
 
 interface TypeData {
@@ -62,48 +65,52 @@ export default function SearchBar({
   return (
     <div className={Styles.container}>
       <form className={Styles.formContainer} onSubmit={handleSearchSubmit}>
-        <div>
-          <input
-            className={Styles.input}
-            placeholder="Pikachu"
+        <div className={Styles.searchWrapper}>
+          <Input
+            className={Styles.searchInput}
+            placeholder="Pikachu..."
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <button className={Styles.buttonSearch} type="submit">
+          <Button variant="accent" className={Styles.buttonSearch} type="submit">
             <img
               className={Styles.img}
               src="/resources/buscar.png"
               alt="Search"
-              width="15"
+              width="16"
+              height="16"
             />
-          </button>
+          </Button>
         </div>
       </form>
       <div className={Styles.filters}>
-        <button
-          className={`${Styles.buttonFilter} ${currentSort === 'asc' ? Styles.active : ''}`}
+        <Button
+          variant={currentSort === 'asc' ? 'primary' : 'secondary'}
+          className={Styles.buttonFilter}
           onClick={() => updateUrl({ sort: 'asc' })}
         >
           a-z
-        </button>
-        <button
-          className={`${Styles.buttonFilter} ${currentSort === 'desc' ? Styles.active : ''}`}
+        </Button>
+        <Button
+          variant={currentSort === 'desc' ? 'primary' : 'secondary'}
+          className={Styles.buttonFilter}
           onClick={() => updateUrl({ sort: 'desc' })}
         >
           z-a
-        </button>
-        <button
-          className={`${Styles.buttonFilter} ${currentPersonalized ? Styles.active : ''}`}
+        </Button>
+        <Button
+          variant={currentPersonalized ? 'primary' : 'secondary'}
+          className={Styles.buttonFilter}
           onClick={() => updateUrl({ personalized: !currentPersonalized })}
         >
-          {currentPersonalized ? 'todos' : 'solo nuestros'}
-        </button>
+          {currentPersonalized ? 'todos' : 'solo creados'}
+        </Button>
       </div>
       <div className={Styles.sort}>
-        <span className={Styles.sortText}>Tipo: </span>
-        <select
-          className={Styles.input}
+        <span className={Styles.sortText}>Tipo:</span>
+        <Select
+          className={Styles.selectInput}
           value={currentType}
           onChange={(e) => updateUrl({ type: e.target.value })}
         >
@@ -113,7 +120,7 @@ export default function SearchBar({
               {t.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
     </div>
   );

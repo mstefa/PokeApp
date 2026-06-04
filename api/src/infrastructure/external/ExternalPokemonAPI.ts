@@ -10,6 +10,34 @@ const POKEAPI_TOTAL_COUNT = 1118; // Official Pokemon count in PokeAPI
  * Returns domain DTOs that can be converted to domain objects
  */
 export class ExternalPokemonAPI {
+  private detailCache = new Map<string, Promise<PokemonDto>>();
+  private apiCache = new Map<string, Promise<PokemonDto | null>>();
+
+  /**
+   * Helper function to execute asynchronous tasks with a concurrency limit.
+   */
+  private async limitConcurrency<T>(
+    tasks: (() => Promise<T>)[],
+    limit: number
+  ): Promise<T[]> {
+    const results: T[] = new Array(tasks.length);
+    let nextIndex = 0;
+
+    const worker = async () => {
+      while (nextIndex < tasks.length) {
+        const currentIndex = nextIndex++;
+        results[currentIndex] = await tasks[currentIndex]();
+      }
+    };
+
+    const workers = Array.from(
+      { length: Math.min(limit, tasks.length) },
+      worker
+    );
+    await Promise.all(workers);
+    return results;
+  }
+
   /**
    * Fetch pokemons from PokeAPI by offset and limit
    * This function retrieves official Pokemon data from the external API
@@ -24,14 +52,14 @@ export class ExternalPokemonAPI {
       const response = await axios.get(url);
 
       const pokemonsData = response.data.results;
-      const pokemons: Promise<PokemonDto>[] = [];
 
-      // Fetch detailed information for each pokemon
-      for (const pokemonData of pokemonsData) {
-        pokemons.push(this.getPokemonDetail(pokemonData.url, includeStats));
-      }
+      // Build tasks to fetch detailed information for each pokemon
+      const tasks = pokemonsData.map((pokemonData: any) => {
+        return () => this.getPokemonDetail(pokemonData.url, includeStats);
+      });
 
-      return Promise.all(pokemons);
+      // Execute tasks with a limit of 15 concurrent requests to avoid rate-limiting/ECONNRESET
+      return this.limitConcurrency(tasks, 15);
     } catch (error) {
       console.error('Error fetching pokemons from PokeAPI:', error);
       throw error;
@@ -41,21 +69,33 @@ export class ExternalPokemonAPI {
   /**
    * Fetch a single pokemon from PokeAPI by ID or name
    */
-  async getPokemonFromAPI(idOrName: number | string): Promise<PokemonDto | null> {
-    try {
-      const url = `${POKEAPI_BASE_URL}/pokemon/${idOrName}`;
-      const response = await axios.get(url);
-
-      const pokemon = this.mapPokemonDetail(response.data, true);
-      return pokemon;
-
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return null;
-      }
-      console.error(`Error fetching pokemon ${idOrName} from PokeAPI:`, error);
-      throw error;
+  getPokemonFromAPI(idOrName: number | string): Promise<PokemonDto | null> {
+    const cacheKey = String(idOrName);
+    const cachedPromise = this.apiCache.get(cacheKey);
+    if (cachedPromise) {
+      return cachedPromise;
     }
+
+    const promise = (async () => {
+      try {
+        const url = `${POKEAPI_BASE_URL}/pokemon/${idOrName}`;
+        const response = await axios.get(url);
+
+        const pokemon = this.mapPokemonDetail(response.data, true);
+        return pokemon;
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+          return null;
+        }
+        console.error(`Error fetching pokemon ${idOrName} from PokeAPI:`, error);
+        // Clear failed promise from cache so it can be retried later
+        this.apiCache.delete(cacheKey);
+        throw error;
+      }
+    })();
+
+    this.apiCache.set(cacheKey, promise);
+    return promise;
   }
 
   /**
@@ -63,6 +103,13 @@ export class ExternalPokemonAPI {
    */
   async existsInAPI(idOrName: number | string): Promise<boolean> {
     try {
+      // Check cache first to avoid HEAD request if we already have it cached
+      const cacheKey = String(idOrName);
+      if (this.apiCache.has(cacheKey)) {
+        const pokemon = await this.apiCache.get(cacheKey);
+        return pokemon !== null;
+      }
+
       const url = `${POKEAPI_BASE_URL}/pokemon/${idOrName}`;
       await axios.head(url);
       return true;
@@ -85,17 +132,30 @@ export class ExternalPokemonAPI {
   /**
    * Get pokemon detail from a URL (used internally)
    */
-  private async getPokemonDetail(
+  private getPokemonDetail(
     url: string,
     includeStats: boolean = false
   ): Promise<PokemonDto> {
-    try {
-      const response = await axios.get(url);
-      return this.mapPokemonDetail(response.data, includeStats);
-    } catch (error) {
-      console.error('Error reading pokemon object from PokeAPI:', error);
-      throw new Error('404: PokemonNotFound');
+    const cacheKey = `${url}_stats:${includeStats}`;
+    const cachedPromise = this.detailCache.get(cacheKey);
+    if (cachedPromise) {
+      return cachedPromise;
     }
+
+    const promise = (async () => {
+      try {
+        const response = await axios.get(url);
+        return this.mapPokemonDetail(response.data, includeStats);
+      } catch (error) {
+        console.error('Error reading pokemon object from PokeAPI:', error);
+        // Clear failed promise from cache so it can be retried later
+        this.detailCache.delete(cacheKey);
+        throw new Error('404: PokemonNotFound');
+      }
+    })();
+
+    this.detailCache.set(cacheKey, promise);
+    return promise;
   }
 
   /**
