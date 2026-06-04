@@ -43,11 +43,21 @@ try {
       );
     }
 
-    // Sort by name
-    if (sort === 'asc') {
-      allPokemons.sort((a: any, b: any) => a.name.localeCompare(b.name));
-    } else if (sort === 'desc') {
-      allPokemons.sort((a: any, b: any) => b.name.localeCompare(a.name));
+    // Sort by id if any filter is active, otherwise sort by name
+    const isFilterActive = personalized || type !== 'all';
+
+    if (isFilterActive) {
+      if (sort === 'asc') {
+        allPokemons.sort((a: any, b: any) => Number(a.id) - Number(b.id));
+      } else if (sort === 'desc') {
+        allPokemons.sort((a: any, b: any) => Number(b.id) - Number(a.id));
+      }
+    } else {
+      if (sort === 'asc') {
+        allPokemons.sort((a: any, b: any) => a.name.localeCompare(b.name));
+      } else if (sort === 'desc') {
+        allPokemons.sort((a: any, b: any) => b.name.localeCompare(a.name));
+      }
     }
 
     count = allPokemons.length;

@@ -21,9 +21,12 @@ describe('<PokemonDetail />', () => {
     render(<PokemonDetail pokemon={mockPokemon} />);
     
     expect(screen.getByText('Pikachu')).toBeInTheDocument();
-    expect(screen.getByText(/vida \/ hp: 35/i)).toBeInTheDocument();
-    expect(screen.getByText(/fuerza: 55/i)).toBeInTheDocument();
-    expect(screen.getByText(/defensa: 40/i)).toBeInTheDocument();
+    expect(screen.getByText(/vida \/ hp/i)).toBeInTheDocument();
+    expect(screen.getByText('35')).toBeInTheDocument();
+    expect(screen.getByText(/fuerza/i)).toBeInTheDocument();
+    expect(screen.getByText('55')).toBeInTheDocument();
+    expect(screen.getByText(/defensa/i)).toBeInTheDocument();
+    expect(screen.getByText('40')).toBeInTheDocument();
     expect(screen.getByText('electric')).toBeInTheDocument();
   });
 });
