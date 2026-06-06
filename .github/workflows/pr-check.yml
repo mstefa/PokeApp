@@ -1,0 +1,70 @@
+name: PR Verification & Security Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    name: Build, Lint & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.0
+          run_install: false
+
+      - name: Get Pnpm Store Directory
+        shell: bash
+        id: pnpm-cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache Pnpm Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Workspace Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 🛡️ Run security checks on dependencies
+      - name: Security Audit
+        run: pnpm audit --prod
+
+      # 💅 Code Linting & Formatting Verification
+      - name: Verify API Formatting & Lint
+        run: |
+          pnpm --filter pokemon-api run lint
+          pnpm --filter pokemon-api exec prettier --check "src/**/*.ts"
+
+      # 🧪 Test Suites Execution
+      - name: Run Backend Unit Tests (Vitest)
+        env:
+          CI: true
+        run: pnpm --filter pokemon-api run test:unit
+
+      - name: Run Frontend Tests (Vitest)
+        env:
+          CI: true
+        run: pnpm --filter client run test --run
+
+      # 🏗️ Build Validation (Catch compile-time errors)
+      - name: Build Backend
+        run: pnpm --filter pokemon-api run build
+
+      - name: Build Frontend
+        run: pnpm --filter client run build
