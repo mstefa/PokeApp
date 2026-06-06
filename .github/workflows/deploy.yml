@@ -56,15 +56,12 @@ jobs:
 
       - name: Build Astro Frontend
         env:
-          # If API_URL is needed at build-time, configure it here or in Cloudflare Pages Dashboard
           API_URL: ${{ secrets.API_URL }}
+          PUBLIC_API_URL: ${{ secrets.API_URL }}
         run: pnpm --filter client run build
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: pokeapp-client
-          directory: client/dist
-          gitBranch: main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm --filter client exec wrangler pages deploy dist --project-name=pokeapp-client --branch=main

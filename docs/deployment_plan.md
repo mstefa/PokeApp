@@ -68,25 +68,29 @@ graph TD
 6. Copy the generated Web Service URL (e.g., `https://pokeapp-api.onrender.com`). You will need this for the client environment settings.
 
 ### Step 3: Frontend Setup (Cloudflare Pages)
-1. In the root directory, we need to install the Cloudflare adapter in the client workspace:
+1. In the root directory, install the Cloudflare adapter in the client workspace (using version `11.2.0` for Astro v4 compatibility):
    ```bash
-   pnpm --filter client add @astrojs/cloudflare
+   pnpm --filter client add @astrojs/cloudflare@11.2.0
    ```
 2. Modify [astro.config.mjs](file:///Users/mstefanutti/workspace/PokeApp/client/astro.config.mjs) to replace `@astrojs/node` with `@astrojs/cloudflare`.
-3. Log in to the [Cloudflare Dashboard](https://dash.cloudflare.com/).
-4. Navigate to **Workers & Pages** -> **Create Application** -> **Pages** tab.
-5. Click **Connect to Git** and choose the `PokeApp` repository.
-6. Configure the build settings:
-   *   **Project Name**: `pokeapp-client`
-   *   **Production Branch**: `main`
-   *   **Framework Preset**: `Astro` (or select `None` and configure manually)
-   *   **Build Command**: `pnpm build`
-   *   **Build Output Directory**: `dist`
-   *   **Root Directory**: `client`
-7. Click **Save and Deploy**.
-8. Go to **Settings** -> **Environment variables** in Cloudflare Pages and add:
-   *   `API_URL`: *(Your Render Web Service URL)*
-9. Redeploy the frontend so that Astro picks up the environment variable during build-time rendering.
+3. Create the modern Cloudflare Pages configuration file [client/wrangler.jsonc](file:///Users/mstefanutti/workspace/PokeApp/client/wrangler.jsonc):
+   ```json
+   {
+     "$schema": "node_modules/wrangler/config-schema.json",
+     "name": "pokeapp-client",
+     "compatibility_date": "2026-06-06",
+     "compatibility_flags": [
+       "nodejs_compat"
+     ],
+     "pages_build_output_dir": "./dist"
+   }
+   ```
+4. Log in to the [Cloudflare Dashboard](https://dash.cloudflare.com/).
+5. Create a new Pages project named `pokeapp-client`. You can deploy directly using the Wrangler CLI in the GitHub Action without needing to set up auto-git builds in the Cloudflare dashboard.
+6. Go to your Pages project **Settings** -> **Environment variables** and define:
+   *   `API_URL`: *(Your Render Web Service URL, e.g. `https://pokeapp-api.onrender.com`)*
+   *   `PUBLIC_API_URL`: *(Same Render Web Service URL)*
+   *   *Note*: `API_URL` is used on the server side (Astro SSR), while `PUBLIC_API_URL` is compiled into the client-side React components for browser-based fetch actions (e.g. creating/searching Pokemons).
 
 ---
 
@@ -187,23 +191,56 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: pokeapp-client
-          directory: client/dist
-          # Assumes build was triggered/handled or Astro is configured to build on Pages
-          # Pages build can also be run locally in GHA and static files uploaded:
-          gitBranch: main
+          node-version: 22
+
+      - name: Install Pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.0
+          run_install: false
+
+      - name: Get Pnpm Store Directory
+        shell: bash
+        id: pnpm-cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache Pnpm Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Astro Frontend
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          PUBLIC_API_URL: ${{ secrets.API_URL }}
+        run: pnpm --filter client run build
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm --filter client exec wrangler pages deploy dist --project-name=pokeapp-client --branch=main
 
   deploy-backend:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render Deploy Hook
         run: |
-          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          else
+            echo "Skipping Render deploy hook: secret not set."
+          fi
 ```
 
 ---
