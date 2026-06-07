@@ -7,13 +7,17 @@ let types = [];
 let error = null;
 
 try {
+  console.log(`[SSR create.astro] Resolved apiBase to: "${apiBase}"`);
+  console.log(`[SSR create.astro] Fetching types from: ${apiBase}/types`);
   const res = await fetch(`${apiBase}/types`);
   if (res.ok) {
     types = await res.json();
   } else {
+    console.error(`[SSR create.astro] Failed to fetch types. Status: ${res.status}`);
     error = `Error al obtener tipos de Pokémon (status ${res.status})`;
   }
 } catch (err: any) {
+  console.error(`[SSR create.astro] Catch block error:`, err);
   error = err.message;
 }
 ---

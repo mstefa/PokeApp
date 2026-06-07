@@ -9,13 +9,17 @@ let pokemon = null;
 let error = null;
 
 try {
+  console.log(`[SSR [id].astro] Resolved apiBase to: "${apiBase}"`);
+  console.log(`[SSR [id].astro] Fetching pokemon ${id} from: ${apiBase}/pokemons/${id}`);
   const res = await fetch(`${apiBase}/pokemons/${id}`);
   if (res.ok) {
     pokemon = await res.json();
   } else {
+    console.error(`[SSR [id].astro] Failed to fetch pokemon ${id}. Status: ${res.status}`);
     error = `Pokemon no encontrado (status ${res.status})`;
   }
 } catch (err: any) {
+  console.error(`[SSR [id].astro] Catch block error for pokemon ${id}:`, err);
   error = err.message;
 }
 ---

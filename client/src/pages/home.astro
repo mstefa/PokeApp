@@ -21,11 +21,16 @@ let types: any[] = [];
 let error: string | null = null;
 
 try {
+  console.log(`[SSR home.astro] Resolved apiBase to: "${apiBase}"`);
+  console.log(`[SSR home.astro] Fetching types from: ${apiBase}/types`);
   const typesRes = await fetch(`${apiBase}/types`);
   if (typesRes.ok) {
     types = await typesRes.json();
+  } else {
+    console.error(`[SSR home.astro] Failed to fetch types. Status: ${typesRes.status}`);
   }
 
+  console.log(`[SSR home.astro] Fetching pokemons from: ${apiBase}/pokemons?limit=1000`);
   const pokemonRes = await fetch(`${apiBase}/pokemons?limit=1000`);
   if (pokemonRes.ok) {
     const data = await pokemonRes.json();
@@ -60,9 +65,11 @@ try {
     const offset = (page - 1) * limit;
     pokemons = allPokemons.slice(offset, offset + limit);
   } else {
+    console.error(`[SSR home.astro] Failed to fetch pokemons. Status: ${pokemonRes.status}`);
     error = `Error al obtener los pokémons (status ${pokemonRes.status})`;
   }
 } catch (err: any) {
+  console.error(`[SSR home.astro] Catch block error:`, err);
   error = err.message;
 }
 ---
