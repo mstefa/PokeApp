@@ -7,10 +7,18 @@ All notable changes to this project will be documented in this file.
 ### Added
 - **Database Configuration Specs:**
   - `docs/specs/database-connection-review.md`: Specification defining environment loading priority, connection setup, and error logging features.
+- **Graceful Shutdown Specs:**
+  - `docs/specs/graceful-shutdown.md`: Specification defining database retry mechanisms on startup, signal handlers, graceful shutdown procedures, and enhanced health checks.
 - **Database Diagnostics Test Suite:**
   - `tests/integration/database-config.spec.ts`: Unit and integration test suite verifying environment loading priority, SSL/dialectOptions configuration, and structured error logging.
+- **Graceful Shutdown Test Suite:**
+  - `tests/integration/health.integration.spec.ts`: Integration test suite verifying health check behaviors under healthy, DB disconnected, and shutting down states.
 
 ### Changed
+- **Server Shutdown & Process Safety:**
+  - `src/index.ts`: Implemented database reconnection retries on startup (up to 3 retries, with a 3-second delay). Added signal listeners for `SIGINT` and `SIGTERM` to initiate graceful shutdown of the HTTP server and Sequelize connections. Integrated `uncaughtException` and `unhandledRejection` hooks to capture fatal errors and shut down resources cleanly.
+- **Enhanced Health Check Endpoint:**
+  - `src/app.ts`: Modified the `createApp` factory function to accept `AppOptions` with an `isShuttingDown` status checker. Enhanced the `/health` endpoint to return 503 Service Unavailable when the database is unreachable or the server is in the process of shutting down.
 - **Environment Variable Loading:**
   - `src/config/app.config.ts`: Modified config loading to prioritize `.env.local` over `.env`, support the `DB_CONNECTION=supabase` override toggle (forcing connection credentials to come from `.env` while preserving other non-database parameters from `.env.local`), default `DB_SSL` to `'false'` for local connections, and wrapped load logic in an exported `loadEnv()` function for testability.
 - **Unified Database Instantiation:**

@@ -1,8 +1,14 @@
 import express, { Express, Router } from 'express';
 import morgan from 'morgan';
 import { registerRoutes } from './routes/index';
+import { conn } from './infrastructure/persistence/sequelize';
+import { logger } from './shared/logger';
 
-export const createApp = (): Express => {
+export interface AppOptions {
+  isShuttingDown?: () => boolean;
+}
+
+export const createApp = (options?: AppOptions): Express => {
   const app = express();
 
   app.use(express.json({ limit: '50mb' }));
@@ -38,8 +44,30 @@ export const createApp = (): Express => {
   app.use('/', mainRouter);
 
   // Health check
-  app.get('/health', (_req, res) => {
-    res.json({ status: 'ok' });
+  app.get('/health', async (_req, res) => {
+    if (options?.isShuttingDown?.()) {
+      res.status(503).json({
+        status: 'unhealthy',
+        message: 'Server is shutting down',
+        database: 'unknown',
+      });
+      return;
+    }
+
+    try {
+      await conn.authenticate();
+      res.json({
+        status: 'ok',
+        database: 'connected',
+      });
+    } catch (dbError) {
+      logger.error('Health check failed: database disconnected', dbError);
+      res.status(503).json({
+        status: 'unhealthy',
+        message: 'Database connection failed',
+        database: 'disconnected',
+      });
+    }
   });
 
   // 404 handler
