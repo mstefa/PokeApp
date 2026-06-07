@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   verify:
     name: Build, Lint & Test
@@ -38,33 +41,48 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install Workspace Dependencies
+      - name: Install API Dependencies
+        working-directory: api
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Client Dependencies
+        working-directory: client
         run: pnpm install --frozen-lockfile
 
       # 🛡️ Run security checks on dependencies
-      - name: Security Audit
+      - name: API Security Audit
+        working-directory: api
+        run: pnpm audit --prod
+
+      - name: Client Security Audit
+        working-directory: client
         run: pnpm audit --prod
 
       # 💅 Code Linting & Formatting Verification
       - name: Verify API Formatting & Lint
+        working-directory: api
         run: |
-          pnpm --filter pokemon-api run lint
-          pnpm --filter pokemon-api exec prettier --check "src/**/*.ts"
+          pnpm run lint
+          pnpm exec prettier --check "src/**/*.ts"
 
       # 🧪 Test Suites Execution
       - name: Run Backend Unit Tests (Vitest)
+        working-directory: api
         env:
           CI: true
-        run: pnpm --filter pokemon-api run test:unit
+        run: pnpm run test:unit
 
       - name: Run Frontend Tests (Vitest)
+        working-directory: client
         env:
           CI: true
-        run: pnpm --filter client run test --run
+        run: pnpm run test --run
 
       # 🏗️ Build Validation (Catch compile-time errors)
       - name: Build Backend
-        run: pnpm --filter pokemon-api run build
+        working-directory: api
+        run: pnpm run build
 
       - name: Build Frontend
-        run: pnpm --filter client run build
+        working-directory: client
+        run: pnpm run build
