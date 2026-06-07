@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added interactive Pokéball and "PULSAR START" button with floating keyframe animations, audio feedback, and fullscreen whiteout transition on `/`.
 - Added **"Limpiar Filtros" (Clear Filters)** button to `SearchBar` component to turn off active search filters in one click.
 ### Fixed
+- **SSR API URL Resolution on Cloudflare:** Updated [home.astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/pages/home.astro), [create.astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/pages/create.astro), and [[id].astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/pages/pokemon/[id].astro) to prioritize `import.meta.env.API_URL` over `process.env.API_URL`, preventing requests from falling back to localhost and getting blocked by Cloudflare SSRF protection (403 Forbidden).
 - Updated `client/pnpm-workspace.yaml` to define `packages` workspace pattern, resolving the `packages field missing or empty` error during Cloudflare deployments using pnpm.
 - Fixed duplicate key `"dragon"` in the `typeTranslation` object literal in [TypeBadge.tsx](file:///Users/mstefanutti/workspace/PokeApp/client/src/components/ui/TypeBadge.tsx).
 - Added `wrangler` to `client/package.json` devDependencies to ensure it is installed and cached on CI/CD systems, avoiding the `wrangler: not found` execution error.

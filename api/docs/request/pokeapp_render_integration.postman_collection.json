@@ -1,0 +1,226 @@
+{
+  "info": {
+    "_postman_id": "0d61122a-579c-4861-ba1b-cc951e7fb53e",
+    "name": "PokeApp Render Integration",
+    "description": "Collection of requests to test the live PokeApp API deployed on Render.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Verifies if the API is active and successfully connected to the remote database."
+      },
+      "response": []
+    },
+    {
+      "name": "2. List Pokémon (Paginated)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pokemons/?offset=0&limit=12",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pokemons",
+            ""
+          ],
+          "query": [
+            {
+              "key": "offset",
+              "value": "0"
+            },
+            {
+              "key": "limit",
+              "value": "12"
+            }
+          ]
+        },
+        "description": "Retrieves a paginated list of Pokémon."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Search Pokémon by Name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pokemons/search/?name=pikachu",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pokemons",
+            "search",
+            ""
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "pikachu"
+            }
+          ]
+        },
+        "description": "Searches for a Pokémon by name (from local database or external PokeAPI)."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Search Pokémon by Name (Non-existent)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pokemons/search/?name=NonexistentPokemonXYZ12345",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pokemons",
+            "search",
+            ""
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "NonexistentPokemonXYZ12345"
+            }
+          ]
+        },
+        "description": "Tests error response for a non-existent Pokémon."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Pokémon Details by ID (Pikachu)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pokemons/25",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pokemons",
+            "25"
+          ]
+        },
+        "description": "Retrieves detailed statistics for Pikachu (ID 25)."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Pokémon Details by ID (Bulbasaur)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pokemons/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pokemons",
+            "1"
+          ]
+        },
+        "description": "Retrieves detailed statistics for Bulbasaur (ID 1)."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Pokémon Types",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/types",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "types"
+          ]
+        },
+        "description": "Lists all available Pokémon types from the database."
+      },
+      "response": []
+    },
+    {
+      "name": "8. Create Custom Pokémon",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"RenderPikachu\",\n  \"life\": 75,\n  \"strength\": 80,\n  \"defense\": 60,\n  \"speed\": 110,\n  \"height\": 4,\n  \"weight\": 60,\n  \"img\": \"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png\",\n  \"types\": [\n    {\n      \"id\": 13,\n      \"name\": \"Electric\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/pokemons",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pokemons"
+          ]
+        },
+        "description": "Inserts a custom Pokémon into the live database. Returns 201 with the created ID."
+      },
+      "response": []
+    },
+    {
+      "name": "9. Search Custom Pokémon by Name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pokemons/search/?name=RenderPikachu",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pokemons",
+            "search",
+            ""
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "RenderPikachu"
+            }
+          ]
+        },
+        "description": "Searches for the created custom Pokémon to verify database persistence."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://pokeapp-api-l7n2.onrender.com",
+      "type": "string"
+    }
+  ]
+}

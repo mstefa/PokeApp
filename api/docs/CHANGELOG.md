@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] - 2026-06-07
 
 ### Added
+- **Render Integration Testing:**
+  - `docs/specs/render-integration-tests.md`: Specification defining endpoints, testing objectives, payloads, and expected status codes for verifying the Render deployment environment.
+  - `docs/request/render-integration.http`: REST Client template request collection file targeting the live environment at `https://pokeapp-api-l7n2.onrender.com`.
+  - `docs/request/pokeapp_render_integration.postman_collection.json`: Standard Postman collection (v2.1.0) JSON file for testing the live Render endpoints.
 - **Deploy Workflow Split:**
   - `docs/specs/deploy-workflows-spec.md`: Specification for splitting the API and client deployment workflows with manual triggers and path filters.
   - `.github/workflows/deploy-api.yml`: GitHub Actions workflow to deploy the backend API to Render.
