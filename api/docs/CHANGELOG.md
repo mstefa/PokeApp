@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-06-07
+
+### Added
+- **Database Configuration Specs:**
+  - `docs/specs/database-connection-review.md`: Specification defining environment loading priority, connection setup, and error logging features.
+- **Database Diagnostics Test Suite:**
+  - `tests/integration/database-config.spec.ts`: Unit and integration test suite verifying environment loading priority, SSL/dialectOptions configuration, and structured error logging.
+
+### Changed
+- **Environment Variable Loading:**
+  - `src/config/app.config.ts`: Modified config loading to prioritize `.env.local` over `.env`, support the `DB_CONNECTION=supabase` override toggle (forcing connection credentials to come from `.env` while preserving other non-database parameters from `.env.local`), default `DB_SSL` to `'false'` for local connections, and wrapped load logic in an exported `loadEnv()` function for testability.
+- **Unified Database Instantiation:**
+  - `src/infrastructure/persistence/sequelize.ts`: Standardized the Sequelize constructor to pass the options configuration object in all environments. This ensures dialect options and SSL parameters work correctly for cloud providers like Supabase even in local development mode.
+- **Start-up Connection Checking:**
+  - `src/infrastructure/persistence/sequelize.ts`: Implemented `testConnection()`, a diagnostics helper that authenticates with the database on start-up. It translates common Postgres errors (refused, access denied, invalid config, host not found, timeouts) into detailed, user-friendly help messages.
+  - `src/index.ts`: Integrated `testConnection()` into the startup sequence, verifying connectivity before synchronizing database models.
+- **Structured Error Logging Wrapper:**
+  - `src/shared/logger.ts`: Enhanced `logger.error` to dynamically log both native `Error` instances (as `err`) and custom diagnostic metadata objects.
+
 ## [Unreleased] - 2026-06-03
 
 ### Added

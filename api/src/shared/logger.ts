@@ -92,9 +92,15 @@ const logger: CustomLogger = {
     }
   },
 
-  error: (message: string, error?: Error) => {
+  error: (message: string, error?: any) => {
     if (error) {
-      baseLogger.error({ msg: message, error });
+      if (error instanceof Error) {
+        baseLogger.error({ msg: message, err: error });
+      } else if (typeof error === 'object') {
+        baseLogger.error({ msg: message, ...error });
+      } else {
+        baseLogger.error({ msg: message, error });
+      }
     } else {
       baseLogger.error(message);
     }

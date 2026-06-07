@@ -1,15 +1,16 @@
 import { createApp } from './app';
 import { config } from './config/app.config';
 import { logger } from './shared/logger';
-import { conn } from './infrastructure/persistence/sequelize';
+import { conn, testConnection } from './infrastructure/persistence/sequelize';
 
 const app = createApp();
 const port = config.port;
 
 const startServer = async (): Promise<void> => {
   try {
-    // Database connection will be established here
-    // await initializeDatabase(config.database);
+    // Check database connection first with detailed logging
+    await testConnection();
+
     await conn.sync({ force: false });
     logger.info('✅ Database connected and synchronized');
 
@@ -18,10 +19,7 @@ const startServer = async (): Promise<void> => {
       logger.info(`📝 Environment: ${config.nodeEnv}`);
     });
   } catch (error) {
-    logger.error('Failed to start server', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined
-    });
+    logger.error('Failed to start server', error);
     process.exit(1);
   }
 };
