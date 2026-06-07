@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented specifications and step-by-step plans under [landing-and-filters-spec.md](file:///Users/mstefanutti/workspace/PokeApp/client/docs/specs/landing-and-filters-spec.md).
 - Added interactive Pokéball and "PULSAR START" button with floating keyframe animations, audio feedback, and fullscreen whiteout transition on `/`.
 - Added **"Limpiar Filtros" (Clear Filters)** button to `SearchBar` component to turn off active search filters in one click.
+### Fixed
+- Updated `client/pnpm-workspace.yaml` to define `packages` workspace pattern, resolving the `packages field missing or empty` error during Cloudflare deployments using pnpm.
 
 ### Changed
 - Refactored landing page layout to align with Kanto Retro-Sleek design tokens.
