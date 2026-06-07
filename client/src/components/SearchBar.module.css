@@ -47,6 +47,7 @@ button.buttonSearch {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 button.buttonFilter {
@@ -77,4 +78,34 @@ button.buttonClear {
   height: 44px;
   padding: 0 1rem;
   font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .formContainer {
+    max-width: none;
+    width: 100%;
+  }
+  .filters {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .sort {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 600px) {
+  button.buttonFilter {
+    height: 48px;
+    flex-grow: 1;
+  }
+  button.buttonClear {
+    height: 48px;
+    flex-grow: 1;
+  }
+  .selectInput {
+    height: 48px;
+    flex-grow: 1;
+  }
 }

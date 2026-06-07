@@ -253,6 +253,24 @@ import Layout from '../layouts/Layout.astro';
     opacity: 1;
     pointer-events: all;
   }
+
+  @media (max-width: 480px) {
+    .title {
+      font-size: 2.5rem;
+    }
+    .landing-card {
+      padding: 2rem 1.5rem;
+    }
+    .pokeball-wrapper {
+      width: 8rem;
+      height: 8rem;
+      margin-bottom: 2rem;
+    }
+    .start-btn {
+      font-size: 1.1rem;
+      padding: 0.875rem 2rem;
+    }
+  }
 </style>
 
 <script>

@@ -13,11 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Deploy Workflow Split:**
   - `docs/specs/deploy-workflows-spec.md`: Specification for splitting the API and client deployment workflows with manual triggers and path filters.
   - `.github/workflows/deploy-client.yml`: GitHub Actions workflow to deploy the frontend client to Cloudflare Workers.
+  - `docs/specs/responsiveness-fixes-spec.md`: Specification detailing responsiveness and mobile viewport layout changes.
 - Created unified central workspace maps.
 - Configured modular CSS architecture and design tokens in [Layout.astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/layouts/Layout.astro).
 - Implemented specifications and step-by-step plans under [landing-and-filters-spec.md](file:///Users/mstefanutti/workspace/PokeApp/client/docs/specs/landing-and-filters-spec.md).
 - Added interactive Pokéball and "PULSAR START" button with floating keyframe animations, audio feedback, and fullscreen whiteout transition on `/`.
 - Added **"Limpiar Filtros" (Clear Filters)** button to `SearchBar` component to turn off active search filters in one click.
+
+### Changed
+- **Mobile Responsiveness Fixes:** Updated `Navbar.module.css`, `index.astro`, `SearchBar.module.css`, `Pagination.module.css`, `CreatePokemon.module.css`, and `PokemonDetail.module.css` with responsive media queries, flex wrapping, and increased mobile touch target sizes (48px) to comply with Kanto Retro-Sleek design system guidelines.
+
 ### Fixed
 - **SSR API URL Resolution on Cloudflare:** Updated [home.astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/pages/home.astro), [create.astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/pages/create.astro), and [[id].astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/pages/pokemon/[id].astro) to prioritize `import.meta.env.PUBLIC_API_URL` over non-prefixed runtime variables, ensuring the Render URL is statically baked in at build time and preventing the localhost fallback/403 block on Cloudflare.
 - Updated `client/pnpm-workspace.yaml` to define `packages` workspace pattern, resolving the `packages field missing or empty` error during Cloudflare deployments using pnpm.

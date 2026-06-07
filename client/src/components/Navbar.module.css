@@ -66,3 +66,24 @@ button.navButton {
   font-size: 0.95rem;
   height: auto;
 }
+
+@media (max-width: 640px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+  button.navButton span {
+    display: none;
+  }
+  button.navButton {
+    padding: 0.5rem;
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoText {
+    display: none;
+  }
+}

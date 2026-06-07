@@ -43,8 +43,31 @@
 }
 
 @media (max-width: 600px) {
+  .container {
+    padding: 1.5rem;
+    margin: 1rem auto;
+  }
+  .header {
+    gap: 1.5rem;
+  }
+  .imageWrapper {
+    width: 10rem;
+    height: 10rem;
+  }
   .titleSection {
     align-items: center;
+  }
+  .name {
+    font-size: 2rem;
+  }
+  .dimensionsSection {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .dimensionItem {
+    padding: 1rem 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 

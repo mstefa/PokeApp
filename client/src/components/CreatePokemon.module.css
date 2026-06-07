@@ -104,3 +104,16 @@ button.buttonSubmit {
   height: 52px;
   font-size: 1.1rem;
 }
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1.5rem;
+    margin: 1rem auto;
+  }
+  .statGrid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  button.buttonSubmit {
+    max-width: 100%;
+  }
+}
