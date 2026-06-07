@@ -8,7 +8,10 @@ To align with the Cloudflare Workers dashboard settings (Workers Builds), we mus
 - **Deploy command**
 - **Root directory**
 
+We also add observability configurations to enable invocation logs while keeping trace sampling disabled.
+
 ## Actions
 1. Update `client/wrangler.jsonc` to declare `main` and `assets` instead of `pages_build_output_dir`.
-2. Ensure the build command is configured correctly.
-3. Update the changelog to document this configuration change.
+2. Add the `observability` configuration block to `client/wrangler.jsonc` to enable logs.
+3. Ensure the build command is configured correctly.
+4. Update the changelog to document these configuration changes.
