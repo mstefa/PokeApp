@@ -14,7 +14,7 @@ const search = url.searchParams.get('search') || '';
 
 const limit = 12;
 
-const apiBase = import.meta.env.API_URL || process.env.API_URL || 'http://localhost:3002';
+const apiBase = import.meta.env.PUBLIC_API_URL || import.meta.env.API_URL || process.env.API_URL || 'http://localhost:3002';
 let pokemons: any[] = [];
 let count = 0;
 let types: any[] = [];
