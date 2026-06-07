@@ -1,13 +1,14 @@
-# Cloudflare Pages Direct Git Integration Migration Spec
+# Cloudflare Workers Builds Migration Spec
 
-This document specifies the changes required to migrate the PokeApp frontend client deployment from a GitHub Actions workflow step to direct Cloudflare Pages Git Integration.
+This document specifies the changes required to migrate the PokeApp frontend client deployment from Cloudflare Pages to Cloudflare Workers (using Workers Builds).
 
 ## Rationale
-To solve the deployment issues where Wrangler failed to deploy from the monorepo root directory:
-1. The GitHub Actions frontend deploy job is removed to avoid duplicate/conflicting deployment triggers.
-2. Cloudflare Pages direct Git integration is utilized with the root directory set to `client`.
-3. This keeps the build and deployment logic within Cloudflare's native pipeline.
+To align with the Cloudflare Workers dashboard settings (Workers Builds), we must configure the frontend client as a Worker with static assets rather than a Pages project. This matches the settings available in the Workers dashboard:
+- **Build command**
+- **Deploy command**
+- **Root directory**
 
 ## Actions
-- Modify `.github/workflows/deploy.yml` to remove the `deploy-frontend` job.
-- Update `client/docs/CHANGELOG.md` to reflect this removal.
+1. Update `client/wrangler.jsonc` to declare `main` and `assets` instead of `pages_build_output_dir`.
+2. Ensure the build command is configured correctly.
+3. Update the changelog to document this configuration change.

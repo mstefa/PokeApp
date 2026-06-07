@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced npm package manager with pnpm.
 - Replaced Redux global state management with URL Search Parameters.
 - Swapped Enzyme testing framework with Vitest and React Testing Library (RTL).
+- Updated `client/wrangler.jsonc` to deploy the Astro client as a Cloudflare Worker with assets (Workers Builds).
 
 ### Removed
-- Removed the `deploy-frontend` job from the GitHub Actions CD workflow in favor of Cloudflare Pages direct Git integration.
+- Removed the `deploy-frontend` job from the GitHub Actions CD workflow in favor of Cloudflare Workers Builds integration.
