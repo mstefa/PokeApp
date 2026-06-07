@@ -54,6 +54,9 @@ importers:
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/debug@4.1.13)(@types/node@25.9.1)(jsdom@26.1.0)
+      wrangler:
+        specifier: ^3.114.17
+        version: 3.114.17(@cloudflare/workers-types@4.20260605.1)
 
 packages:
 

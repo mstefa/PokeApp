@@ -20,7 +20,8 @@
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^26.1.0",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.6"
+    "vitest": "^3.2.6",
+    "wrangler": "^3.114.17"
   },
   "scripts": {
     "dev": "astro dev",

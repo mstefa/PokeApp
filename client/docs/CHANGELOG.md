@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Updated `client/pnpm-workspace.yaml` to define `packages` workspace pattern, resolving the `packages field missing or empty` error during Cloudflare deployments using pnpm.
 - Fixed duplicate key `"dragon"` in the `typeTranslation` object literal in [TypeBadge.tsx](file:///Users/mstefanutti/workspace/PokeApp/client/src/components/ui/TypeBadge.tsx).
+- Added `wrangler` to `client/package.json` devDependencies to ensure it is installed and cached on CI/CD systems, avoiding the `wrangler: not found` execution error.
 
 ### Changed
 - Refactored landing page layout to align with Kanto Retro-Sleek design tokens.
