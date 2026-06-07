@@ -39,7 +39,6 @@ const typeTranslation: Record<string, string> = {
   bug: 'bug',
   rock: 'rock',
   ghost: 'ghost',
-  dragon: 'dragon',
   steel: 'steel',
   dark: 'dark',
   fairy: 'fairy',

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added **"Limpiar Filtros" (Clear Filters)** button to `SearchBar` component to turn off active search filters in one click.
 ### Fixed
 - Updated `client/pnpm-workspace.yaml` to define `packages` workspace pattern, resolving the `packages field missing or empty` error during Cloudflare deployments using pnpm.
+- Fixed duplicate key `"dragon"` in the `typeTranslation` object literal in [TypeBadge.tsx](file:///Users/mstefanutti/workspace/PokeApp/client/src/components/ui/TypeBadge.tsx).
 
 ### Changed
 - Refactored landing page layout to align with Kanto Retro-Sleek design tokens.
