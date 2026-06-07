@@ -1,8 +1,13 @@
-name: Continuous Deployment
+name: Deploy Backend API
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+    paths:
+      - 'api/**'
+      - '.github/workflows/deploy-api.yml'
+  workflow_dispatch:
 
 jobs:
   deploy-backend:
@@ -18,4 +23,3 @@ jobs:
           else
             echo "Warning: RENDER_DEPLOY_HOOK_URL secret is not set. Skipping."
           fi
-

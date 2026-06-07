@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Deploy Workflow Split:**
+  - `docs/specs/deploy-workflows-spec.md`: Specification for splitting the API and client deployment workflows with manual triggers and path filters.
+  - `.github/workflows/deploy-client.yml`: GitHub Actions workflow to deploy the frontend client to Cloudflare Workers.
 - Created unified central workspace maps.
 - Configured modular CSS architecture and design tokens in [Layout.astro](file:///Users/mstefanutti/workspace/PokeApp/client/src/layouts/Layout.astro).
 - Implemented specifications and step-by-step plans under [landing-and-filters-spec.md](file:///Users/mstefanutti/workspace/PokeApp/client/docs/specs/landing-and-filters-spec.md).

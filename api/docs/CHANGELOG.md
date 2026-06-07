@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] - 2026-06-07
 
 ### Added
+- **Deploy Workflow Split:**
+  - `docs/specs/deploy-workflows-spec.md`: Specification for splitting the API and client deployment workflows with manual triggers and path filters.
+  - `.github/workflows/deploy-api.yml`: GitHub Actions workflow to deploy the backend API to Render.
 - **Database Configuration Specs:**
   - `docs/specs/database-connection-review.md`: Specification defining environment loading priority, connection setup, and error logging features.
 - **Graceful Shutdown Specs:**
