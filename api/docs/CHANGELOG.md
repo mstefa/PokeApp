@@ -12,7 +12,14 @@ All notable changes to this project will be documented in this file.
 - **Database Seeding:**
   - `src/infrastructure/persistence/LocalDatabaseTypeRepository.ts`: Implemented dynamic seeding of Pokemon types from PokeAPI. If the local database `types` table is empty upon calling `findAll()`, it automatically queries PokeAPI, extracts the type IDs and names, saves them, and returns them. This fixes integration test and client page failures on clean databases.
 - **TS6 Compatibility:**
-  - `tsconfig.json`: Added `ignoreDeprecations: 5.0` to compilerOptions to support modern TS 6 compilation requirements while preserving backward compatibility.
+  - `tsconfig.json`: Added `ignoreDeprecations: 6.0` to compilerOptions to support modern TS 6 compilation requirements.
+- **Dependency Upgrades:**
+  - `api/package.json`: Upgraded `typescript` to `^6.0.3` and `@cucumber/cucumber` to `^13.0.0` in devDependencies.
+  - `client/package.json`: Upgraded `vitest` to `^4.1.8` in devDependencies.
+  - `pnpm-lock.yaml`: Re-generated lockfiles for both workspaces.
+- **GitHub Actions Upgrades:**
+  - `.github/workflows/deploy-client.yml`: Upgraded `setup-node` and `pnpm/action-setup` to `v6`, and `cache` to `v5`.
+  - `.github/workflows/pr-check.yml`: Upgraded `setup-node` and `pnpm/action-setup` to `v6`, and `cache` to `v5`.
 
 ## [Unreleased] - 2026-06-07
 
