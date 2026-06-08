@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-06-08
+
+### Added
+- **Database Seeding and TS Modernization:**
+  - `docs/specs/pr-resolution-and-todos.md`: Specification defining database types seeding design, TS6 compiler modernization, and tracking future high-risk upgrade TODOs.
+
+### Changed
+- **Database Seeding:**
+  - `src/infrastructure/persistence/LocalDatabaseTypeRepository.ts`: Implemented dynamic seeding of Pokemon types from PokeAPI. If the local database `types` table is empty upon calling `findAll()`, it automatically queries PokeAPI, extracts the type IDs and names, saves them, and returns them. This fixes integration test and client page failures on clean databases.
+- **TS6 Compatibility:**
+  - `tsconfig.json`: Added `ignoreDeprecations: 5.0` to compilerOptions to support modern TS 6 compilation requirements while preserving backward compatibility.
+
 ## [Unreleased] - 2026-06-07
 
 ### Added

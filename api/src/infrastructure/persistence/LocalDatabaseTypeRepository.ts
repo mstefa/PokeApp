@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Type } from '../../domain/Type';
 import { TypeRepository } from '../../domain/TypeRepository';
 
@@ -13,7 +14,27 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
    */
   async findAll(): Promise<Type[]> {
     try {
-      const types = await TypeModel.findAll();
+      let types = await TypeModel.findAll();
+      if (types.length === 0) {
+        try {
+          const response = await axios.get('https://pokeapi.co/api/v2/type');
+          const results = response.data.results;
+          for (const item of results) {
+            const url = item.url;
+            const idMatch = url.match(/\/type\/(\d+)\//);
+            const id = idMatch ? parseInt(idMatch[1], 10) : undefined;
+            if (id) {
+              await TypeModel.findOrCreate({
+                where: { id },
+                defaults: { id, name: item.name }
+              });
+            }
+          }
+          types = await TypeModel.findAll();
+        } catch (apiError) {
+          console.error('Failed to seed types from PokeAPI:', apiError);
+        }
+      }
       return types.map((t: any) => new Type(t.id, t.name));
     } catch (error) {
       console.error('Error finding all types:', error);
