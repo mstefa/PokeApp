@@ -61,8 +61,8 @@ importers:
         specifier: ^7.0.4
         version: 7.0.5
       '@types/sequelize':
-        specifier: ^4.28.20
-        version: 4.28.20
+        specifier: ^6.12.0
+        version: 6.12.0(pg@8.22.0)
       '@types/supertest':
         specifier: ^7.2.0
         version: 7.2.0
@@ -559,9 +559,6 @@ packages:
   '@tybys/wasm-util@0.10.3':
     resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
 
-  '@types/bluebird@3.5.42':
-    resolution: {integrity: sha512-Jhy+MWRlro6UjVi578V/4ZGNfeCOcNCp0YaFNIUGFKlImowqwb1O/22wDVk3FDGMLqxdpOV3qQHD5fPEH4hK6A==}
-
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
@@ -570,9 +567,6 @@ packages:
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
-
-  '@types/continuation-local-storage@3.2.7':
-    resolution: {integrity: sha512-Q7dPOymVpRG5Zpz90/o26+OAqOG2Sw+FED7uQmTrJNCF/JAPTylclZofMxZKd6W7g1BDPmT9/C/jX0ZcSNTQwQ==}
 
   '@types/cookiejar@2.1.5':
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
@@ -597,9 +591,6 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
-
-  '@types/lodash@4.17.24':
-    resolution: {integrity: sha512-gIW7lQLZbue7lRSWEFql49QJJWThrTFFeIMJdp3eH4tKoxm1OvEPg02rm4wCCSHS0cL3/Fizimb35b7k8atwsQ==}
 
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
@@ -629,8 +620,9 @@ packages:
   '@types/send@1.2.1':
     resolution: {integrity: sha512-arsCikDvlU99zl1g69TcAB3mzZPpxgw0UQnaHeC1Nwb015xp8bknZv5rIfri9xTOcMuaVgvabfIRA7PSZVuZIQ==}
 
-  '@types/sequelize@4.28.20':
-    resolution: {integrity: sha512-XaGOKRhdizC87hDgQ0u3btxzbejlF+t6Hhvkek1HyphqCI4y7zVBIVAGmuc4cWJqGpxusZ1RiBToHHnNK/Edlw==}
+  '@types/sequelize@6.12.0':
+    resolution: {integrity: sha512-rJRUf3AkP356HicHSjM2I7+d0FiLvOPZdDxFY0bhmKiZnGOuZZ1cUcDlPyyin9b3pYFvxZfJUTC3nGXLoi6DWA==}
+    deprecated: This is a stub types definition. sequelize provides its own type definitions, so you do not need this installed.
 
   '@types/serve-static@2.2.0':
     resolution: {integrity: sha512-8mam4H1NHLtu7nmtalF7eyBH14QyOASmcxHhSfEoRyr0nP/YdoesEtU+uSRvMe96TW/HPTtkoKqQLl53N7UXMQ==}
@@ -3309,8 +3301,6 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@types/bluebird@3.5.42': {}
-
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
@@ -3322,10 +3312,6 @@ snapshots:
       assertion-error: 2.0.1
 
   '@types/connect@3.4.38':
-    dependencies:
-      '@types/node': 25.9.2
-
-  '@types/continuation-local-storage@3.2.7':
     dependencies:
       '@types/node': 25.9.2
 
@@ -3356,8 +3342,6 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/lodash@4.17.24': {}
-
   '@types/methods@1.1.4': {}
 
   '@types/morgan@1.9.10':
@@ -3384,12 +3368,20 @@ snapshots:
     dependencies:
       '@types/node': 25.9.2
 
-  '@types/sequelize@4.28.20':
+  '@types/sequelize@6.12.0(pg@8.22.0)':
     dependencies:
-      '@types/bluebird': 3.5.42
-      '@types/continuation-local-storage': 3.2.7
-      '@types/lodash': 4.17.24
-      '@types/validator': 13.15.10
+      sequelize: 6.37.8(pg@8.22.0)
+    transitivePeerDependencies:
+      - ibm_db
+      - mariadb
+      - mysql2
+      - oracledb
+      - pg
+      - pg-hstore
+      - snowflake-sdk
+      - sqlite3
+      - supports-color
+      - tedious
 
   '@types/serve-static@2.2.0':
     dependencies:
