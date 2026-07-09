@@ -52,7 +52,7 @@ jobs:
       # 🛡️ Run security checks on dependencies
       - name: API Security Audit
         working-directory: api
-        run: pnpm audit --prod
+        run: pnpm audit --prod --audit-level=high
 
       # NOTE: Client uses --audit-level=critical because astro v4 / @astrojs/cloudflare v11
       # have transitive high/moderate vulns (undici, vite, ws, esbuild) that require major
@@ -61,12 +61,25 @@ jobs:
         working-directory: client
         run: pnpm audit --prod --audit-level=critical
 
+      - name: API Socket Security Scan
+        working-directory: api
+        run: npx socket cli scan || true
+
+      - name: Client Socket Security Scan
+        working-directory: client
+        run: npx socket cli scan || true
+
       # 💅 Code Linting & Formatting Verification
       - name: Verify API Formatting & Lint
         working-directory: api
         run: |
           pnpm run lint
           pnpm exec prettier --check "src/**/*.ts"
+
+      # 🔍 Type Checking
+      - name: Typecheck Backend
+        working-directory: api
+        run: pnpm run typecheck
 
       # 🧪 Test Suites Execution
       - name: Run Backend Unit Tests (Vitest)

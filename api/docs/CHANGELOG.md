@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] - 2026-07-09
 
 ### Added
+- **Security Specification:**
+  - `api/docs/specs/security-implementation.md`: Specification detailing the implementation of supply chain defense, CI/CD checks, and environment/hosting controls.
 - **ESLint v10 Migration Specification:**
   - `api/docs/specs/eslint-v10-migration.md`: Specification detailing the linter migration to flat config format.
 - **Phase 1 Dependency Upgrade Specification:**
@@ -13,6 +15,12 @@ All notable changes to this project will be documented in this file.
   - `api/tests/unit/domain/Pokemon.spec.ts`: Added unit tests for the `Pokemon` domain model to ensure logic verification without DB dependencies.
 
 ### Changed
+- **Supply Chain Defense & Exact Version Pinning:**
+  - `api/package.json`: Pinned all dependency and devDependency versions exactly (removing `^` and `~`). Added `"typecheck": "tsc --noEmit"` script.
+  - `api/.npmrc`: Added `save-exact=true` to enforce exact version saving by default.
+  - `.github/workflows/pr-check.yml`: Integrated backend `typecheck`, optional Socket CLI scans, and adjusted API vulnerability audit level to `--audit-level=high`.
+- **Security Headers Middleware:**
+  - `api/src/app.ts`: Integrated a custom middleware setting CSP, HSTS, X-Frame-Options, Referrer-Policy, X-Content-Type-Options, and X-Permitted-Cross-Domain-Policies.
 - **Linter Migration to ESLint v10 (Flat Config):**
   - `api/package.json`: Upgraded `eslint` to `^10.6.0`, added `@eslint/eslintrc` as devDependency, and updated `lint` script to omit deprecated `--ext` flag.
   - `api/eslint.config.mjs`: Added new flat config style configuration using `@eslint/eslintrc` compatibility layer to preserve Airbnb base configuration.
