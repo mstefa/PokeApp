@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Security Specification:**
+  - `client/docs/specs/security-implementation.md`: Specification detailing the implementation of supply chain defense, CI/CD checks, and environment/hosting controls.
+- **Security Headers Middleware:**
+  - `client/src/middleware.ts`: Astro response middleware setting CSP, HSTS, X-Frame-Options, Referrer-Policy, X-Content-Type-Options, and X-Permitted-Cross-Domain-Policies for Cloudflare deployment.
+- **Dependabot Noise Reduction Specification:**
+  - `client/docs/specs/dependabot-noise-reduction.md`: Specification detailing the changes to reduce Dependabot Pull Request noise.
 - **Deploy Workflow Split:**
   - `docs/specs/deploy-workflows-spec.md`: Specification for splitting the API and client deployment workflows with manual triggers and path filters.
   - `.github/workflows/deploy-client.yml`: GitHub Actions workflow to deploy the frontend client to Cloudflare Workers.
@@ -21,6 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added **"Limpiar Filtros" (Clear Filters)** button to `SearchBar` component to turn off active search filters in one click.
 
 ### Changed
+- **Supply Chain Defense & Exact Version Pinning:**
+  - `client/package.json`: Pinned all dependency and devDependency versions exactly (removing `^` and `~`). Added `"typecheck": "tsc --noEmit"` script.
+  - `client/.npmrc`: Added `save-exact=true` to enforce exact version saving by default.
+  - `.github/workflows/pr-check.yml`: Integrated optional Socket CLI scans for the frontend.
+- **Dependabot Configuration:**
+  - `.github/dependabot.yml`: Reduced `open-pull-requests-limit` from `5` to `2` and added a 1-day cooldown policy (`cooldown: default-days: 1`) for frontend client dependencies.
 - **Mobile Responsiveness Fixes:** Updated `Navbar.module.css`, `index.astro`, `SearchBar.module.css`, `Pagination.module.css`, `CreatePokemon.module.css`, and `PokemonDetail.module.css` with responsive media queries, flex wrapping, and increased mobile touch target sizes (48px) to comply with Kanto Retro-Sleek design system guidelines.
 
 ### Fixed
