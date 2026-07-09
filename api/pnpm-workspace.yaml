@@ -1,2 +1,15 @@
 allowBuilds:
   esbuild: true
+
+# 🛡️ Security: Override vulnerable transitive dependencies
+overrides:
+  # Fix CRLF injection in form-data (via axios): GHSA-hmw2-7cc7-3qxx
+  form-data@>=4.0.0 <4.0.6: ">=4.0.6"
+
+# 🔇 Audit exceptions for vulnerabilities that cannot be fixed without breaking changes
+auditConfig:
+  ignoreGhsas:
+    # uuid buffer bounds check (GHSA-w5hq-g745-h8pq): sequelize pins uuid@8.x,
+    # fix only exists in uuid>=11.1.1 (breaking major version jump).
+    # Low real-world risk — requires passing a user-controlled `buf` argument to uuid.
+    - GHSA-w5hq-g745-h8pq

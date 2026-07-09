@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-07-09
+
+### Fixed
+- **CI Security Audit Blocker:**
+  - `pnpm-workspace.yaml`: Added `pnpm.overrides` to force `form-data@>=4.0.6` (fixes CRLF injection — GHSA-hmw2-7cc7-3qxx) and `auditConfig.ignoreGhsas` to suppress the unfixable `uuid` advisory (GHSA-w5hq-g745-h8pq — sequelize pins uuid@8.x, fix only in uuid>=11.1.1).
+  - `.github/workflows/pr-check.yml`: Changed client security audit to `--audit-level=critical` because astro v4 / @astrojs/cloudflare v11 have 36 transitive vulnerabilities (undici, vite, ws, esbuild) that require major framework upgrades to resolve.
+
 ## [Unreleased] - 2026-06-08
 
 ### Added
