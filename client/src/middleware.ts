@@ -15,4 +15,4 @@ export const onRequest: MiddlewareResponseHandler = async (context, next) => {
   response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
 
   return response;
-});
+};
