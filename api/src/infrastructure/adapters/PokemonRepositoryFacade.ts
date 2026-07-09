@@ -1,42 +1,39 @@
-
+import { config } from '@/config/app.config';
 import { Pokemon } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
 import { ExternalPokemonAPI } from '../external/ExternalPokemonAPI';
 import { LocalDatabasePokemonRepository } from '../persistence/LocalDatabasePokemonRepository';
-import { config } from '@/config/app.config';
 
 /**
  * Pokemon Repository Facade (Aggregation Pattern)
- * 
+ *
  * This facade provides a unified interface for accessing Pokemon data from two sources:
  * 1. PokeAPI (External, Read-only): Official Pokemon data
  * 2. Local Database (Read/Write): Custom user-created Pokemon
- * 
+ *
  * The routing logic determines which data source to use based on:
  * - Pokemon ID range: IDs 1-1118 are official Pokemon, IDs > 1118 are custom
  * - Operation type: Read operations check both sources, Write operations go to DB only
- * 
+ *
  * This implementation respects the Single Responsibility Principle while providing
  * a clean, unified interface to the application layer.
  */
 export class PokemonRepositoryFacade implements PokemonRepository {
   private externalAPI: ExternalPokemonAPI;
+
   private localRepository: LocalDatabasePokemonRepository;
 
   // Constant representing the total count of official Pokemon in PokeAPI
   private readonly OFFICIAL_POKEMON_THRESHOLD = config.officialPokemonThreshold;
 
-  constructor(
-    externalAPI?: ExternalPokemonAPI,
-    localRepository?: LocalDatabasePokemonRepository
-  ) {
+  constructor(externalAPI?: ExternalPokemonAPI, localRepository?: LocalDatabasePokemonRepository) {
     this.externalAPI = externalAPI || new ExternalPokemonAPI();
     this.localRepository = localRepository || new LocalDatabasePokemonRepository();
   }
 
   /**
    * Find all pokemons (both official and custom)
-   * 
+   *
    * Strategy:
    * 1. First fetch official Pokemon from PokeAPI up to the requested limit
    * 2. If more results are needed, fetch custom Pokemon from the local database
@@ -56,9 +53,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
       if (apiPokemonDto.length === limit) {
         return {
           count: totalCount,
-          pokemons: apiPokemonDto.map(dto => {
-            return Pokemon.fromPrimitives(dto);
-          })
+          pokemons: apiPokemonDto.map((dto) => Pokemon.fromPrimitives(dto)),
         };
       }
 
@@ -68,9 +63,10 @@ export class PokemonRepositoryFacade implements PokemonRepository {
 
       return {
         count: totalCount,
-        pokemons: [...apiPokemonDto.map(dto => {
-          return Pokemon.fromPrimitives(dto);
-        }), ...dbPokemons.pokemons]
+        pokemons: [
+          ...apiPokemonDto.map((dto) => Pokemon.fromPrimitives(dto)),
+          ...dbPokemons.pokemons,
+        ],
       };
     } catch (error) {
       console.error('Error in PokemonRepositoryFacade.findAll:', error);
@@ -80,7 +76,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
 
   /**
    * Find a pokemon by ID
-   * 
+   *
    * Strategy:
    * 1. Check if ID is within the official Pokemon range (1-1118)
    * 2. If yes, try to fetch from PokeAPI (read-only source)
@@ -89,7 +85,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
    */
   async findById(id: number | string): Promise<Pokemon | null> {
     try {
-      const numId = typeof id === 'string' ? parseInt(id) : id; //TODO: use only number
+      const numId = typeof id === 'string' ? parseInt(id) : id; // TODO: use only number
 
       // Check if this is an official Pokemon (by ID range)
       if (numId >= 1 && numId <= this.OFFICIAL_POKEMON_THRESHOLD) {
@@ -112,7 +108,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
 
   /**
    * Find a pokemon by name
-   * 
+   *
    * Strategy:
    * 1. First try to find in the local database (custom Pokemon)
    * 2. If not found, try to fetch from PokeAPI
@@ -142,7 +138,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
 
   /**
    * Create a new pokemon
-   * 
+   *
    * Strategy:
    * - All create operations go exclusively to the local database
    * - External PokeAPI is read-only and cannot be modified
@@ -160,7 +156,7 @@ export class PokemonRepositoryFacade implements PokemonRepository {
 
   /**
    * Count custom Pokemon in the local database
-   * 
+   *
    * Note: This counts only custom Pokemon, not official ones.
    * Total official Pokemon count can be obtained via getOfficialPokemonCount()
    */

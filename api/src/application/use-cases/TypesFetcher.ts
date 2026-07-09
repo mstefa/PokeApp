@@ -14,9 +14,11 @@ export class TypesFetcher {
   async run(): Promise<Array<{ id?: number; name: string }>> {
     try {
       const types = await this.repository.findAll();
-      return types.map(type => type.toPrimitives());
+      return types.map((type) => type.toPrimitives());
     } catch (error) {
-      throw new Error(`Failed to fetch types: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Failed to fetch types: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 }

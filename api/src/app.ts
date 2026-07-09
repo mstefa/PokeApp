@@ -19,10 +19,7 @@ export const createApp = (options?: AppOptions): Express => {
   app.use((_req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', 'true');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept'
-    );
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
   });
@@ -77,12 +74,7 @@ export const createApp = (options?: AppOptions): Express => {
 
   // Error handling middleware
   app.use(
-    (
-      err: Error,
-      _req: express.Request,
-      res: express.Response,
-      _next: express.NextFunction
-    ) => {
+    (err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error(err);
       res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -90,5 +82,3 @@ export const createApp = (options?: AppOptions): Express => {
 
   return app;
 };
-
-

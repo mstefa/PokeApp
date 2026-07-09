@@ -9,13 +9,11 @@ export class PokemonsFetcher {
   }
 
   async run(limit: number, offset: number): Promise<PokemonsDto> {
-
     const result = await this.repository.findAll(offset, limit);
 
     return {
       count: result.count,
-      pokemons: result.pokemons.map((p) => p.toPrimitives())
+      pokemons: result.pokemons.map((p) => p.toPrimitives()),
     };
   }
 }
-

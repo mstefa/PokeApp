@@ -1,7 +1,7 @@
 import { logger } from '@/shared/logger';
+import { NotFoundError } from '@/shared/errors';
 import { Pokemon } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
-import { NotFoundError } from '@/shared/errors';
 
 /**
  * Use Case: Fetch Pokemon Detail
@@ -28,7 +28,7 @@ export class PokemonSearcher {
       throw new NotFoundError(`Pokemon with name ${name} not found`);
     }
 
-    logger.info(`PokemonDetailFetcher: Found pokemon`, { pokemonId: pokemon.id });
+    logger.info('PokemonDetailFetcher: Found pokemon', { pokemonId: pokemon.id });
     return pokemon;
   }
 }

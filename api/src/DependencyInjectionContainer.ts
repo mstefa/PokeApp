@@ -20,17 +20,27 @@ export class DependencyContainer {
 
   // Controllers (are public to be accessible from route definitions)
   public getPokemonsController!: GetPokemonsController;
+
   public createPokemonController!: CreatePokemonController;
+
   public getTypesController!: GetTypesController;
+
   public getPokemonDetailController!: GetPokemonDetailController;
+
   public searchPokemonController!: SearchPokemonController;
 
   private pokemonsFetcher!: PokemonsFetcher;
+
   private pokemonSearcher!: PokemonSearcher;
+
   private pokemonCreator!: PokemonCreator;
+
   private typesFetcher!: TypesFetcher;
+
   private pokemonDetailFetcher!: PokemonFetcher;
+
   private pokemonRepository!: PokemonRepository;
+
   private typeRepository!: TypeRepository;
 
   private constructor() {

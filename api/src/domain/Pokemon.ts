@@ -4,7 +4,6 @@ import { PokemonImage } from './value-objects/PokemonImage';
 import { Type, TypeDto } from './Type';
 
 export class Pokemon {
-
   constructor(
     readonly id: number,
     readonly name: PokemonName,
@@ -17,7 +16,7 @@ export class Pokemon {
     readonly personalized: boolean = false,
     readonly img: PokemonImage,
     readonly types: Type[]
-  ) { }
+  ) {}
 
   toPrimitives(): PokemonDto {
     return {
@@ -31,7 +30,7 @@ export class Pokemon {
       weight: this.weight.value,
       personalized: this.personalized,
       img: this.img.value,
-      types: this.types.map(t => t.toPrimitives())
+      types: this.types.map((t) => t.toPrimitives()),
     };
   }
 
@@ -47,7 +46,7 @@ export class Pokemon {
       new PokemonStat(data.weight, 'Weight'),
       data.personalized ?? false,
       new PokemonImage(data.img),
-      data.types.map(t => new Type(t.id, t.name)),
+      data.types.map((t) => new Type(t.id, t.name))
     );
   }
 }

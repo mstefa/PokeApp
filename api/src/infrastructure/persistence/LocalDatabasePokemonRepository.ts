@@ -1,7 +1,7 @@
 import { logger } from '@/shared/logger';
+import { NotFoundError } from '@/shared/errors';
 import { Pokemon as PokemonDomain } from '../../domain/Pokemon';
 import { PokemonRepository } from '../../domain/PokemonRepository';
-import { NotFoundError } from '@/shared/errors';
 
 import { Pokemon as PokemonModel } from './sequelize';
 
@@ -16,19 +16,22 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
    * Find all custom Pokemon in the local database
    * Does NOT include official Pokemon from PokeAPI
    */
-  async findAll(offset: number, limit: number): Promise<{ pokemons: PokemonDomain[]; count: number; }> {
+  async findAll(
+    offset: number,
+    limit: number
+  ): Promise<{ pokemons: PokemonDomain[]; count: number }> {
     try {
       const customPokemons = await PokemonModel.findAll({
         offset,
         limit,
-        order: [['id', 'DESC']]
+        order: [['id', 'DESC']],
       });
 
       const totalCount = await PokemonModel.count({});
 
       return {
         count: totalCount,
-        pokemons: customPokemons.map((p) => this.mapToEntity(p))
+        pokemons: customPokemons.map((p) => this.mapToEntity(p)),
       };
     } catch (error) {
       console.error('Error finding all custom pokemons:', error);
@@ -49,7 +52,7 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
         throw new NotFoundError(`Custom Pokemon with ID "${id}" not found`);
       }
 
-      return this.mapToEntity(pokemon)
+      return this.mapToEntity(pokemon);
     } catch (error) {
       logger.error(`Error finding custom pokemon with ID ${id}:`, error as Error);
       throw error;
@@ -76,16 +79,16 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
    */
   async create(pokemonDomain: PokemonDomain, id: number): Promise<void> {
     try {
-
       logger.info('LocalDB: Creating new pokemon', { id, name: pokemonDomain.name.toString() });
 
       // Convert types array to JSON format for storage
-      const typesJson = pokemonDomain.types && pokemonDomain.types.length > 0
-        ? pokemonDomain.types.map(t => ({
-          id: t.id,
-          name: t.name.toString()
-        }))
-        : [];
+      const typesJson =
+        pokemonDomain.types && pokemonDomain.types.length > 0
+          ? pokemonDomain.types.map((t) => ({
+              id: t.id,
+              name: t.name.toString(),
+            }))
+          : [];
 
       const model = {
         id,
@@ -96,20 +99,20 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
         speed: pokemonDomain.speed.toString(),
         height: pokemonDomain.height.toString(),
         weight: pokemonDomain.weight.toString(),
-        img: pokemonDomain.img.toString() || "https://http2.mlstatic.com/D_NQ_NP_2X_872556-MLA99519668399_112025-F.webp",
-        types: [{ id: 1, name: "normal" }],
-        personalized: true
-      }
+        img:
+          pokemonDomain.img.toString() ||
+          'https://http2.mlstatic.com/D_NQ_NP_2X_872556-MLA99519668399_112025-F.webp',
+        types: [{ id: 1, name: 'normal' }],
+        personalized: true,
+      };
 
       const pokemon = await PokemonModel.create(model);
 
       logger.info('LocalDB: Pokemon created successfully', {
         pokemonId: pokemon.id,
         pokemonName: pokemon.name,
-        typesCount: typesJson.length
+        typesCount: typesJson.length,
       });
-
-      return;
     } catch (error) {
       console.error('Error creating custom pokemon:', error);
       throw error;
@@ -133,23 +136,23 @@ export class LocalDatabasePokemonRepository implements PokemonRepository {
    * Validates all data during construction
    */
   private mapToEntity(model: PokemonModel): PokemonDomain {
-    return PokemonDomain.fromPrimitives(
-      {
-        id: model.id,
-        name: model.name,
-        life: model.life,
-        strength: model.strength,
-        defense: model.defense,
-        speed: model.speed,
-        height: model.height,
-        weight: model.weight,
-        personalized: model.personalized || false,
-        img: model.img,
-        types: model.types ? model.types.map((t: any) => ({
-          id: t.id,
-          name: t.name
-        })) : []
-      }
-    );
+    return PokemonDomain.fromPrimitives({
+      id: model.id,
+      name: model.name,
+      life: model.life,
+      strength: model.strength,
+      defense: model.defense,
+      speed: model.speed,
+      height: model.height,
+      weight: model.weight,
+      personalized: model.personalized || false,
+      img: model.img,
+      types: model.types
+        ? model.types.map((t: any) => ({
+            id: t.id,
+            name: t.name,
+          }))
+        : [],
+    });
   }
 }

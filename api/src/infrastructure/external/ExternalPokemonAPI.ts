@@ -11,15 +11,13 @@ const POKEAPI_TOTAL_COUNT = 1118; // Official Pokemon count in PokeAPI
  */
 export class ExternalPokemonAPI {
   private detailCache = new Map<string, Promise<PokemonDto>>();
+
   private apiCache = new Map<string, Promise<PokemonDto | null>>();
 
   /**
    * Helper function to execute asynchronous tasks with a concurrency limit.
    */
-  private async limitConcurrency<T>(
-    tasks: (() => Promise<T>)[],
-    limit: number
-  ): Promise<T[]> {
+  private async limitConcurrency<T>(tasks: (() => Promise<T>)[], limit: number): Promise<T[]> {
     const results: T[] = new Array(tasks.length);
     let nextIndex = 0;
 
@@ -30,10 +28,7 @@ export class ExternalPokemonAPI {
       }
     };
 
-    const workers = Array.from(
-      { length: Math.min(limit, tasks.length) },
-      worker
-    );
+    const workers = Array.from({ length: Math.min(limit, tasks.length) }, worker);
     await Promise.all(workers);
     return results;
   }
@@ -54,9 +49,9 @@ export class ExternalPokemonAPI {
       const pokemonsData = response.data.results;
 
       // Build tasks to fetch detailed information for each pokemon
-      const tasks = pokemonsData.map((pokemonData: any) => {
-        return () => this.getPokemonDetail(pokemonData.url, includeStats);
-      });
+      const tasks = pokemonsData.map(
+        (pokemonData: any) => () => this.getPokemonDetail(pokemonData.url, includeStats)
+      );
 
       // Execute tasks with a limit of 15 concurrent requests to avoid rate-limiting/ECONNRESET
       return this.limitConcurrency(tasks, 15);
@@ -132,10 +127,7 @@ export class ExternalPokemonAPI {
   /**
    * Get pokemon detail from a URL (used internally)
    */
-  private getPokemonDetail(
-    url: string,
-    includeStats: boolean = false
-  ): Promise<PokemonDto> {
+  private getPokemonDetail(url: string, includeStats: boolean = false): Promise<PokemonDto> {
     const cacheKey = `${url}_stats:${includeStats}`;
     const cachedPromise = this.detailCache.get(cacheKey);
     if (cachedPromise) {
@@ -188,10 +180,10 @@ export class ExternalPokemonAPI {
       weight = data.weight || 0;
     }
 
-    const types = data.types.map((t: any) => (
-      { id: t.type.url.split('/').slice(-2, -1)[0], name: t.type.name }
-    )
-    );
+    const types = data.types.map((t: any) => ({
+      id: t.type.url.split('/').slice(-2, -1)[0],
+      name: t.type.name,
+    }));
 
     return {
       id: data.id,
@@ -204,7 +196,7 @@ export class ExternalPokemonAPI {
       height,
       weight,
       personalized: false,
-      types
+      types,
     };
   }
 }

@@ -44,15 +44,20 @@ export const testConnection = async (): Promise<void> => {
     } else if (error.name === 'SequelizeAccessDeniedError') {
       friendlyMessage = `Database access denied. Please verify your DB_USER (${dbConfig.username}) and DB_PASSWORD credentials.`;
     } else if (error.name === 'SequelizeInvalidConnectionError') {
-      friendlyMessage = `Database connection configuration is invalid. Please check your credentials and hosts.`;
+      friendlyMessage =
+        'Database connection configuration is invalid. Please check your credentials and hosts.';
     } else if (error.name === 'SequelizeHostNotFoundError') {
       friendlyMessage = `Database host not found. Please check your DB_HOST (${dbConfig.host}).`;
     } else if (error.name === 'SequelizeHostNotReachableError') {
       friendlyMessage = `Database host at ${dbConfig.host} is not reachable.`;
-    } else if (error.name === 'SequelizeConnectionTimedOutError' || error.name === 'SequelizeTimeoutError') {
-      friendlyMessage = `Database connection timed out. Check network path and firewall configuration.`;
+    } else if (
+      error.name === 'SequelizeConnectionTimedOutError' ||
+      error.name === 'SequelizeTimeoutError'
+    ) {
+      friendlyMessage =
+        'Database connection timed out. Check network path and firewall configuration.';
     }
-    
+
     logger.error(`❌ ${friendlyMessage}`, {
       name: error.name,
       message: error.message,
@@ -61,21 +66,17 @@ export const testConnection = async (): Promise<void> => {
       database: dbConfig.database,
       username: dbConfig.username,
       stack: error.stack,
-      originalError: error.original ? {
-        message: error.original.message,
-        code: error.original.code,
-        errno: error.original.errno,
-      } : undefined,
+      originalError: error.original
+        ? {
+            message: error.original.message,
+            code: error.original.code,
+            errno: error.original.errno,
+          }
+        : undefined,
     });
     throw error;
   }
 };
 
-export {
-  sequelize,
-  sequelize as conn,
-  PokemonModel as Pokemon,
-  TypeModel as Type
-};
+export { sequelize, sequelize as conn, PokemonModel as Pokemon, TypeModel as Type };
 export default sequelize;
-

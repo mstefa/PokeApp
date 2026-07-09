@@ -41,3 +41,6 @@ The following high-risk Dependabot pull requests require future verification and
 - [ ] **Astro 5 & React 19 Migration**:
   * **Scope**: Major migration updating the client workspace to React 19, `@astrojs/react` 5.x, and Astro 5.x.
   * **Verification**: Confirm hydration works across React islands and resolve any legacy context/ref APIs.
+- [ ] **Review Test Structure and CI Integration**:
+  * **Scope**: Re-evaluate the split between unit tests (`tests/unit`) and database-dependent integration/BDD tests.
+  * **Verification**: Design and implement a robust testing workflow for CI that includes a proper database service (e.g. PostgreSQL GitHub Actions service) so integration tests can run automatically in the pipeline without blocking main or developer PRs.

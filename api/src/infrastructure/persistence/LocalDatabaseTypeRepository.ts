@@ -18,15 +18,15 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
       if (types.length === 0) {
         try {
           const response = await axios.get('https://pokeapi.co/api/v2/type');
-          const results = response.data.results;
+          const { results } = response.data;
           for (const item of results) {
-            const url = item.url;
+            const { url } = item;
             const idMatch = url.match(/\/type\/(\d+)\//);
             const id = idMatch ? parseInt(idMatch[1], 10) : undefined;
             if (id) {
               await TypeModel.findOrCreate({
                 where: { id },
-                defaults: { id, name: item.name }
+                defaults: { id, name: item.name },
               });
             }
           }
@@ -77,7 +77,7 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
       const typeDomain = new Type(id, name);
 
       const type = await TypeModel.create({
-        name: typeDomain.name
+        name: typeDomain.name,
       });
 
       return new Type(type.id, type.name);
@@ -97,7 +97,7 @@ export class LocalDatabaseTypeRepository implements TypeRepository {
 
       const [type] = await TypeModel.findOrCreate({
         where: { name: typeDomain.name },
-        defaults: id ? { id, name: typeDomain.name } : { name: typeDomain.name }
+        defaults: id ? { id, name: typeDomain.name } : { name: typeDomain.name },
       });
 
       return new Type(type.id, type.name);

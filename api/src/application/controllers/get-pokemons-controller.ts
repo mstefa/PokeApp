@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 
+import { logger } from '@/shared/logger';
 import { Controller } from '../../shared/infrastructure/Controller';
 import { PokemonsFetcher } from '../use-cases/PokemonsFetcher';
-import { logger } from '@/shared/logger';
 
 type GetPokemonsRequest = Request & {
   query: {

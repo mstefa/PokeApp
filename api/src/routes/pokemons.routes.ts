@@ -13,9 +13,7 @@ export const register = (router: Router) => {
   // ];
 
   // GET /pokemons - Fetch all pokemons
-  router.get('/', (req: Request, res: Response) =>
-    DIContainer.getPokemonsController.run(req, res)
-  );
+  router.get('/', (req: Request, res: Response) => DIContainer.getPokemonsController.run(req, res));
 
   // GET /pokemons/search?name=<name> - Search pokemon by name
   router.get('/search', (req: Request, res: Response) =>
@@ -32,5 +30,3 @@ export const register = (router: Router) => {
     DIContainer.createPokemonController.run(req, res)
   );
 };
-
-

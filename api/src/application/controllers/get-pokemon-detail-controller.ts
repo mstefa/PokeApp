@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 
+import { logger } from '@/shared/logger';
 import { Controller } from '../../shared/infrastructure/Controller';
 import { PokemonFetcher } from '../use-cases/PokemonDetailFetcher';
-import { logger } from '@/shared/logger';
 
 export class GetPokemonDetailController extends Controller {
   private pokemonFetcher: PokemonFetcher;

@@ -27,7 +27,8 @@ export const loadEnv = () => {
   }
 
   // Determine DB_CONNECTION from process.env, .env.local, or .env
-  const dbConnection = process.env.DB_CONNECTION || envLocalConfig.DB_CONNECTION || envConfig.DB_CONNECTION;
+  const dbConnection =
+    process.env.DB_CONNECTION || envLocalConfig.DB_CONNECTION || envConfig.DB_CONNECTION;
 
   let finalConfig: Record<string, string> = {};
   const dbKeys = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_NAME', 'DB_PASSWORD', 'DB_SSL'];
@@ -36,7 +37,7 @@ export const loadEnv = () => {
     // If DB_CONNECTION is 'supabase', database connection keys must come from .env
     // Start with .env settings
     finalConfig = { ...envConfig };
-    
+
     // Merge only non-database settings from .env.local (like PORT)
     for (const [key, value] of Object.entries(envLocalConfig)) {
       if (!dbKeys.includes(key)) {
@@ -48,7 +49,7 @@ export const loadEnv = () => {
     if (fs.existsSync(envLocalPath)) {
       // Start with all keys from .env
       finalConfig = { ...envConfig };
-      
+
       // Override database connection keys ONLY with .env.local values
       // If a database connection key is missing in .env.local, delete it to prevent inheriting from .env
       for (const dbKey of dbKeys) {
@@ -58,7 +59,7 @@ export const loadEnv = () => {
           delete finalConfig[dbKey];
         }
       }
-      
+
       // Merge all other non-database keys from .env.local (like PORT)
       for (const [key, value] of Object.entries(envLocalConfig)) {
         if (!dbKeys.includes(key)) {
