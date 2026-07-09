@@ -5,12 +5,18 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] - 2026-07-09
 
 ### Added
+- **ESLint v10 Migration Specification:**
+  - `api/docs/specs/eslint-v10-migration.md`: Specification detailing the linter migration to flat config format.
 - **Phase 1 Dependency Upgrade Specification:**
   - `api/docs/specs/phase-1-deps-upgrade.md`: Specification detailing the upgrade of `http-status` and `@types/sequelize`.
 - **Unit Testing Setup:**
   - `api/tests/unit/domain/Pokemon.spec.ts`: Added unit tests for the `Pokemon` domain model to ensure logic verification without DB dependencies.
 
 ### Changed
+- **Linter Migration to ESLint v10 (Flat Config):**
+  - `api/package.json`: Upgraded `eslint` to `^10.6.0`, added `@eslint/eslintrc` as devDependency, and updated `lint` script to omit deprecated `--ext` flag.
+  - `api/eslint.config.mjs`: Added new flat config style configuration using `@eslint/eslintrc` compatibility layer to preserve Airbnb base configuration.
+  - `api/.eslintrc.json`: Removed legacy configuration.
 - **Dependency Upgrades:**
   - `api/package.json`: Upgraded `http-status` from `^1.7.4` to `^2.1.0` and `@types/sequelize` from `^4.28.20` to `^6.12.0`.
   - `api/pnpm-lock.yaml`: Re-generated lockfile for backend workspace.

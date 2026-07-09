@@ -12,7 +12,7 @@
     "test:watch": "vitest tests/unit",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration && cucumber-js -p backend",
-    "lint": "eslint src/ --ext .ts,.js --fix",
+    "lint": "eslint src/ --fix",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\""
   },
   "author": "Henry",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@cucumber/cucumber": "^13.0.0",
+    "@eslint/eslintrc": "^3.3.5",
     "@types/express": "^5.0.6",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.9.2",
@@ -45,7 +46,7 @@
     "@types/supertest": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^8.63.0",
     "@typescript-eslint/parser": "^8.63.0",
-    "eslint": "^8.54.0",
+    "eslint": "^10.6.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.5",
