@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased] - 2026-07-09
 
 ### Added
+- **Dependabot Noise Reduction Specification:**
+  - `api/docs/specs/dependabot-noise-reduction.md`: Specification detailing the changes to reduce Dependabot Pull Request noise.
 - **ESLint v10 Migration Specification:**
   - `api/docs/specs/eslint-v10-migration.md`: Specification detailing the linter migration to flat config format.
 - **Phase 1 Dependency Upgrade Specification:**
@@ -13,6 +15,8 @@ All notable changes to this project will be documented in this file.
   - `api/tests/unit/domain/Pokemon.spec.ts`: Added unit tests for the `Pokemon` domain model to ensure logic verification without DB dependencies.
 
 ### Changed
+- **Dependabot Configuration:**
+  - `.github/dependabot.yml`: Reduced `open-pull-requests-limit` from `5` to `2` and added a 1-day cooldown policy (`cooldown: default-days: 1`) for backend API dependencies.
 - **Linter Migration to ESLint v10 (Flat Config):**
   - `api/package.json`: Upgraded `eslint` to `^10.6.0`, added `@eslint/eslintrc` as devDependency, and updated `lint` script to omit deprecated `--ext` flag.
   - `api/eslint.config.mjs`: Added new flat config style configuration using `@eslint/eslintrc` compatibility layer to preserve Airbnb base configuration.

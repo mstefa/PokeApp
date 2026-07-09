@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Dependabot Noise Reduction Specification:**
+  - `client/docs/specs/dependabot-noise-reduction.md`: Specification detailing the changes to reduce Dependabot Pull Request noise.
 - **Deploy Workflow Split:**
   - `docs/specs/deploy-workflows-spec.md`: Specification for splitting the API and client deployment workflows with manual triggers and path filters.
   - `.github/workflows/deploy-client.yml`: GitHub Actions workflow to deploy the frontend client to Cloudflare Workers.
@@ -21,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added **"Limpiar Filtros" (Clear Filters)** button to `SearchBar` component to turn off active search filters in one click.
 
 ### Changed
+- **Dependabot Configuration:**
+  - `.github/dependabot.yml`: Reduced `open-pull-requests-limit` from `5` to `2` and added a 1-day cooldown policy (`cooldown: default-days: 1`) for frontend client dependencies.
 - **Mobile Responsiveness Fixes:** Updated `Navbar.module.css`, `index.astro`, `SearchBar.module.css`, `Pagination.module.css`, `CreatePokemon.module.css`, and `PokemonDetail.module.css` with responsive media queries, flex wrapping, and increased mobile touch target sizes (48px) to comply with Kanto Retro-Sleek design system guidelines.
 
 ### Fixed
