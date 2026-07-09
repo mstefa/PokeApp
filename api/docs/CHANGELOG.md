@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - **Security Specification:**
   - `api/docs/specs/security-implementation.md`: Specification detailing the implementation of supply chain defense, CI/CD checks, and environment/hosting controls.
+- **Dependabot Noise Reduction Specification:**
+  - `api/docs/specs/dependabot-noise-reduction.md`: Specification detailing the changes to reduce Dependabot Pull Request noise.
 - **ESLint v10 Migration Specification:**
   - `api/docs/specs/eslint-v10-migration.md`: Specification detailing the linter migration to flat config format.
 - **Phase 1 Dependency Upgrade Specification:**
@@ -21,6 +23,8 @@ All notable changes to this project will be documented in this file.
   - `.github/workflows/pr-check.yml`: Integrated backend `typecheck`, optional Socket CLI scans, and adjusted API vulnerability audit level to `--audit-level=high`.
 - **Security Headers Middleware:**
   - `api/src/app.ts`: Integrated a custom middleware setting CSP, HSTS, X-Frame-Options, Referrer-Policy, X-Content-Type-Options, and X-Permitted-Cross-Domain-Policies.
+- **Dependabot Configuration:**
+  - `.github/dependabot.yml`: Reduced `open-pull-requests-limit` from `5` to `2` and added a 1-day cooldown policy (`cooldown: default-days: 1`) for backend API dependencies.
 - **Linter Migration to ESLint v10 (Flat Config):**
   - `api/package.json`: Upgraded `eslint` to `^10.6.0`, added `@eslint/eslintrc` as devDependency, and updated `lint` script to omit deprecated `--ext` flag.
   - `api/eslint.config.mjs`: Added new flat config style configuration using `@eslint/eslintrc` compatibility layer to preserve Airbnb base configuration.
