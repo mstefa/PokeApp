@@ -2,6 +2,7 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 
 export class TypeModel extends Model {
   public id!: number;
+
   public name!: string;
 }
 
@@ -17,7 +18,7 @@ export function initTypeModel(sequelize: Sequelize): typeof TypeModel {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-      }
+      },
     },
     {
       sequelize,

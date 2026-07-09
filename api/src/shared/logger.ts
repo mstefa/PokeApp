@@ -22,15 +22,15 @@ const sensibleKeys = ['password', 'token', 'authorization', 'secret', 'apiKey', 
 
 // Configuración del redact (redacción de datos sensibles)
 const redactOptions = {
-  paths: sensibleKeys.flatMap(key => [
+  paths: sensibleKeys.flatMap((key) => [
     `*.${key}`,
     `**.${key}`,
     `[*].${key}`,
     `data.${key}`,
     `data.*.${key}`,
-    `data.**.${key}`
+    `data.**.${key}`,
   ]),
-  censor: '[REDACTED]'
+  censor: '[REDACTED]',
 };
 
 // Configuración base común para ambos entornos
@@ -49,10 +49,8 @@ if (isProduction) {
   loggerConfig = {
     ...baseConfig,
     formatters: {
-      level: (label) => {
-        return { level: label };
-      }
-    }
+      level: (label) => ({ level: label }),
+    },
   };
 } else {
   // Desarrollo: Colorido y legible con pino-pretty
@@ -66,16 +64,14 @@ if (isProduction) {
       translateTime: 'SYS:standard',
       ignore: 'pid,hostname',
       hideObject: false,
-    }
+    },
   });
 
   loggerConfig = baseConfig;
 }
 
 // Crear la instancia base de Pino
-const baseLogger = transport
-  ? pino(loggerConfig, transport)
-  : pino(loggerConfig);
+const baseLogger = transport ? pino(loggerConfig, transport) : pino(loggerConfig);
 
 /**
  * Custom logger implementation
@@ -136,7 +132,7 @@ const logger: CustomLogger = {
     } else {
       baseLogger.fatal(message);
     }
-  }
+  },
 };
 
 export { logger };

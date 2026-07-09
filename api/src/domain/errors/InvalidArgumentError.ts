@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 
 export default class InvalidArgumentError extends Error {
   readonly message: string;
+
   readonly httpStatus: number;
 
   constructor(message: string) {

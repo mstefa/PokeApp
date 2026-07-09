@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 
-import { Controller } from '../../shared/infrastructure/Controller';
 import { logger } from '@/shared/logger';
+import { Controller } from '../../shared/infrastructure/Controller';
 import { PokemonSearcher } from '../use-cases/PokemonDetailSearcher';
 
 export class SearchPokemonController extends Controller {
@@ -19,7 +19,7 @@ export class SearchPokemonController extends Controller {
     if (!name) {
       logger.warn('SearchPokemonController: Name query parameter is missing');
       res.status(httpStatus.BAD_REQUEST).json({
-        error: 'Name query parameter is required'
+        error: 'Name query parameter is required',
       });
       return;
     }

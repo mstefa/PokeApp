@@ -14,7 +14,3 @@ export function registerRoutes(router: Router) {
   router.use('/pokemons', pokemonsTsRouter);
   router.use('/types', typesTsRouter);
 }
-
-
-
-

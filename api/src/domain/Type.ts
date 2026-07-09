@@ -2,6 +2,7 @@ import { TypeName } from './value-objects/TypeName';
 
 export class Type {
   readonly id: number;
+
   readonly name: TypeName;
 
   constructor(id: number, name: string) {

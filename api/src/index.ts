@@ -8,7 +8,7 @@ let isShuttingDown = false;
 let server: Server | undefined;
 
 const app = createApp({ isShuttingDown: () => isShuttingDown });
-const port = config.port;
+const { port } = config;
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 3000;
@@ -101,7 +101,7 @@ const handleFatalError = async (message: string, error: any) => {
   logger.fatal(`💥 Fatal Error: ${message}`, {
     error: error instanceof Error ? { message: error.message, stack: error.stack } : error,
   });
-  
+
   // Attempt clean shutdown before exiting with status 1
   await gracefulShutdown('FATAL');
   process.exit(1);
@@ -113,4 +113,3 @@ process.on('unhandledRejection', (reason) => handleFatalError('unhandledRejectio
 startServer();
 
 export default app;
-

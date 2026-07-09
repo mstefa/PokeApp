@@ -5,7 +5,10 @@ import { z } from 'zod';
  */
 export const TypeSchema = z.object({
   id: z.number().int().positive().default(0),
-  name: z.string().min(1, 'Type name is required').max(50, 'Type name must be less than 50 characters'),
+  name: z
+    .string()
+    .min(1, 'Type name is required')
+    .max(50, 'Type name must be less than 50 characters'),
 });
 
 export type Type = z.infer<typeof TypeSchema>;
@@ -20,11 +23,7 @@ export const CreatePokemonSchema = z.object({
     .max(100, 'Pokemon name must be less than 100 characters')
     .trim(),
 
-  img: z
-    .string()
-    .url('Image must be a valid URL')
-    .or(z.literal(''))
-    .default(''),
+  img: z.string().url('Image must be a valid URL').or(z.literal('')).default(''),
 
   life: z
     .number()
@@ -66,10 +65,7 @@ export const CreatePokemonSchema = z.object({
     .max(10000, 'Weight must be at most 10000')
     .default(0),
 
-  types: z
-    .array(TypeSchema)
-    .min(1, 'At least one type is required')
-    .default([]),
+  types: z.array(TypeSchema).min(1, 'At least one type is required').default([]),
 });
 
 export type CreatePokemonRequest = z.infer<typeof CreatePokemonSchema>;

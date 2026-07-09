@@ -1,18 +1,14 @@
-import httpStatus from "http-status";
+import httpStatus from 'http-status';
 
 // Shared error class for domain errors
 export class DomainError extends Error {
   readonly statusCode: number;
+
   readonly status: string;
+
   readonly name: string;
 
-
-  constructor(
-    message: string,
-    statusCode: number,
-    status: string,
-    name: string = 'DomainError'
-  ) {
+  constructor(message: string, statusCode: number, status: string, name: string = 'DomainError') {
     super(message);
     this.name = name;
     this.status = status;
