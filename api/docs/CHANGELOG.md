@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased] - 2026-07-09
 
+### Added
+- **Unit Testing Setup:**
+  - `api/tests/unit/domain/Pokemon.spec.ts`: Added unit tests for the `Pokemon` domain model to ensure logic verification without DB dependencies.
+
+### Changed
+- **Test Scripts Separation:**
+  - `api/package.json`: Separated unit tests (`tests/unit`) from integration/BDD tests (`tests/integration` and Cucumber) so that only unit tests run in the CI pipeline.
+
 ### Fixed
 - **CI Security Audit Blocker:**
   - `pnpm-workspace.yaml`: Added `pnpm.overrides` to force `form-data@>=4.0.6` (fixes CRLF injection — GHSA-hmw2-7cc7-3qxx) and `auditConfig.ignoreGhsas` to suppress the unfixable `uuid` advisory (GHSA-w5hq-g745-h8pq — sequelize pins uuid@8.x, fix only in uuid>=11.1.1).
