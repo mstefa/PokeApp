@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-08-25
+
+### Added
+- **Dependency Upgrades Specification:**
+  - `api/docs/specs/dependabot-api-deps-upgrade.md`: Specification detailing the general dependency upgrades in the API workspace from Dependabot PR #44.
+
+### Changed
+- **General Dependency Upgrades (PR #44):**
+  - Upgraded production dependencies in `api/package.json`: `axios` (1.19.0), `cors` (2.8.6), `pg` (8.23.0), `pino` (10.3.1), and `zod` (4.4.3).
+  - Upgraded devDependencies in `api/package.json`: `@cucumber/cucumber` (13.2.1), `@eslint/eslintrc` (3.3.6), `@types/pino` (7.0.5), `@types/supertest` (7.2.1), `@typescript-eslint/eslint-plugin` (8.67.0), `@typescript-eslint/parser` (8.67.0), `eslint` (10.9.0), `prettier` (3.9.6), `tsc-alias` (1.9.2), `tsx` (4.23.12), and `vitest` (4.1.11).
+  - Updated lockfile `api/pnpm-lock.yaml`.
+
 ## [Unreleased] - 2026-07-09
 
 ### Added
