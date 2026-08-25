@@ -1,6 +1,6 @@
-import type { MiddlewareResponseHandler } from 'astro';
+import type { MiddlewareHandler } from 'astro';
 
-export const onRequest: MiddlewareResponseHandler = async (context, next) => {
+export const onRequest: MiddlewareHandler = async (context, next) => {
   const response = await next();
 
   // Enforce standard security headers

@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+## [Unreleased] - 2026-08-25
+
+### Added
+- **Astro v7 Migration Specification:**
+  - `client/docs/specs/astro-v7-migration.md`: Specification detailing the client-side upgrade to Astro v7 and its integrations/adapters.
+
+### Changed
+- **Astro & Integrations Upgrade (PR #39, #38, #28):**
+  - Upgraded dependencies in `client/package.json`: `astro` (7.1.1), `@astrojs/cloudflare` (14.0.0), `@astrojs/node` (11.0.2), and `@astrojs/react` (5.0.7).
+  - Upgraded devDependencies in `client/package.json`: `@vitejs/plugin-react` (6.1.0), `vitest` (4.1.11), and `wrangler` (4.125.0).
+  - Configured `client/tsconfig.json` to extend `"astro/tsconfigs/strict"` for modern module resolution.
+  - Configured `client/wrangler.jsonc` to use `@astrojs/cloudflare/entrypoints/server` as the main server entrypoint.
+  - Updated `client/src/middleware.ts` to use Astro's `MiddlewareHandler` types.
+  - Updated lockfile `client/pnpm-lock.yaml`.
 
 ### Added
 - **Security Specification:**
