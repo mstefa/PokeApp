@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2026-10-13
 
 ### Added
+- **Vitest v5 Alignment Specification:**
+  - `client/docs/specs/vitest-v5-alignment.md`: Specification detailing the upgrade of `vitest` to version `5.0.3` to match backend tooling.
 - **Unified Frontend Lockfile Refresh Specification:**
   - `client/docs/specs/unified-lockfile-refresh.md`: Specification detailing the unified refresh of transitive dependencies and supply chain security patches.
 
@@ -19,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Tooling Alignment:**
+  - `client/package.json`: Upgraded `vitest` from `4.1.11` to `5.0.3` to align with the backend test suite.
+  - `client/src/components/PokemonDetail.test.tsx`: Migrated matchers import to `@testing-library/jest-dom/vitest`.
   - `client/package.json`: Bumped `wrangler` from `4.135.0` to `4.150.0` to satisfy `@cloudflare/vite-plugin` peer dependency requirements.
   - `client/pnpm-workspace.yaml`: Added exclusions for `miniflare` and `wrangler` release ages.
 
