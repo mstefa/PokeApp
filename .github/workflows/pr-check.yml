@@ -54,9 +54,9 @@ jobs:
         working-directory: api
         run: pnpm audit --prod --audit-level=high
 
-      # NOTE: Client uses --audit-level=critical because astro v4 / @astrojs/cloudflare v11
-      # have transitive high/moderate vulns (undici, vite, ws, esbuild) that require major
-      # framework upgrades (astro v5+/v6+) to resolve. Tracked for a future migration.
+      # NOTE: Client uses --audit-level=critical. Astro v7 and @astrojs/cloudflare v14
+      # are now active; high/moderate transitive vulnerabilities continue to be audited
+      # and tracked for future upstream framework patch releases.
       - name: Client Security Audit
         working-directory: client
         run: pnpm audit --prod --audit-level=critical

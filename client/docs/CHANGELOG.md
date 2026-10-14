@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Patched `http-cache-semantics` (4.2.0 -> 4.3.0), `smol-toml` (1.8.0 -> 1.9.1), `devalue` (5.9.2 -> 5.9.4), `baseline-browser-mapping` (2.10.33 -> 2.11.28), `browserslist` (4.28.2 -> 4.29.3), and `source-map-js` (1.2.1 -> 1.2.2) in `client/pnpm-lock.yaml`.
 
 ### Changed
+- **CI/CD Workflow Documentation:**
+  - `.github/workflows/pr-check.yml`: Updated comments on client security audit to reflect Astro v7 and Cloudflare adapter v14.
 - **Tooling Alignment:**
   - `client/package.json`: Removed deprecated `pnpm.onlyBuiltDependencies` block to eliminate warning in pnpm v11+.
   - `client/pnpm-workspace.yaml`: Moved `onlyBuiltDependencies` list (`esbuild`, `sharp`, `workerd`) to workspace configuration.
