@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import PokemonDetail from './PokemonDetail';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 
 describe('<PokemonDetail />', () => {
   const mockPokemon = {
