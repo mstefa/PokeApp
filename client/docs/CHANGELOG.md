@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2026-10-13
 
 ### Added
+- **pnpm Settings Cleanup Specification:**
+  - `client/docs/specs/pnpm-settings-cleanup.md`: Specification detailing migration of `onlyBuiltDependencies` from `package.json` to `pnpm-workspace.yaml`.
 - **Vitest v5 Alignment Specification:**
   - `client/docs/specs/vitest-v5-alignment.md`: Specification detailing the upgrade of `vitest` to version `5.0.3` to match backend tooling.
 - **Unified Frontend Lockfile Refresh Specification:**
@@ -21,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Tooling Alignment:**
+  - `client/package.json`: Removed deprecated `pnpm.onlyBuiltDependencies` block to eliminate warning in pnpm v11+.
+  - `client/pnpm-workspace.yaml`: Moved `onlyBuiltDependencies` list (`esbuild`, `sharp`, `workerd`) to workspace configuration.
   - `client/package.json`: Upgraded `vitest` from `4.1.11` to `5.0.3` to align with the backend test suite.
   - `client/src/components/PokemonDetail.test.tsx`: Migrated matchers import to `@testing-library/jest-dom/vitest`.
   - `client/package.json`: Bumped `wrangler` from `4.135.0` to `4.150.0` to satisfy `@cloudflare/vite-plugin` peer dependency requirements.

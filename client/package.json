@@ -30,12 +30,5 @@
     "preview": "astro preview",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp",
-      "workerd"
-    ]
   }
 }
