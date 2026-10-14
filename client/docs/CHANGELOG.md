@@ -7,7 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased] - 2026-08-25
+## [Unreleased] - 2026-10-13
+
+### Added
+- **Unified Frontend Lockfile Refresh Specification:**
+  - `client/docs/specs/unified-lockfile-refresh.md`: Specification detailing the unified refresh of transitive dependencies and supply chain security patches.
+
+### Security
+- **Transitive Dependency Vulnerability Patches:**
+  - Patched `http-cache-semantics` (4.2.0 -> 4.3.0), `smol-toml` (1.8.0 -> 1.9.1), `devalue` (5.9.2 -> 5.9.4), `baseline-browser-mapping` (2.10.33 -> 2.11.28), `browserslist` (4.28.2 -> 4.29.3), and `source-map-js` (1.2.1 -> 1.2.2) in `client/pnpm-lock.yaml`.
+
+### Changed
+- **Tooling Alignment:**
+  - `client/package.json`: Bumped `wrangler` from `4.135.0` to `4.150.0` to satisfy `@cloudflare/vite-plugin` peer dependency requirements.
+  - `client/pnpm-workspace.yaml`: Added exclusions for `miniflare` and `wrangler` release ages.
+
+---
+
+## [0.1.0] - 2026-08-25
 
 ### Added
 - **Astro v7 Migration Specification:**
