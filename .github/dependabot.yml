@@ -4,18 +4,15 @@ updates:
   - package-ecosystem: "npm"
     directory: "/api"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "monday"
       time: "08:00"
     open-pull-requests-limit: 2
-    # Group minor and patch updates to avoid PR noise and bundle dependency updates together
+    # Group all updates to avoid individual PR noise and bundle updates together
     groups:
       dependencies:
         patterns:
           - "*"
-        update-types:
-          - "minor"
-          - "patch"
     cooldown:
       default-days: 1
 
@@ -23,7 +20,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/client"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "monday"
       time: "09:00"
     open-pull-requests-limit: 2
@@ -31,9 +28,6 @@ updates:
       dependencies:
         patterns:
           - "*"
-        update-types:
-          - "minor"
-          - "patch"
     cooldown:
       default-days: 1
 
@@ -41,7 +35,11 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     open-pull-requests-limit: 2
+    groups:
+      actions:
+        patterns:
+          - "*"
     cooldown:
       default-days: 1

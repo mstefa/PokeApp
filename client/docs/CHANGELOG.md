@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] - 2026-10-14
+
+### Added
+- **Dependabot Optimization Specification:**
+  - `client/docs/specs/dependabot-monthly-grouping-optimization.md`: Specification detailing Dependabot monthly grouping, GitHub actions bundling, and PR noise reduction.
+
+### Changed
+- **Dependabot Configuration:**
+  - `.github/dependabot.yml`: Switched update interval to monthly, removed minor/patch restriction to group all version bumps, added GitHub Actions grouping, and retained `open-pull-requests-limit: 2`.
+
 ## [Unreleased] - 2026-10-13
 
 ### Added
