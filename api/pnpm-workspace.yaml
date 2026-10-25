@@ -6,6 +6,8 @@ allowBuilds:
 overrides:
   # Fix CRLF injection in form-data (via axios): GHSA-hmw2-7cc7-3qxx
   form-data@>=4.0.0 <4.0.6: ">=4.0.6"
+  # Fix launch-editor & fs vulnerabilities in vite (via vitest): GHSA-587h-7wmj-h5pm, GHSA-r825-w8mm-5pxw, GHSA-698v-4r3x-3vcv
+  vite: ">=8.1.6"
 
 # 🔇 Audit exceptions for vulnerabilities that cannot be fixed without breaking changes
 auditConfig:
