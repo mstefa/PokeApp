@@ -19,3 +19,9 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
   - workerd
+
+# 🛡️ Security: Override vulnerable transitive dependencies
+overrides:
+  # Fix DoS and SRI bypass in undici (GHSA-4qv8-2p9j-2685, GHSA-f72v-6w45-q472, GHSA-xjj6-f33q-929c)
+  undici@>=7.0.0 <7.30.1: "^7.30.1"
+  undici@>=8.0.0 <8.12.2: "^8.12.2"

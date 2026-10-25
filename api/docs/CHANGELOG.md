@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-10-25
+
+### Added
+- **PR #80 Resolution & Security Patch Specification:**
+  - `api/docs/specs/security-and-pr80-resolution.md`: Specification detailing Dependabot PR #80 resolution, TypeScript 6.0 retention, and transitive vulnerability patches.
+
+### Security
+- **Transitive Dependency Vulnerability Patches:**
+  - Updated `body-parser` (`2.3.0` -> `2.4.0`), `follow-redirects` (`1.16.0` -> `1.16.1`), `moment` (`2.30.1` -> `2.31.0`), `brace-expansion` (`1.1.18` -> `1.1.21`), and `vite` (`8.0.16` -> `8.3.5`) in `api/pnpm-lock.yaml` and `api/pnpm-workspace.yaml`, resolving GitHub Dependabot alerts #135, #148, #163, #164, #165, #166, #167 and `GHSA-27r3-jxmh-p828`.
+
+### Changed
+- **Dependabot PR #80 Resolution:**
+  - `api/package.json`: Kept `typescript` at `6.0.3` (reverted from `7.0.2` due to `@typescript-eslint` incompatibility with TS 7.0) while retaining bumps for `dotenv` (`18.0.7`), `zod` (`4.6.7`), `@typescript-eslint/eslint-plugin` (`8.71.2`), `@typescript-eslint/parser` (`8.71.2`), and `vitest` (`5.0.4`).
+  - `.github/dependabot.yml`: Added `ignore` rule for major `typescript` updates (`version-update:semver-major`) across `/api` and `/client`.
+
 ## [Unreleased] - 2026-10-14
 
 ### Added

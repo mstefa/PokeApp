@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] - 2026-10-25
+
+### Added
+- **Undici Security Overrides & TS6 Alignment Specification:**
+  - `client/docs/specs/undici-security-and-ts6-fixes.md`: Specification detailing `undici` security overrides and `tsconfig.json` path mapping update for TypeScript 6.0.
+
+### Security
+- **Transitive `undici` Vulnerability Patches:**
+  - `client/pnpm-workspace.yaml` & `client/pnpm-lock.yaml`: Added overrides for `undici` (`>=7.0.0 <7.30.1` -> `^7.30.1` and `>=8.0.0 <8.12.2` -> `^8.12.2`), resolving `GHSA-xjj6-f33q-929c`, `GHSA-4qv8-2p9j-2685`, and `GHSA-f72v-6w45-q472` (`undici@7.30.1` and `undici@8.12.3`).
+
+### Changed
+- **TypeScript 6.0 Configuration:**
+  - `client/tsconfig.json`: Removed deprecated `baseUrl` option and updated `@/*` path alias to `./src/*` so `pnpm run typecheck` passes cleanly under TypeScript 6.0.3.
+  - `.github/dependabot.yml`: Added `ignore` rule for major `typescript` updates (`version-update:semver-major`).
+
 ## [Unreleased] - 2026-10-14
 
 ### Added
