@@ -1,26 +1,25 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PokemonDetail from '../../components/PokemonDetail';
+import { fetchSsrJson, resolveApiBase } from '../../lib/ssrApi';
 
 const { id } = Astro.params;
 
-const apiBase = import.meta.env.PUBLIC_API_URL || import.meta.env.API_URL || process.env.API_URL || 'http://localhost:3002';
-let pokemon = null;
-let error = null;
+const apiBase = resolveApiBase();
+let pokemon: any = null;
+let error: string | null = null;
 
-try {
-  console.log(`[SSR [id].astro] Resolved apiBase to: "${apiBase}"`);
-  console.log(`[SSR [id].astro] Fetching pokemon ${id} from: ${apiBase}/pokemons/${id}`);
-  const res = await fetch(`${apiBase}/pokemons/${id}`);
-  if (res.ok) {
-    pokemon = await res.json();
-  } else {
-    console.error(`[SSR [id].astro] Failed to fetch pokemon ${id}. Status: ${res.status}`);
-    error = `Pokemon no encontrado (status ${res.status})`;
-  }
-} catch (err: any) {
-  console.error(`[SSR [id].astro] Catch block error for pokemon ${id}:`, err);
-  error = err.message;
+console.log(`[SSR [id].astro] Resolved apiBase to: "${apiBase}"`);
+const res = await fetchSsrJson<any>(`${apiBase}/pokemons/${id}`, {
+  ttlSeconds: 300,
+  logTag: 'SSR [id].astro',
+});
+if (res.ok && res.data) {
+  pokemon = res.data;
+} else {
+  error = res.status
+    ? `Pokemon no encontrado (status ${res.status})`
+    : res.errorMessage || 'Pokemon no encontrado';
 }
 ---
 

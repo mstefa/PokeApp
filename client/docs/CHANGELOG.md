@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] - 2026-11-16
+
+### Added
+- **SSR API Caching & 429 Diagnostics Specification:**
+  - `client/docs/specs/ssr-api-caching-and-headers.md`: Specification for Cloudflare Cache API (`caches.default`) integration, `User-Agent` headers, and edge `429` diagnostic logging.
+- **Shared SSR Fetch Helper & Tests:**
+  - `client/src/lib/ssrApi.ts`: Added `resolveApiBase()` and `fetchSsrJson()` with Cloudflare edge caching, `PokeApp-SSR/1.0` `User-Agent`, and `retry-after`/`server`/`cf-ray` error logging.
+  - `client/src/lib/ssrApi.test.ts`: Added unit tests covering cache hits, cache misses, `429` non-caching + header diagnostics, and fallback when `caches.default` is unavailable.
+
+### Changed
+- **SSR Pages:**
+  - `client/src/pages/home.astro`: Parallelized `/types` (1h TTL) and `/pokemons?limit=1000` (5m TTL) fetches via `Promise.all` using `fetchSsrJson`.
+  - `client/src/pages/create.astro`: Switched `/types` fetch to `fetchSsrJson` with 1h edge cache TTL.
+  - `client/src/pages/pokemon/[id].astro`: Switched `/pokemons/${id}` fetch to `fetchSsrJson` with 5m edge cache TTL.
+
 ## [Unreleased] - 2026-10-25
 
 ### Added

@@ -4,6 +4,7 @@ import PokemonCard from '../components/PokemonCard';
 import SearchBar from '../components/SearchBar';
 import Pagination from '../components/Pagination';
 import Styles from '../components/Pokemons.module.css';
+import { fetchSsrJson, resolveApiBase } from '../lib/ssrApi';
 
 const url = new URL(Astro.request.url);
 const page = parseInt(url.searchParams.get('page') || '1', 10);
@@ -14,63 +15,64 @@ const search = url.searchParams.get('search') || '';
 
 const limit = 12;
 
-const apiBase = import.meta.env.PUBLIC_API_URL || import.meta.env.API_URL || process.env.API_URL || 'http://localhost:3002';
+const apiBase = resolveApiBase();
 let pokemons: any[] = [];
 let count = 0;
 let types: any[] = [];
 let error: string | null = null;
 
-try {
-  console.log(`[SSR home.astro] Resolved apiBase to: "${apiBase}"`);
-  console.log(`[SSR home.astro] Fetching types from: ${apiBase}/types`);
-  const typesRes = await fetch(`${apiBase}/types`);
-  if (typesRes.ok) {
-    types = await typesRes.json();
-  } else {
-    console.error(`[SSR home.astro] Failed to fetch types. Status: ${typesRes.status}`);
+console.log(`[SSR home.astro] Resolved apiBase to: "${apiBase}"`);
+
+const [typesRes, pokemonRes] = await Promise.all([
+  fetchSsrJson<any[]>(`${apiBase}/types`, {
+    ttlSeconds: 3600,
+    logTag: 'SSR home.astro',
+  }),
+  fetchSsrJson<{ pokemons?: any[] }>(`${apiBase}/pokemons?limit=1000`, {
+    ttlSeconds: 300,
+    logTag: 'SSR home.astro',
+  }),
+]);
+
+if (typesRes.ok && Array.isArray(typesRes.data)) {
+  types = typesRes.data;
+}
+
+if (pokemonRes.ok && pokemonRes.data) {
+  let allPokemons = pokemonRes.data.pokemons || [];
+
+  // Filter by personalization
+  if (personalized) {
+    allPokemons = allPokemons.filter((p: any) => p.personalized);
   }
 
-  console.log(`[SSR home.astro] Fetching pokemons from: ${apiBase}/pokemons?limit=1000`);
-  const pokemonRes = await fetch(`${apiBase}/pokemons?limit=1000`);
-  if (pokemonRes.ok) {
-    const data = await pokemonRes.json();
-    let allPokemons = data.pokemons || [];
-
-    // Filter by personalization
-    if (personalized) {
-      allPokemons = allPokemons.filter((p: any) => p.personalized);
-    }
-
-    // Filter by type
-    if (type !== 'all') {
-      allPokemons = allPokemons.filter((p: any) =>
-        p.types && p.types.some((t: any) => t.name === type)
-      );
-    }
-
-    // Sort logic
-    if (sort === 'name-asc') {
-      allPokemons.sort((a: any, b: any) => a.name.localeCompare(b.name));
-    } else if (sort === 'name-desc') {
-      allPokemons.sort((a: any, b: any) => b.name.localeCompare(a.name));
-    } else if (sort === 'desc') {
-      allPokemons.sort((a: any, b: any) => Number(b.id) - Number(a.id));
-    } else {
-      // Default: 'asc' / 'id-asc' or any other value sorts by ID ascending
-      allPokemons.sort((a: any, b: any) => Number(a.id) - Number(b.id));
-    }
-
-    count = allPokemons.length;
-
-    const offset = (page - 1) * limit;
-    pokemons = allPokemons.slice(offset, offset + limit);
-  } else {
-    console.error(`[SSR home.astro] Failed to fetch pokemons. Status: ${pokemonRes.status}`);
-    error = `Error al obtener los pokémons (status ${pokemonRes.status})`;
+  // Filter by type
+  if (type !== 'all') {
+    allPokemons = allPokemons.filter((p: any) =>
+      p.types && p.types.some((t: any) => t.name === type)
+    );
   }
-} catch (err: any) {
-  console.error(`[SSR home.astro] Catch block error:`, err);
-  error = err.message;
+
+  // Sort logic
+  if (sort === 'name-asc') {
+    allPokemons.sort((a: any, b: any) => a.name.localeCompare(b.name));
+  } else if (sort === 'name-desc') {
+    allPokemons.sort((a: any, b: any) => b.name.localeCompare(a.name));
+  } else if (sort === 'desc') {
+    allPokemons.sort((a: any, b: any) => Number(b.id) - Number(a.id));
+  } else {
+    // Default: 'asc' / 'id-asc' or any other value sorts by ID ascending
+    allPokemons.sort((a: any, b: any) => Number(a.id) - Number(b.id));
+  }
+
+  count = allPokemons.length;
+
+  const offset = (page - 1) * limit;
+  pokemons = allPokemons.slice(offset, offset + limit);
+} else {
+  error = pokemonRes.status
+    ? `Error al obtener los pokémons (status ${pokemonRes.status})`
+    : pokemonRes.errorMessage || 'Error al obtener los pokémons';
 }
 ---
 
