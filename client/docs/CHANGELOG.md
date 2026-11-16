@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `client/src/lib/ssrApi.test.ts`: Added unit tests covering cache hits, cache misses, `429` non-caching + header diagnostics, and fallback when `caches.default` is unavailable.
 
 ### Changed
+- **Cloudflare Build Tooling:**
+  - `client/package.json`: Added `"packageManager": "pnpm@11.8.0"` so Cloudflare Workers Builds uses pnpm v11 (matching `pnpm-workspace.yaml` `overrides` and `pnpm-lock.yaml`, avoiding `pnpm@9.10.0` `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`).
 - **SSR Pages:**
   - `client/src/pages/home.astro`: Parallelized `/types` (1h TTL) and `/pokemons?limit=1000` (5m TTL) fetches via `Promise.all` using `fetchSsrJson`.
   - `client/src/pages/create.astro`: Switched `/types` fetch to `fetchSsrJson` with 1h edge cache TTL.
