@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] - 2026-11-22
+
+### Added
+- **Client-Side API Fetching Specification:**
+  - `client/docs/specs/client-side-api-fetching.md`: Specification for moving `/pokemons` and `/types` fetching from Cloudflare Worker SSR to browser-hydrated React islands to eliminate Render edge `429` errors.
+- **Browser-Hydrated Data Islands & API Helper:**
+  - `client/src/lib/api.ts`: Minimal `getApiBase()` helper for browser API requests.
+  - `client/src/components/PokemonHome.tsx` & `client/src/components/PokemonHome.test.tsx`: Client-side React island for `/home` with loading state, filtering, sorting, pagination, and unit tests.
+  - `client/src/components/PokemonDetailView.tsx` & `client/src/components/PokemonDetailView.test.tsx`: Client-side React island for `/pokemon/[id]` with loading/error states and unit tests.
+
+### Changed
+- **Astro Pages & Components:**
+  - `client/src/pages/home.astro`: Replaced SSR API fetching with `<PokemonHome client:load />`.
+  - `client/src/pages/create.astro` & `client/src/components/CreatePokemon.tsx`: Moved `/types` fetching to the browser on mount with error banner handling.
+  - `client/src/pages/pokemon/[id].astro`: Replaced SSR API fetching with `<PokemonDetailView client:load id={id} />`.
+  - `client/src/components/SearchBar.tsx`: Updated to use shared `getApiBase()` helper.
+  - `client/src/components/Pokemons.module.css`: Added modular styles for loading text, error banner, empty state, and detail error container.
+
+### Removed
+- **SSR API Caching Helper:**
+  - Removed `client/src/lib/ssrApi.ts` and `client/src/lib/ssrApi.test.ts` (no longer needed once Worker-to-Render SSR fetches are eliminated).
+
 ## [Unreleased] - 2026-11-16
 
 ### Added

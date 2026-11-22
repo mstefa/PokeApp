@@ -1,36 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PokemonDetail from '../../components/PokemonDetail';
-import { fetchSsrJson, resolveApiBase } from '../../lib/ssrApi';
+import PokemonDetailView from '../../components/PokemonDetailView';
 
 const { id } = Astro.params;
-
-const apiBase = resolveApiBase();
-let pokemon: any = null;
-let error: string | null = null;
-
-console.log(`[SSR [id].astro] Resolved apiBase to: "${apiBase}"`);
-const res = await fetchSsrJson<any>(`${apiBase}/pokemons/${id}`, {
-  ttlSeconds: 300,
-  logTag: 'SSR [id].astro',
-});
-if (res.ok && res.data) {
-  pokemon = res.data;
-} else {
-  error = res.status
-    ? `Pokemon no encontrado (status ${res.status})`
-    : res.errorMessage || 'Pokemon no encontrado';
-}
 ---
 
-<Layout title={pokemon ? pokemon.name : "Detalles del Pokemon"}>
+<Layout title="Detalles del Pokemon">
   <div class="detail-wrapper">
-    {pokemon ? (
-      <PokemonDetail pokemon={pokemon} />
+    {id ? (
+      <PokemonDetailView client:load id={id} />
     ) : (
       <div class="error-container">
         <h2>Error al cargar el Pokémon</h2>
-        <p>{error}</p>
+        <p>Pokemon no encontrado</p>
         <a href="/home" class="back-btn">Volver a Home</a>
       </div>
     )}
