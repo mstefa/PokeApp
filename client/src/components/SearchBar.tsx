@@ -3,6 +3,7 @@ import Input from './ui/Input';
 import Select from './ui/Select';
 import Button from './ui/Button';
 import Styles from './SearchBar.module.css';
+import { getApiBase } from '../lib/api';
 
 interface TypeData {
   id: number | string;
@@ -48,7 +49,7 @@ export default function SearchBar({
     e.preventDefault();
     if (!searchInput.trim()) return;
 
-    const apiBase = import.meta.env.PUBLIC_API_URL || 'http://localhost:3002';
+    const apiBase = getApiBase();
 
     fetch(`${apiBase}/pokemons/search?name=${searchInput.toLowerCase().trim()}`)
       .then((res) => {

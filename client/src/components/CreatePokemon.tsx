@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from './ui/Card';
 import Input from './ui/Input';
 import Button from './ui/Button';
 import Styles from './CreatePokemon.module.css';
+import { getApiBase } from '../lib/api';
 
 interface TypeData {
   id: number | string;
@@ -10,10 +11,12 @@ interface TypeData {
 }
 
 interface CreatePokemonProps {
-  types: TypeData[];
+  types?: TypeData[];
 }
 
-export default function CreatePokemon({ types }: CreatePokemonProps) {
+export default function CreatePokemon({ types: initialTypes }: CreatePokemonProps) {
+  const [types, setTypes] = useState<TypeData[]>(initialTypes ?? []);
+  const [typesError, setTypesError] = useState<string | null>(null);
   const [input, setInput] = useState({
     name: '',
     life: 0,
@@ -26,6 +29,38 @@ export default function CreatePokemon({ types }: CreatePokemonProps) {
     img: '',
     types: [] as { id: number | string; name: string }[],
   });
+
+  useEffect(() => {
+    if (initialTypes && initialTypes.length > 0) return;
+
+    const controller = new AbortController();
+    const apiBase = getApiBase();
+
+    fetch(`${apiBase}/types`, { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`status ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setTypes(data);
+        }
+      })
+      .catch((err) => {
+        if ((err as Error).name === 'AbortError') return;
+        setTypesError(
+          err instanceof Error && err.message.startsWith('status ')
+            ? `Error al obtener tipos de Pokémon (${err.message})`
+            : 'Error al obtener tipos de Pokémon'
+        );
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, [initialTypes]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.type === 'number' ? parseInt(e.target.value, 10) || 0 : e.target.value;
@@ -48,7 +83,7 @@ export default function CreatePokemon({ types }: CreatePokemonProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const apiBase = import.meta.env.PUBLIC_API_URL || 'http://localhost:3002';
+    const apiBase = getApiBase();
 
     if (input.name && input.name.trim().length > 0) {
       fetch(`${apiBase}/pokemons`, {
@@ -75,7 +110,24 @@ export default function CreatePokemon({ types }: CreatePokemonProps) {
   };
 
   return (
-    <Card className={Styles.container}>
+    <>
+      {typesError && (
+        <div
+          role="alert"
+          style={{
+            backgroundColor: '#ffdddd',
+            color: '#ff0000',
+            padding: '1rem',
+            borderRadius: '0.25rem',
+            marginBottom: '1.5rem',
+            fontWeight: 'bold',
+            textAlign: 'center',
+          }}
+        >
+          <span>{typesError}</span>
+        </div>
+      )}
+      <Card className={Styles.container}>
       <form className={Styles.formContainer} onSubmit={handleSubmit}>
         <div className={Styles.section}>
           <h2 className={Styles.sectionTitle}>Identidad del Pokémon</h2>
@@ -243,5 +295,6 @@ export default function CreatePokemon({ types }: CreatePokemonProps) {
         </div>
       </form>
     </Card>
+    </>
   );
 }
